@@ -16,28 +16,31 @@ var ex = 0, ey = 0, counter = 0;
 var a_canvas = document.getElementById("a"), ctx = a_canvas.getContext("2d");
 var x = window.innerWidth, y = window.innerHeight;
 var ratio = x/y;
+
 if (ratio >= 0.5 && ratio <= 0.8) {
     console.log("Great, your screen supports, the game :)");
 } else {
     alert("Your screen ratio is not compatible with this app, sorry.");
     doNothing = true;
 }
-var xc = (9 * x) / 31, yc = (11 * y) / 49;
-var xfin = 0, yall = 0, xk13 = 0;
+
+var xc = (9 * x) / 31, yc = (11 * y) / 49, xfin = 0, yall = 0, xk13 = 0;
 //Finnur út hvar staðsetning textans á að vera á stóru svörtu.
 var blackCanvasthing = function(ys, text) {//x -staðsetning og x-canvas
-    var ycc = (5 / 49), xcc = (23 / 31), midblack = xcc/2, fastiX_black = (7/31), fastiY_black = (3/49), midtext = (lengd / 2), lengd = (((ctx.measureText(text).width)/x));//LENGD TEXTA
+    var ycc = (5 / 49), xcc = (23 / 31), midblack = (xcc/2), fastiX_black = (7/31), fastiY_black = (3/49), lengd = (((ctx.measureText(text).width)/x)), midtext = lengd / 2;
     xk13 = ((3.5/31)-midtext)*x;//k13
     //k11 og k10
     xfin = (fastiX_black + midblack - midtext)*x;
     yall = (ys + fastiY_black)*y;
+    console.log(xfin);
     return {
         X: xfin,
         Y: yall,
         X13: xk13
-    };
-};
+    }
+}
 var selAudio = new Audio("SelectionSound.mp3"), myMedia = new Audio("Click.mp3");
+
 var k13Box = function drawK13(){
     ctx.fillStyle = "Black";
     ctx.beginPath();
@@ -112,9 +115,8 @@ var game_interface = function drawGame() {
     ctx.lineTo((2*x)/31, (39.5*y)/49);
     ctx.fill();
     ctx.font = "25px Arial";
-    var getCoord1 = blackCanvasthing(43/49, "Click to Start"), Xhnit = getCoord1.X, Yhnit = getCoord1.Y;
+    var getCoord1 = blackCanvasthing(43/49, "Click to Start"), var Xhnit = getCoord1.X, Yhnit = getCoord1.Y;
     ctx.fillText("Click to Start", Xhnit, Yhnit);
-
 };
 function resize_canvas() {
     if (a_canvas.width < window.innerWidth) {
@@ -140,7 +142,6 @@ var continue_canvas = function continueBlack() {
     ctx.fillStyle = "White";
     ctx.font = "25px Arial";
     var getCoord2 = blackCanvasthing(43/49, "Proceed"), Xhnit = getCoord2.X, Yhnit = getCoord2.Y;
-    console.log(getCoord2);
     ctx.fillText("Proceed", Xhnit, Yhnit);
 };
 
@@ -165,8 +166,7 @@ var currentremain_canvas = function newCurrentR() {
 };
 
 function gameover(e){
-    ex = e.offsetX;
-    ey = e.offsetY;
+    ex = e.offsetX, ey = e.offsetY;
     if (collides(consoleRects, ex, ey)) {
         selAudio.play();
         setTimeout(function(){
@@ -306,10 +306,7 @@ function computerRe() {
 function randomXY() {
     var minXY = x/31, maxX = (30*x)/31, maxY = (36*y)/49;
     X = randomInt(minXY, maxX), Y = randomInt(minXY, maxY);
-    while (!collides(rects, X, Y)) {
-        X = randomInt(minXY, maxX);//generating new random number
-        Y = randomInt(minXY, maxY);//generating new random number
-    }
+    while (!collides(rects, X, Y)) { X = randomInt(minXY, maxX), Y = randomInt(minXY, maxY); }
     return { 'x': X, 'y': Y }; // OBJECT coordinates for box the computer hits next.
 }
 
@@ -339,10 +336,8 @@ function startPlaying() {
                 var myMedia = new Audio("CorrectSound.mp3");
                 myMedia.play();
                 reverseQue.pop();
-                counter += 1;
-                currentremain = currentremain - 1;
+                counter += 1, currentremain -= 1;
                 currentremain_canvas();
-
             } else if (collides(rects, ex, ey) !== que[counter]) {
                 a_canvas.removeEventListener('click', clickEvent, false);
                 var errAudio = new Audio("WrongSound.mp3");
@@ -386,4 +381,3 @@ if (!doNothing) {
         a_canvas.addEventListener('click', clickEvent, false);
         FastClick.attach(document.body);
     }
-}
