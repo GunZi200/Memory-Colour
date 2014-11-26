@@ -95,7 +95,6 @@ var game_interface = function drawGame() {
     ctx.fill();
     ctx.strokeStyle = "Black";
     ctx.stroke();
-    ctx.fillStyle = "Black";
     k13Box();
     ctx.fillStyle = "White";
     ctx.font = "25px Arial";
@@ -106,7 +105,6 @@ var game_interface = function drawGame() {
     ctx.lineWidth = (0.3*x)/31;
     ctx.strokeStyle = "White";
     ctx.stroke();
-    ctx.fillStyle = "White";
     ctx.beginPath();
     ctx.moveTo((1.5*x)/31, (38.5*y)/49);
     ctx.lineTo((1.1*x)/31, (39.5*y)/49);
@@ -319,11 +317,11 @@ function startPlaying() {
         blackCan = true;
         g = randomXY();
     }
-    if (blackCan && !userTurn) { // computer's turn
+    if (blackCan && !userTurn) {
         for (var i = 0; i < rects.length; i += 1) {
             if (collides([rects[i]], g.x, g.y)) {
                 que.push(rects[i]);
-                reverseQue = que.slice(0).reverse();// reverseQue = [Green, Blue]
+                reverseQue = que.slice(0);//.reverse();// reverseQue = [Green, Blue]
                 blackCan = false;
                 computer();
             }
@@ -333,7 +331,7 @@ function startPlaying() {
             turnEvent(ex, ey);
             if (collides(rects, ex, ey) === que[counter]) { //if tveir litir eru tvisvar í röð.
                 myMedia.play();
-                reverseQue.pop();
+                reverseQue.shift();
                 counter += 1, currentremain -= 1;
                 currentremain_canvas();
             } else if (collides(rects, ex, ey) !== que[counter]) {
@@ -341,7 +339,7 @@ function startPlaying() {
                 var errAudio = new Audio("WrongSound.wav");
                 errAudio.play();
                 counter = 0, lives -= 1;
-                reverseQue = que.slice(0).reverse();
+                reverseQue = que.slice(0);//.reverse();
                 k13Box();
                 ctx.fillStyle = "White";
                 ctx.font = "25px Arial";
