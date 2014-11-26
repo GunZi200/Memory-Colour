@@ -32,7 +32,6 @@ var blackCanvasthing = function(ys, text) {//x -staðsetning og x-canvas
     //k11 og k10
     xfin = (fastiX_black + midblack - midtext)*x;
     yall = (ys + fastiY_black)*y;
-    console.log(xfin);
     return {
         X: xfin,
         Y: yall,
@@ -40,7 +39,6 @@ var blackCanvasthing = function(ys, text) {//x -staðsetning og x-canvas
     }
 }
 var selAudio = new Audio("SelectionSound.mp3"), myMedia = new Audio("Click.mp3");
-
 var k13Box = function drawK13(){
     ctx.fillStyle = "Black";
     ctx.beginPath();
@@ -115,7 +113,8 @@ var game_interface = function drawGame() {
     ctx.lineTo((2*x)/31, (39.5*y)/49);
     ctx.fill();
     ctx.font = "25px Arial";
-    var getCoord1 = blackCanvasthing(43/49, "Click to Start"), var Xhnit = getCoord1.X, Yhnit = getCoord1.Y;
+    var getCoord1 = blackCanvasthing(43/49, "Click to Start");
+    var Xhnit = getCoord1.X, Yhnit = getCoord1.Y;
     ctx.fillText("Click to Start", Xhnit, Yhnit);
 };
 function resize_canvas() {
@@ -333,14 +332,13 @@ function startPlaying() {
         if (collides(rects, ex, ey)) {
             turnEvent(ex, ey);
             if (collides(rects, ex, ey) === que[counter]) { //if tveir litir eru tvisvar í röð.
-                var myMedia = new Audio("CorrectSound.mp3");
                 myMedia.play();
                 reverseQue.pop();
                 counter += 1, currentremain -= 1;
                 currentremain_canvas();
             } else if (collides(rects, ex, ey) !== que[counter]) {
                 a_canvas.removeEventListener('click', clickEvent, false);
-                var errAudio = new Audio("WrongSound.mp3");
+                var errAudio = new Audio("WrongSound.wav");
                 errAudio.play();
                 counter = 0, lives -= 1;
                 reverseQue = que.slice(0).reverse();
@@ -381,3 +379,4 @@ if (!doNothing) {
         a_canvas.addEventListener('click', clickEvent, false);
         FastClick.attach(document.body);
     }
+}
