@@ -9,9 +9,10 @@
 window.onload = function () {
     console.log("Game is loaded...");
 }
+
 var que = [], reverseQue = [];//que reversed, this pops each element correct by the user.
 var userTurn = false, blackCan = false, roundEvent = false, doNothing = false;
-var round = 1, remain = 1, currentremain = 1, lives = 3;
+var round = 0, remain = 1, currentremain = 1, lives = 3;
 var ex = 0, ey = 0, counter = 0;
 var a_canvas = document.getElementById("a"), ctx = a_canvas.getContext("2d");
 var x = window.innerWidth, y = window.innerHeight;
@@ -69,7 +70,7 @@ var rects = [{x: x/31, y: y/49, w: xc, h: yc, color: "Green"},  //Green
 var game_interface = function drawGame() {
     ctx.fillStyle = "Silver";
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-    for (var i = rects.length - 1; i >= 0; i -= 1) {
+    for (var i = 0; i < rects.length; i += 1) {
         ctx.fillStyle = rects[i].color;
         ctx.fillRect(rects[i].x, rects[i].y, xc, yc);
         ctx.beginPath();
@@ -77,6 +78,7 @@ var game_interface = function drawGame() {
         ctx.lineWidth = 4;
         ctx.strokeStyle = 'black';
         ctx.stroke();
+        console.log("hi");
     }
 
     ctx.fillStyle = "Black";
@@ -124,16 +126,17 @@ function resize_canvas() {
     }
     game_interface();
 }
+
 var black_canvas = function blackCanvas() {
-    ctx.clearRect((7 * x) / 31, (43 * y) / 49, (23 * x) / 31, (5 * y) / 49);//k11
     ctx.fillStyle = "Black";
     ctx.fillRect((7 * x) / 31, (43 * y) / 49, (23 * x) / 31, (5 * y) / 49);//k11
     ctx.fillStyle = "White";
     ctx.font = "25px Arial";
+    var getCoord7 = blackCanvasthing(43/49, "Round: x"), Xhnit = getCoord7.X, Yhnit = getCoord7.Y;
+    ctx.fillText("Round: " + round, Xhnit, Yhnit);
 };
 
 var continue_canvas = function continueBlack() {
-    ctx.clearRect((7 * x) / 31, (43 * y) / 49, (23 * x) / 31, (5 * y) / 49);
     ctx.fillStyle = "Black";
     ctx.fillRect((7 * x) / 31, (43 * y) / 49, (23 * x) / 31, (5 * y) / 49);
     ctx.fillStyle = "White";
@@ -142,8 +145,8 @@ var continue_canvas = function continueBlack() {
     ctx.fillText("Proceed", Xhnit, Yhnit);
 };
 
+
 var remain_cavas = function newRemaining() {
-    ctx.clearRect((7 * x) / 31, (37 * y) / 49, (23 * x) / 31, (5 * y) / 49);//k10
     ctx.fillStyle = "Black";
     ctx.fillRect((7 * x) / 31, (37 * y) / 49, (23 * x) / 31, (5 * y) / 49);//k10
     ctx.fillStyle = "White";
@@ -153,7 +156,6 @@ var remain_cavas = function newRemaining() {
 };
 
 var currentremain_canvas = function newCurrentR() {
-    ctx.clearRect((7*x)/31, (37*y)/49, (23*x)/31, (5*y)/49);//k10
     ctx.fillStyle = "Black";
     ctx.fillRect((7*x)/31, (37*y)/49, (23*x)/31, (5*y)/49);//k10
     ctx.fillStyle = "White";
@@ -200,18 +202,6 @@ var startRects = [{x: (7*x)/31, y: (43*y)/49, w: (23*x)/31, h: (5*y)/49}];//k11
 
 function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-function containsObject(obj, list) {
-    var i, j;
-    for (i = 1; i = obj.length; i += 1) {
-        for (j = 1; j = list.length; j += 1) {
-            if (list[j] === obj[i]) {
-                return true;
-            }
-        }
-    }
-    return false;
 }
 
 function collides(rects2, x, y) {
@@ -266,17 +256,14 @@ function clickEvent(e){
 function computer() {
     a_canvas.removeEventListener('click', clickEvent, false);
     remain_cavas();
-    currentremain = round;
-    var counter = 0, i = setInterval(function () {
-        if (containsObject(que, rects)) {
-            myMedia.play();
-            turnEvent(que[counter].x, que[counter].y);
-            counter += 1; // stops when counter equals the length of que.
-        }
-        if (counter === que.length) {
+    currentremain = remain;
+    var j = 0, i = setInterval(function () {
+        turnEvent(que[j].x, que[j].y);
+        myMedia.play();
+        j += 1; // stops when counter equals the length of que.
+        if (j === que.length) {
             clearInterval(i);
             a_canvas.addEventListener('click', clickEvent, false);
-            FastClick.attach(document.body);
             userTurn = true;
         }
     }, 450);
@@ -284,23 +271,21 @@ function computer() {
 
 function computerRe() {
     remain_cavas();
-    currentremain = round;
-    var counter = 0, i = setInterval(function () {
-        if (containsObject(que, rects)) {
-            myMedia.play();
-            turnEvent(que[counter].x, que[counter].y);
-            counter += 1; // stops when counter equals the length of que.
-        }
-        if (counter === que.length) {
+    currentremain = remain;
+    var j = 0, i = setInterval(function () {
+        turnEvent(que[j].x, que[j].y);
+        myMedia.play();
+        j += 1; // stops when counter equals the length of que.
+        if (j === que.length) {
             clearInterval(i);
             a_canvas.addEventListener('click', clickEvent, false);
-            FastClick.attach(document.body);
             userTurn = true;
         }
     }, 400);//faster version
 }
 
 function randomXY() {
+    //chooses random coordinates for the computer.
     var minXY = x/31, maxX = (30*x)/31, maxY = (36*y)/49;
     X = randomInt(minXY, maxX), Y = randomInt(minXY, maxY);
     while (!collides(rects, X, Y)) { X = randomInt(minXY, maxX), Y = randomInt(minXY, maxY); }
@@ -310,36 +295,37 @@ function randomXY() {
 function startPlaying() {
     var g = { 'x': 0, 'y': 0 }, i;
     if (collides(startRects, ex, ey)) {
-        selAudio.play();
+        if (round < 1) {
+            selAudio.play();//start game
+            round += 1;
+        }
         black_canvas();
-        var getCoord7 = blackCanvasthing(43/49, "Round: x"), Xhnit = getCoord7.X, Yhnit = getCoord7.Y;
-        ctx.fillText("Round: " + round, Xhnit, Yhnit);
         blackCan = true;
         g = randomXY();
     }
     if (blackCan && !userTurn) {
-        for (var i = 0; i < rects.length; i += 1) {
+        for (i = 0; i < rects.length; i += 1) {
             if (collides([rects[i]], g.x, g.y)) {
                 que.push(rects[i]);
-                reverseQue = que.slice(0);//.reverse();// reverseQue = [Green, Blue]
+                reverseQue = [];
+                reverseQue = que.slice(0);
                 blackCan = false;
                 computer();
             }
         }
     } else if (userTurn) { // user's turn
         if (collides(rects, ex, ey)) {
-            turnEvent(ex, ey);
             if (collides(rects, ex, ey) === que[counter]) { //if tveir litir eru tvisvar í röð.
-                myMedia.play();
-                reverseQue.shift();
+                turnEvent(ex, ey);
+                reverseQue.shift();//pops the first object in array.
                 counter += 1, currentremain -= 1;
                 currentremain_canvas();
             } else if (collides(rects, ex, ey) !== que[counter]) {
                 a_canvas.removeEventListener('click', clickEvent, false);
-                var errAudio = new Audio("WrongSound.wav");
+                var errAudio = new Audio("WrongSound.mp3");
                 errAudio.play();
                 counter = 0, lives -= 1;
-                reverseQue = que.slice(0);//.reverse();
+                reverseQue = que.slice(0);
                 k13Box();
                 ctx.fillStyle = "White";
                 ctx.font = "25px Arial";
@@ -351,21 +337,19 @@ function startPlaying() {
                         computerRe();
                     },1000);
                 }
-            } 
-            if (lives <= 0) {
+            }
+            if (reverseQue.length === 0) {
+                counter = 0;
+                blackCan = false, userTurn = false;
+                if (round > 0) {round += 1;};
+                remain += 1;
+                continue_canvas();
+                return;
+            } else if (lives === 0) {
                 var endAudio = new Audio("GameOver.mp3");
                 setTimeout(function(){ endAudio.play(); }, 800);
                 gameover_interface();
                 return;
-            }
-            if (reverseQue.length === 0 && currentremain === 0) {
-                counter = 0;
-                blackCan = false, userTurn = false;
-                round += 1, remain += 1;
-                continue_canvas();
-                return;
-            } else {
-                userTurn = true;
             }
         }
     }
@@ -375,6 +359,5 @@ resize_canvas();
 if (!doNothing) {
     if (a_canvas && a_canvas.getContext) {
         a_canvas.addEventListener('click', clickEvent, false);
-        FastClick.attach(document.body);
     }
 }
