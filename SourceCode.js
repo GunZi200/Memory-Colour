@@ -10,28 +10,54 @@ window.onload = function () {
     console.log("Game is loaded...");
 }
 
+var a_canvas = document.getElementById("a");
+var ctx = a_canvas.getContext("2d");
+
 var que = [], reverseQue = [];//que reversed, this pops each element correct by the user.
 var userTurn = false, blackCan = false, roundEvent = false, doNothing = false;
 var round = 0, remain = 1, currentremain = 1, lives = 3;
 var ex = 0, ey = 0, counter = 0;
-var a_canvas = document.getElementById("a"), ctx = a_canvas.getContext("2d");
-var x = window.innerWidth, y = window.innerHeight;
-var ratio = x/y;
-var Xf = x/31; // X fraction
-var Yf = y/49; // Y fraction
+//var ratio = window.devicePixelRatio || 1;
+var x = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+var y = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
-if (ratio >= 0.5 && ratio <= 0.8) {
-    console.log("Great, your screen supports, the game :)");
-} else {
-    alert("Your screen ratio is not compatible with this app, sorry.");
-    doNothing = true;
+var x_canvas1 = a_canvas.width;//310
+var y_canvas1 = a_canvas.height;//490
+var Xf = x/x_canvas1; // X fraction
+var Yf = y/y_canvas1; // Y fraction
+
+function resize_canvas() {
+    if (a_canvas.width < x) {
+        a_canvas.width = x;
+    }
+    if (a_canvas.height < y) {
+        a_canvas.height = y;
+    } 
+}
+resize_canvas();
+var selAudio = new Audio("SelectionSound.mp3"), myMedia = new Audio("Click.mp3"), errAudio = new Audio("WrongSound.mp3"), endAudio = new Audio("GameOver.mp3");
+var k13Box = function drawK13(){
+    ctx.fillStyle = "Black";
+    ctx.beginPath();
+    ctx.moveTo(20*Xf, 430*Yf);
+    ctx.lineTo(50*Xf, 430*Yf);
+    ctx.quadraticCurveTo(60*Xf, 430*Yf, 60*Xf, 440*Yf);
+    ctx.lineTo(60*Xf, 470*Yf);
+    ctx.quadraticCurveTo(60*Xf, 480*Yf, 50*Xf, 480*Yf);
+    ctx.lineTo(20*Xf, 480*Yf);
+    ctx.quadraticCurveTo(10*Xf, 480*Yf, 10*Xf, 470*Yf);
+    ctx.lineTo(10*Xf, 440*Yf);
+    ctx.quadraticCurveTo(10*Xf, 430*Yf, 20*Xf, 430*Yf);
+    ctx.fill();
+    ctx.strokeStyle = "Black";
+    ctx.stroke();
 }
 
-var xc = (9 * x) / 31, yc = (11 * y) / 49, xfin = 0, yall = 0, xk13 = 0;
+var xc = 90 * Xf, yc = 110 * Yf, xfin = 0, yall = 0, xk13 = 0;
 //Finnur út hvar staðsetning textans á að vera á stóru svörtu.
 var blackCanvasthing = function(ys, text) {//x -staðsetning og x-canvas
-    var ycc = (5 / 49), xcc = (23 / 31), midblack = (xcc/2), fastiX_black = (7/31), fastiY_black = (3/49), lengd = (((ctx.measureText(text).width)/x)), midtext = lengd / 2;
-    xk13 = ((3.5/31)-midtext)*x;//k13
+    var ycc = (50 / y_canvas1), xcc = (230 / x_canvas1), midblack = (xcc/2), fastiX_black = (70/x_canvas1), fastiY_black = (30/y_canvas1), lengd = (((ctx.measureText(text).width)/x)), midtext = lengd / 2;
+    xk13 = ((35/x_canvas1)-midtext)*x;//k13
     //k11 og k10
     xfin = (fastiX_black + midblack - midtext)*x;
     yall = (ys + fastiY_black)*y;
@@ -41,37 +67,20 @@ var blackCanvasthing = function(ys, text) {//x -staðsetning og x-canvas
         X13: xk13
     }
 }
-var selAudio = new Audio("SelectionSound.mp3"), myMedia = new Audio("Click.mp3"), errAudio = new Audio("WrongSound.mp3"), endAudio = new Audio("GameOver.mp3");
-var k13Box = function drawK13(){
-    ctx.fillStyle = "Black";
-    ctx.beginPath();
-    ctx.moveTo(2*Xf, 43*Yf);
-    ctx.lineTo(5*Xf, 43*Yf);
-    ctx.quadraticCurveTo(6*Xf, 43*Yf, 6*Xf, 44*Yf);
-    ctx.lineTo(6*Xf, 47*Yf);
-    ctx.quadraticCurveTo(6*Xf, 48*Yf, 5*Xf, 48*Yf);
-    ctx.lineTo(2*x/31, 48*y/49);
-    ctx.quadraticCurveTo(Xf, 48*Yf, Xf, 47*Yf);
-    ctx.lineTo(Xf, 44*Yf);
-    ctx.quadraticCurveTo(Xf, 43*Yf, 2*Xf, 43*Yf);
-    ctx.fill();
-    ctx.strokeStyle = "Black";
-    ctx.stroke();
-}
-
-var rects = [{x: Xf, y: Yf, w: xc, h: yc, color: "Green"},  //Green
-        {x: 11*Xf, y: Yf, w: xc, h: yc, color: "#DC143C"},  //Red
-        {x: Xf, y: 13*Yf, w: xc, h: yc, color: "#1E90FF"},  //Blue
-        {x: Xf, y: 25*Yf, w: xc, h: yc, color: "Gold"},  //Gold
-        {x: 11*Xf, y: 25*Yf, w: xc, h: yc, color: "#8B008B"},  //Purple
-        {x: 21*Xf, y: Yf, w: xc, h: yc, color: "#DDA0DD"},  //Pink
-        {x: 21*Xf, y: 13*Yf, w: xc, h: yc, color: "#FF8C00"}, //Orange k6
-        {x: 21*Xf, y: 25*Yf, w: xc, h: yc, color: "Lightseagreen"}, //Lightseagreen
-        {x: 11*Xf, y: 13*Yf, w: xc, h: yc, color: "Brown"}];//Brown
+var rects = [{x: 10*Xf, y: 10*Yf, w: xc, h: yc, color: "Green"},  //Green
+        {x: 110*Xf, y: 10*Yf, w: xc, h: yc, color: "#DC143C"},  //Red
+        {x: 10*Xf, y: 130*Yf, w: xc, h: yc, color: "#1E90FF"},  //Blue
+        {x: 10*Xf, y: 250*Yf, w: xc, h: yc, color: "Gold"},  //Gold
+        {x: 110*Xf, y: 250*Yf, w: xc, h: yc, color: "#8B008B"},  //Purple
+        {x: 210*Xf, y: 10*Yf, w: xc, h: yc, color: "#DDA0DD"},  //Pink
+        {x: 210*Xf, y: 130*Yf, w: xc, h: yc, color: "#FF8C00"}, //Orange k6
+        {x: 210*Xf, y: 250*Yf, w: xc, h: yc, color: "Lightseagreen"}, //Lightseagreen
+        {x: 110*Xf, y: 130*Yf, w: xc, h: yc, color: "Brown"}];//Brown
 
 var game_interface = function drawGame() {
+    console.log("drawing...");
     ctx.fillStyle = "Silver";
-    ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+    ctx.fillRect(0, 0, x, y);
     for (var i = 0; i < rects.length; i += 1) {
         ctx.fillStyle = rects[i].color;
         ctx.fillRect(rects[i].x, rects[i].y, xc, yc);
@@ -82,87 +91,77 @@ var game_interface = function drawGame() {
         ctx.stroke();
         console.log("hi");
     }
-
     ctx.fillStyle = "Black";
-    ctx.fillRect(7 * Xf, 37 * Yf, 23 * Xf, 5 * Yf);//k10
-    ctx.fillRect(7 * Xf, 43 * Yf, 23 * Xf, 5 * Yf);//k11
+    ctx.fillRect(70 * Xf, 370 * Yf, 230 * Xf, 50 * Yf);//k10
+    ctx.fillRect(70 * Xf, 430 * Yf, 230 * Xf, 50 * Yf);//k11
     ctx.beginPath();
-    ctx.moveTo(2 * Xf, 37 * Yf);
-    ctx.lineTo(5 * Xf, 37 * Yf);
-    ctx.quadraticCurveTo(6 * Xf, 37 * Yf, 6 * Xf, 38 * Yf);
-    ctx.lineTo(6 * Xf, 41 * Yf);
-    ctx.quadraticCurveTo(6 * Xf, 42 * Yf, 5 * Xf, 42 * Yf);
-    ctx.lineTo(2 * Xf, 42 * Yf);
-    ctx.quadraticCurveTo(Xf, 42 * Yf, Xf, 41 * Yf);
-    ctx.lineTo(Xf, 38 * Yf);
-    ctx.quadraticCurveTo(Xf, 37 * Yf, 2 * Xf, 37 * Yf);
+    ctx.moveTo(20 * Xf, 370 * Yf);
+    ctx.lineTo(50 * Xf, 370 * Yf);
+    ctx.quadraticCurveTo(60 * Xf, 370 * Yf, 60 * Xf, 380 * Yf);
+    ctx.lineTo(60 * Xf, 410 * Yf);
+    ctx.quadraticCurveTo(60 * Xf, 420 * Yf, 50 * Xf, 420 * Yf);
+    ctx.lineTo(20 * Xf, 420 * Yf);
+    ctx.quadraticCurveTo(10*Xf, 420 * Yf, 10*Xf, 410 * Yf);
+    ctx.lineTo(10*Xf, 380 * Yf);
+    ctx.quadraticCurveTo(10 * Xf, 370 * Yf, 20 * Xf, 370 * Yf);
     ctx.fill();
     ctx.strokeStyle = "Black";
     ctx.stroke();
     k13Box();
     ctx.fillStyle = "White";
     ctx.font = "25px Arial";
-    var getCoord8 = blackCanvasthing(43/49, "3"), Xhnit = getCoord8.X13, Yhnit = getCoord8.Y;
+    var getCoord8 = blackCanvasthing(430/y_canvas1, "3"), Xhnit = getCoord8.X13, Yhnit = getCoord8.Y;
     ctx.fillText("3", Xhnit, Yhnit);// Number of lives to start with.
     ctx.beginPath();
-    ctx.arc(3.5 * Xf, 39.5 * Yf, 2*Xf, (5*Math.PI)/4, (Math.PI), false);
-    ctx.lineWidth = 0.3*Xf;
+    ctx.arc(35 * Xf, 395 * Yf, 20*Xf, (5*Math.PI)/4, (Math.PI), false);
+    ctx.lineWidth = 3*Xf;
     ctx.strokeStyle = "White";
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(1.5*Xf, 38.5*Yf);
-    ctx.lineTo(1.1*Xf, 39.5*Yf);
-    ctx.lineTo(2*Xf, 39.5*Yf);
+    ctx.moveTo(15*Xf, 385*Yf);
+    ctx.lineTo(11*Xf, 395*Yf);
+    ctx.lineTo(20*Xf, 395*Yf);
     ctx.fill();
     ctx.font = "25px Arial";
-    var getCoord1 = blackCanvasthing(43/49, "Click to Start");
+    var getCoord1 = blackCanvasthing(430/y_canvas1, "Click to Start");
     var Xhnit = getCoord1.X, Yhnit = getCoord1.Y;
     ctx.fillText("Click to Start", Xhnit, Yhnit);
 };
-function resize_canvas() {
-    if (a_canvas.width < window.innerWidth) {
-        a_canvas.width = window.innerWidth;
-    }
-    if (a_canvas.height < window.innerHeight) {
-        a_canvas.height = window.innerHeight;
-    }
-    game_interface();
-}
 
 var black_canvas = function blackCanvas() {
     ctx.fillStyle = "Black";
-    ctx.fillRect(7 * Xf, 43 * Yf, 23 * Xf, 5 * Yf);//k11
+    ctx.fillRect(70 * Xf, 430 * Yf, 230 * Xf, 50 * Yf);//k11
     ctx.fillStyle = "White";
     ctx.font = "25px Arial";
-    var getCoord7 = blackCanvasthing(43/49, "Round: x"), Xhnit = getCoord7.X, Yhnit = getCoord7.Y;
+    var getCoord7 = blackCanvasthing(430/y_canvas1, "Round: x"), Xhnit = getCoord7.X, Yhnit = getCoord7.Y;
     ctx.fillText("Round: " + round, Xhnit, Yhnit);
 };
 
 var continue_canvas = function continueBlack() {
     ctx.fillStyle = "Black";
-    ctx.fillRect(7 * Xf, 43 * Yf, 23 * Xf, 5 * Yf);
+    ctx.fillRect(70 * Xf, 430 * Yf, 230 * Xf, 50 * Yf);
     ctx.fillStyle = "White";
     ctx.font = "25px Arial";
-    var getCoord2 = blackCanvasthing(43/49, "Proceed"), Xhnit = getCoord2.X, Yhnit = getCoord2.Y;
+    var getCoord2 = blackCanvasthing(430/y_canvas1, "Proceed"), Xhnit = getCoord2.X, Yhnit = getCoord2.Y;
     ctx.fillText("Proceed", Xhnit, Yhnit);
 };
 
 
 var remain_cavas = function newRemaining() {
     ctx.fillStyle = "Black";
-    ctx.fillRect(7 * Xf, 37 * Yf, 23 * Xf, 5 * Yf);//k10
+    ctx.fillRect(70 * Xf, 370 * Yf, 230 * Xf, 50 * Yf);//k10
     ctx.fillStyle = "White";
     ctx.font = "25px Arial";
-    var getCoord3 = blackCanvasthing(37/49, "Remaining: x"), Xhnit = getCoord3.X, Yhnit = getCoord3.Y;
+    var getCoord3 = blackCanvasthing(370/y_canvas1, "Remaining: x"), Xhnit = getCoord3.X, Yhnit = getCoord3.Y;
     ctx.fillText("Remaining: " + remain, Xhnit, Yhnit);//k10
 };
 
 var currentremain_canvas = function newCurrentR() {
     ctx.fillStyle = "Black";
-    ctx.fillRect(7*Xf, 37*Yf, 23*Xf, 5*Yf);//k10
+    ctx.fillRect(70*Xf, 370*Yf, 230*Xf, 50*Yf);//k10
     ctx.fillStyle = "White";
     ctx.font = "25px Arial";
-    var getCoord4 = blackCanvasthing(37/49, "Remaining: x"), Xhnit = getCoord4.X, Yhnit = getCoord4.Y;
+    var getCoord4 = blackCanvasthing(370/y_canvas1, "Remaining: x"), Xhnit = getCoord4.X, Yhnit = getCoord4.Y;
     ctx.fillText("Remaining: " + currentremain, Xhnit, Yhnit);
 };
 
@@ -180,27 +179,27 @@ var gameover_interface = function game_over() {
     k13Box();
     ctx.fillStyle = "White";
     ctx.font = "25px Arial";
-    var getCoord10 = blackCanvasthing(43/49, "0"), Xhnit = getCoord10.X13, Yhnit = getCoord10.Y;
+    var getCoord10 = blackCanvasthing(430/y_canvas1, "0"), Xhnit = getCoord10.X13, Yhnit = getCoord10.Y;
     ctx.fillText("0", Xhnit, Yhnit);//lives = 0
-    ctx.clearRect(7*Xf, 43*Yf, 23*Xf, 5*Yf);//k11
+    ctx.clearRect(70*Xf, 430*Yf, 230*Xf, 50*Yf);//k11
     ctx.fillStyle = "Black";
-    ctx.fillRect(7*Xf, 43*Yf, 23*Xf, 5*Yf);//k11
+    ctx.fillRect(70*Xf, 430*Yf, 230*Xf, 50*Yf);//k11
     ctx.fillStyle = "White";
     ctx.font = "25px Arial";
-    var getCoord5 = blackCanvasthing(43/49, "Game over: "), Xhnit = getCoord5.X, Yhnit = getCoord5.Y;
+    var getCoord5 = blackCanvasthing(430/y_canvas1, "Game over: "), Xhnit = getCoord5.X, Yhnit = getCoord5.Y;
     ctx.fillText("Game over: " + round, Xhnit, Yhnit);
-    ctx.clearRect(7*Xf, 37*Yf, 23*Xf, 5*Yf);//k10
+    ctx.clearRect(70*Xf, 370*Yf, 230*Xf, 50*Yf);//k10
     ctx.fillStyle = "Black";
-    ctx.fillRect(7*Xf, 37*Yf, 23*Xf, 5*Yf);//k10
+    ctx.fillRect(70*Xf, 370*Yf, 230*Xf, 50*Yf);//k10
     ctx.fillStyle = "White";
     ctx.font = "25px Arial";
-    var getCoord6 = blackCanvasthing(37/49, "<-- Try again?"), Xhnit = getCoord6.X, Yhnit = getCoord6.Y;
+    var getCoord6 = blackCanvasthing(370/y_canvas1, "<-- Try again?"), Xhnit = getCoord6.X, Yhnit = getCoord6.Y;
     a_canvas.addEventListener('click', gameover, false);
     ctx.fillText("<-- Try again?", Xhnit, Yhnit);
 };
 
-var consoleRects = [{x: Xf, y: 37*Yf, w: 5*Xf, h: 5*Yf}];//k12
-var startRects = [{x: 7*Xf, y: 43*Yf, w: 23*Xf, h: 5*Yf}];//k11
+var consoleRects = [{x: 10*Xf, y: 370*Yf, w: 50*Xf, h: 50*Yf}];//k12
+var startRects = [{x: 70*Xf, y: 430*Yf, w: 230*Xf, h: 50*Yf}];//k11
 
 function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -216,21 +215,23 @@ function collides(rects2, x, y) {
 }
 
 function turnEvent(x, y) {
-    var xw = window.innerWidth, yw = window.innerHeight, kassi = collides(rects, x, y);
-    var Xfw = xw/31;
-    var Yfw = yw/49;
-    var newXsf = 0.3 * Xfw, newYsf = 0.3 * Yfw, newXlf = 0.6 * Xfw, newYlf = 0.6 * Yfw, newXs = 0, newYs = 0, newXl = 0, newYl = 0;
+    var xw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    var yw = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+    var kassi = collides(rects, x, y);
+    var Xfw = xw/x_canvas1;
+    var Yfw = yw/y_canvas1;
+    var newXsf = 3 * Xfw, newYsf = 3 * Yfw, newXlf = 6 * Xfw, newYlf = 6 * Yfw, newXs = 0, newYs = 0, newXl = 0, newYl = 0;
     var boxesSizes = [{x: kassi.x + ((1/3)*xc), y: kassi.y + ((1/3)*yc), h: ((1/3)*xc), w:  ((4/11)*yc)}];
     ctx.fillStyle = "black";
     ctx.fillRect(kassi.x, kassi.y, xc, yc);
     var temp_var = setInterval(function myAnimation() {
         ctx.fillStyle = kassi.color;
         ctx.fillRect(boxesSizes[0].x - newXs, boxesSizes[0].y - newYs, boxesSizes[0].h + newXl, boxesSizes[0].w + newYl);
-        if (newXs.toFixed(2) > ((1/3)*xc)-newXsf+(0.1* xw)/31) { newXsf = 0; }
+        if (newXs.toFixed(2) > ((1/3)*xc)-newXsf+(xw)/x_canvas1) { newXsf = 0; }
         else { newXs +=  newXsf; }
         if (newYs.toFixed(2) > ((1/3)*yc)-newYsf) { newYsf = 0; }
         else { newYs += newYsf; }
-        if (newXl.toFixed(2) > ((2/3)*xc-newXlf+(0.1* xw)/31)) { newXlf = 0; } 
+        if (newXl.toFixed(2) > ((2/3)*xc-newXlf+(xw)/x_canvas1)) { newXlf = 0; } 
         else { newXl += newXlf; }
         if (newYl.toFixed(2) > (7/11)*yc-newYlf) { newYlf = 0;} 
         else { newYl += newYlf; }
@@ -290,7 +291,7 @@ function computerRe() {
 
 function randomXY() {
     //chooses random coordinates for the computer.
-    var minXY = Xf, maxX = 30*Xf, maxY = 36*Yf;
+    var minXY = 10*Xf, maxX = 300*Xf, maxY = 360*Yf;
     X = randomInt(minXY, maxX), Y = randomInt(minXY, maxY);
     while (!collides(rects, X, Y)) { X = randomInt(minXY, maxX), Y = randomInt(minXY, maxY); }
     return { 'x': X, 'y': Y }; // OBJECT coordinates for box the computer hits next.
@@ -332,7 +333,7 @@ function startPlaying() {
                 k13Box();
                 ctx.fillStyle = "White";
                 ctx.font = "25px Arial";
-                var getCoord9 = blackCanvasthing(43/49, "" + lives), Xhnit = getCoord9.X13, Yhnit = getCoord9.Y;
+                var getCoord9 = blackCanvasthing(430/y_canvas1, "" + lives), Xhnit = getCoord9.X13, Yhnit = getCoord9.Y;
                 ctx.fillText("" + lives, Xhnit, Yhnit);
                 if (lives !== 0) {
                     setTimeout(function(){
@@ -357,10 +358,10 @@ function startPlaying() {
         }
     }
 }
-
-resize_canvas();
+game_interface();
 if (!doNothing) {
     if (a_canvas && a_canvas.getContext) {
         a_canvas.addEventListener('click', clickEvent, false);
+        new FastClick.attach(document.body);
     }
 }
