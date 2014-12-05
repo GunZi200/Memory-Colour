@@ -257,7 +257,6 @@ function collides(rects2, x, y) {
 }
 
 function turnEvent(AnX, AnY) {
-    var xcf = 90, ycf = 110
     var xw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
     var yw = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
@@ -282,22 +281,16 @@ function turnEvent(AnX, AnY) {
             ctx.stroke();
         }
     }
-    for (var i = 0; i < lengd; i += 1) {
-        if (rightBox.color === rects[i].color ) {
-                var smallBox = rects[i];
-            };
-    }    
-    var one30 = 2;
-    var one40 = 2;
-    var thirty = 30;
-    var forty = 40;
+    var one30 = 3;
+    var one40 = 4;
+    var thirty = 33;
+    var forty = 43;
     var fifty = 50;
-    var sixty = 60;
+    var sixty = 58;
     var seventy = 70;
-    var eigthy = 80;
+    var eigthy = 78;
     var one301 = 1;
     var one401 = 1;
-    var j = 0;
     var temp_var = setInterval(function myAnimation() {
         ctx.beginPath();
         ctx.fillStyle = rightBox.color;
@@ -311,19 +304,18 @@ function turnEvent(AnX, AnY) {
         ctx.lineTo((rightBox.x + thirty - one30) * Xf, (rightBox.y + forty - one40) * Yf);
         ctx.quadraticCurveTo((rightBox.x + thirty - one30) * Xf, (rightBox.y + thirty - one30) * Yf, (rightBox.x + forty - one40) * Xf, (rightBox.y + thirty - one30) * Yf);
         ctx.fill();
-        if (one30 === 28) {
+        if (one30 === 30) {
             one30 += 0;
             one301 = 0;
         } else {
-            one30 += 2;
+            one30 += 3;
         }
-        if (one40 === 38) {
+        if (one40 === 40) {
             one40 += 0;
             one401 = 0;
         } else {
-            one40 += 2;
+            one40 += 4;
         }
-        j += 1;
         if (one301 === 0 && one401 === 0) {
             var lengd = rects.length;
             for (var i = 0; i < lengd; i += 1) {
@@ -347,7 +339,7 @@ function turnEvent(AnX, AnY) {
             }
             clearInterval(temp_var);
         }
-    },10);
+    },800/60);
 }
 
 function clickEvent(e){
@@ -434,7 +426,7 @@ function startPlaying() {
         //If a box is clicked
         if (collides(rects, ex, ey)) {
             //if clicked n box is the same as n box from computer.
-            if (collides(rects, ex, ey) === que[counter]) { //if tveir litir eru tvisvar Ã­ rÃ¶Ã°.
+            if (collides(rects, ex, ey) === que[counter]) { //if tveir litir eru tvisvar í röð.
                 turnEvent(ex, ey);//do animation
                 reverseQue.shift();//pops the first object in array.
                 counter += 1, currentremain -= 1;
