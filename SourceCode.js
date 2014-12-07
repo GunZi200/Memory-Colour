@@ -8,6 +8,8 @@
 // user follows...
 window.onload = function () {
     console.log("Game is loaded...");
+    resize_canvas();
+    game_interface();
 };
 
 var a_canvas = document.getElementById("a");
@@ -45,7 +47,7 @@ function resize_canvas() {
         a_canvas.height = y;
     }
 }
-resize_canvas();
+
 var k13Box = function drawK13() {
     ctx.fillStyle = "Black";
     ctx.beginPath();
@@ -213,6 +215,15 @@ var black_canvas2Proceed = function proCeed() {
     ctx.fillText("Proceed", 185 * Xf, 460 * Yf);
 };
 
+ var remainUpdate = function remainUpdate() {
+    ctx.fillStyle = "Black";
+    ctx.fillRect(80 * Xf, 370 * Yf, 210 * Xf, 40 * Yf);//k10
+    ctx.fillStyle = "White";
+    ctx.font = pixels + " px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("Remaining: " + remain, 185 * Xf, 400 * Yf);//k10
+};
+
 function gameover(e) {
     ex = e.offsetX;
     ey = e.offsetY;
@@ -248,41 +259,66 @@ function loopALoop() {
         if (collides([rects[i]], ex, ey)) {
             var rightBox = rects[i];
             var rectangle = rects2[i];
+
+            var rectangleXTen = (rects2[i].x + 10) * Xf;
+            var rectangleX90 = (rects2[i].x + 90) * Xf;
+            var rectangleX80 = (rects2[i].x + 80) * Xf;
+            //-----------------
+            var rectangleY110 = (rects2[i].y + 110) * Yf;
+            var rectangleY100 = (rects2[i].y + 100) * Yf;
+            var rectangleYTen = (rects2[i].y + 10) * Yf;
+            //----------------
         }
     }
     ctx.beginPath();
-    ctx.moveTo((rectangle.x + 10) * Xf, rightBox.y);
-    ctx.lineTo((rectangle.x + 80) * Xf, rightBox.y);
-    ctx.quadraticCurveTo((rectangle.x + 90) * Xf, rightBox.y, (rectangle.x + 90) * Xf, (rectangle.y + 10) * Yf);
-    ctx.lineTo((rectangle.x + 90) * Xf, (rectangle.y + 100) * Yf);
-    ctx.quadraticCurveTo((rectangle.x + 90) * Xf, (rectangle.y + 110) * Yf, (rectangle.x + 80) * Xf, (rectangle.y + 110) * Yf);
-    ctx.lineTo((rectangle.x + 10) * Xf, (rectangle.y + 110) * Yf);
-    ctx.quadraticCurveTo(rightBox.x, (rectangle.y + 110) * Yf, rightBox.x, (rectangle.y + 100) * Yf);
-    ctx.lineTo(rightBox.x, (rectangle.y + 10) * Yf);
-    ctx.quadraticCurveTo(rightBox.x, rightBox.y, (rectangle.x + 10) * Xf, rightBox.y);
+    ctx.moveTo(rectangleXTen, rightBox.y);
+    ctx.lineTo(rectangleX80, rightBox.y);
+    ctx.quadraticCurveTo(rectangleX90, rightBox.y, rectangleX90, rectangleYTen);
+    ctx.lineTo(rectangleX90, rectangleY100);
+    ctx.quadraticCurveTo(rectangleX90, rectangleY110, rectangleX80, rectangleY110);
+    ctx.lineTo(rectangleXTen, rectangleY110);
+    ctx.quadraticCurveTo(rightBox.x, rectangleY110, rightBox.x, rectangleY100);
+    ctx.lineTo(rightBox.x, rectangleYTen);
+    ctx.quadraticCurveTo(rightBox.x, rightBox.y, rectangleXTen, rightBox.y);
     ctx.lineWidth = 4;
     ctx.strokeStyle = 'black';
     ctx.stroke();
 }
+
 function turnEvent(AnX, AnY) {
-    var lengd = rects.length, i, one30 = 3, one40 = 4, thirty = 33, forty = 43, fifty = 50, sixty = 58, seventy = 70, eigthy = 78, one301 = 1, one401 = 1, temp = setInterval(myAnimation, 800 / 60);
+    console.time('Infunction');
+    var lengd = rects.length, i,
+    one30 = 10,
+    one40 = 10,  
+    one301 = 1, 
+    one401 = 1, 
+    temp = setInterval(myAnimation, 5);
     for (var i = 0; i < lengd; i += 1) {
         if (collides([rects[i]], AnX, AnY)) {
             var rightBox = rects[i];
             var rectangle = rects2[i];
+             //---------------
+            var rectangleXTen = (rects2[i].x + 10) * Xf;
+            var rectangleX90 = (rects2[i].x + 90) * Xf;
+            var rectangleX80 = (rects2[i].x + 80) * Xf;
+            //-----------------
+            var rectangleY110 = (rects2[i].y + 110) * Yf;
+            var rectangleY100 = (rects2[i].y + 100) * Yf;
+            var rectangleYTen = (rects2[i].y + 10) * Yf;
+            //----------------
         }
     }
     ctx.beginPath();
     ctx.fillStyle = 'black';
-    ctx.moveTo((rectangle.x + 10) * Xf, rightBox.y);
-    ctx.lineTo((rectangle.x + 80) * Xf, rightBox.y);
-    ctx.quadraticCurveTo((rectangle.x + 90) * Xf, rightBox.y, (rectangle.x + 90) * Xf, (rectangle.y + 10) * Yf);
-    ctx.lineTo((rectangle.x + 90) * Xf, (rectangle.y + 100) * Yf);
-    ctx.quadraticCurveTo((rectangle.x + 90) * Xf, (rectangle.y + 110) * Yf, (rectangle.x + 80) * Xf, (rectangle.y + 110) * Yf);
-    ctx.lineTo((rectangle.x + 10) * Xf, (rectangle.y + 110) * Yf);
-    ctx.quadraticCurveTo(rightBox.x, (rectangle.y + 110) * Yf, rightBox.x, (rectangle.y + 100) * Yf);
-    ctx.lineTo(rightBox.x, (rectangle.y + 10) * Yf);
-    ctx.quadraticCurveTo(rightBox.x, rightBox.y, (rectangle.x + 10) * Xf, rightBox.y);
+    ctx.moveTo(rectangleXTen, rightBox.y);
+    ctx.lineTo(rectangleX80, rightBox.y);
+    ctx.quadraticCurveTo(rectangleX90, rightBox.y, rectangleX90, rectangleYTen);
+    ctx.lineTo(rectangleX90, rectangleY100);
+    ctx.quadraticCurveTo(rectangleX90, rectangleY110, rectangleX80, rectangleY110);
+    ctx.lineTo(rectangleXTen, rectangleY110);
+    ctx.quadraticCurveTo(rightBox.x, rectangleY110, rightBox.x, rectangleY100);
+    ctx.lineTo(rightBox.x, rectangleYTen);
+    ctx.quadraticCurveTo(rightBox.x, rightBox.y, rectangleXTen, rightBox.y);
     ctx.fill();
     ctx.lineWidth = 4;
     ctx.strokeStyle = 'black';
@@ -290,44 +326,45 @@ function turnEvent(AnX, AnY) {
     function myAnimation() {
         ctx.beginPath();
         ctx.fillStyle = rightBox.color;
-        ctx.moveTo((rectangle.x + forty - one40) * Xf, (rectangle.y + thirty - one30) * Yf);
-        ctx.lineTo((rectangle.x + fifty + one40) * Xf, (rectangle.y + thirty - one30) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + sixty + one30) * Xf, (rectangle.y + thirty - one30) * Yf, (rectangle.x + sixty + one30) * Xf, (rectangle.y + forty - one40) * Yf);
-        ctx.lineTo((rectangle.x + sixty + one30) * Xf, (rectangle.y + seventy + one40) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + sixty + one30) * Xf, (rectangle.y + eigthy + one30) * Yf, (rectangle.x + fifty + one40) * Xf, (rectangle.y + eigthy + one30) * Yf);
-        ctx.lineTo((rectangle.x + forty - one40) * Xf, (rectangle.y + eigthy + one30) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + thirty - one30) * Xf, (rectangle.y + eigthy + one30) * Yf, (rectangle.x + thirty - one30) * Xf, (rectangle.y + seventy + one40) * Yf);
-        ctx.lineTo((rectangle.x + thirty - one30) * Xf, (rectangle.y + forty - one40) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + thirty - one30) * Xf, (rectangle.y + thirty - one30) * Yf, (rectangle.x + forty - one40) * Xf, (rectangle.y + thirty - one30) * Yf);
+        ctx.moveTo((rectangle.x + 43 - one40) * Xf, (rectangle.y + 33 - one30) * Yf);
+        ctx.lineTo((rectangle.x + 50 + one40) * Xf, (rectangle.y + 33 - one30) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 58 + one30) * Xf, (rectangle.y + 33 - one30) * Yf, (rectangle.x + 58 + one30) * Xf, (rectangle.y + 43 - one40) * Yf);
+        ctx.lineTo((rectangle.x + 58 + one30) * Xf, (rectangle.y + 70 + one40) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 58 + one30) * Xf, (rectangle.y + 78 + one30) * Yf, (rectangle.x + 50 + one40) * Xf, (rectangle.y + 78 + one30) * Yf);
+        ctx.lineTo((rectangle.x + 43 - one40) * Xf, (rectangle.y + 78 + one30) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 33 - one30) * Xf, (rectangle.y + 78 + one30) * Yf, (rectangle.x + 33 - one30) * Xf, (rectangle.y + 70 + one40) * Yf);
+        ctx.lineTo((rectangle.x + 33 - one30) * Xf, (rectangle.y + 43 - one40) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 33 - one30) * Xf, (rectangle.y + 33 - one30) * Yf, (rectangle.x + 43 - one40) * Xf, (rectangle.y + 33 - one30) * Yf);
         ctx.fill();
         if (one30 === 30) {
             one30 += 0;
             one301 = 0;
         } else {
-            one30 += 3;
+            one30 += 1;
         }
         if (one40 === 40) {
             one40 += 0;
             one401 = 0;
         } else {
-            one40 += 4;
+            one40 += 1;
         }
         if (one301 === 0 && one401 === 0) {
             ctx.beginPath();
             ctx.fillStyle = rightBox.color;
-            ctx.moveTo((rectangle.x + 10) * Xf, rightBox.y);
-            ctx.lineTo((rectangle.x + 80) * Xf, rightBox.y);
-            ctx.quadraticCurveTo((rectangle.x + 90) * Xf, rightBox.y, (rectangle.x + 90) * Xf, (rectangle.y + 10) * Yf);
-            ctx.lineTo((rectangle.x + 90) * Xf, (rectangle.y + 100) * Yf);
-            ctx.quadraticCurveTo((rectangle.x + 90) * Xf, (rectangle.y + 110) * Yf, (rectangle.x + 80) * Xf, (rectangle.y + 110) * Yf);
-            ctx.lineTo((rectangle.x + 10) * Xf, (rectangle.y + 110) * Yf);
-            ctx.quadraticCurveTo(rightBox.x, (rectangle.y + 110) * Yf, rightBox.x, (rectangle.y + 100) * Yf);
-            ctx.lineTo(rightBox.x, (rectangle.y + 10) * Yf);
-            ctx.quadraticCurveTo(rightBox.x, rightBox.y, (rectangle.x + 10) * Xf, rightBox.y);
+            ctx.moveTo(rectangleXTen, rightBox.y);
+            ctx.lineTo(rectangleX80, rightBox.y);
+            ctx.quadraticCurveTo(rectangleX90, rightBox.y, rectangleX90, rectangleYTen);
+            ctx.lineTo(rectangleX90, rectangleY100);
+            ctx.quadraticCurveTo(rectangleX90, rectangleY110, rectangleX80, rectangleY110);
+            ctx.lineTo(rectangleXTen, rectangleY110);
+            ctx.quadraticCurveTo(rightBox.x, rectangleY110, rightBox.x, rectangleY100);
+            ctx.lineTo(rightBox.x, rectangleYTen);
+            ctx.quadraticCurveTo(rightBox.x, rightBox.y, rectangleXTen, rightBox.y);
             ctx.fill();
             ctx.lineWidth = 4;
             ctx.strokeStyle = 'black';
             ctx.stroke();
+            console.timeEnd('Infunction');
             clearInterval(temp);
         }
     }
@@ -335,16 +372,12 @@ function turnEvent(AnX, AnY) {
 
 function computer() {
     a_canvas.removeEventListener('click', clickEvent, false);
-    ctx.fillStyle = "Black";
-    ctx.fillRect(80 * Xf, 370 * Yf, 210 * Xf, 40 * Yf);//k10
-    ctx.fillStyle = "White";
-    ctx.font = pixels + " px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText("Remaining: " + remain, 185 * Xf, 400 * Yf);//k10
     currentremain = remain; // reset values...
     var j = 0, i = setInterval(function () {
         //do animation for the first object in Object, and then the next, and the next.
-        turnEvent(que[j].x, que[j].y);
+        console.time('COMPUTERturnEvent');
+        turnEvent(que[j].x, que[j].y); // run whatever needs to be timed in between the statements
+        console.timeEnd('COMPUTERturnEvent');
         myMedia.play();
         j += 1; // stops when counter equals the length of que.
         if (j === que.length) {
@@ -357,15 +390,11 @@ function computer() {
 
 function computerRe() {
     //same as computer function, but is timed faster.
-    ctx.fillStyle = "Black";
-    ctx.fillRect(80 * Xf, 370 * Yf, 210 * Xf, 40 * Yf);//k10
-    ctx.fillStyle = "White";
-    ctx.font = pixels + " px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText("Remaining: " + remain, 185 * Xf, 400 * Yf);//k10
     currentremain = remain;
     var j = 0, i = setInterval(function () {
-        turnEvent(que[j].x, que[j].y);
+        console.time('COMPUTERturnEvent');
+        turnEvent(que[j].x, que[j].y); // run whatever needs to be timed in between the statements
+        console.timeEnd('COMPUTERturnEvent');
         myMedia.play();
         j += 1;
         if (j === que.length) {
@@ -400,9 +429,10 @@ function startPlaying() {
     if (blackCan && !userTurn) {
         for (i = 0; i < lengd; i += 1) {
             if (collides([rects[i]], g.x, g.y)) {
+                remainUpdate();
                 var boxy = rects[i];
                 que.push(boxy);
-                reverseQue = [];
+                //reverseQue = [];
                 reverseQue = que.slice(0);
                 blackCan = false;
                 computer();
@@ -414,9 +444,9 @@ function startPlaying() {
             //if clicked n box is the same as n box from computer.
             if (collides(rects, ex, ey) === que[counter]) {
                 //turnEvent(ex, ey);      //do animation
-                console.time('turnEvent');
+                console.time('USERturnEvent');
                 turnEvent(ex, ey); // run whatever needs to be timed in between the statements
-                console.timeEnd('turnEvent');
+                console.timeEnd('USERturnEvent');
                 //turnEvent1(ex, ey);
                 reverseQue.shift();     //pops the first object in array.
                 counter += 1; 
@@ -429,18 +459,26 @@ function startPlaying() {
                     if (collides([rects[i]], ex, ey)) {
                         var rightBox = rects[i];
                         var rectangle = rects2[i];
+                         //---------------
+                        var rectangleXTen = (rects2[i].x + 10) * Xf;
+                        var rectangleX90 = (rects2[i].x + 90) * Xf;
+                        var rectangleX80 = (rects2[i].x + 80) * Xf;
+                        //-----------------
+                        var rectangleY110 = (rects2[i].y + 110) * Yf;
+                        var rectangleY100 = (rects2[i].y + 100) * Yf;
+                        var rectangleYTen = (rects2[i].y + 10) * Yf;
                     }
                 }
                 ctx.beginPath();
-                ctx.moveTo((rectangle.x + 10) * Xf, rightBox.y);
-                ctx.lineTo((rectangle.x + 80) * Xf, rightBox.y);
-                ctx.quadraticCurveTo((rectangle.x + 90) * Xf, rightBox.y, (rectangle.x + 90) * Xf, (rectangle.y + 10) * Yf);
-                ctx.lineTo((rectangle.x + 90) * Xf, (rectangle.y + 100) * Yf);
-                ctx.quadraticCurveTo((rectangle.x + 90) * Xf, (rectangle.y + 110) * Yf, (rectangle.x + 80) * Xf, (rectangle.y + 110) * Yf);
-                ctx.lineTo((rectangle.x + 10) * Xf, (rectangle.y + 110) * Yf);
-                ctx.quadraticCurveTo(rightBox.x, (rectangle.y + 110) * Yf, rightBox.x, (rectangle.y + 100) * Yf);
-                ctx.lineTo(rightBox.x, (rectangle.y + 10) * Yf);
-                ctx.quadraticCurveTo(rightBox.x, rightBox.y, (rectangle.x + 10) * Xf, rightBox.y);
+                ctx.moveTo(rectangleXTen, rightBox.y);
+                ctx.lineTo(rectangleX80, rightBox.y);
+                ctx.quadraticCurveTo(rectangleX90, rightBox.y, rectangleX90, rectangleYTen);
+                ctx.lineTo(rectangleX90, rectangleY100);
+                ctx.quadraticCurveTo(rectangleX90, rectangleY110, rectangleX80, rectangleY110);
+                ctx.lineTo(rectangleXTen, rectangleY110);
+                ctx.quadraticCurveTo(rightBox.x, rectangleY110, rightBox.x, rectangleY100);
+                ctx.lineTo(rightBox.x, rectangleYTen);
+                ctx.quadraticCurveTo(rightBox.x, rightBox.y, rectangleXTen, rightBox.y);
                 ctx.lineWidth = 4;
                 ctx.strokeStyle = 'red';
                 ctx.stroke();
@@ -457,18 +495,19 @@ function startPlaying() {
                 if (lives !== 0) {  //if not game over.
                     setTimeout(function () {
                         userTurn = false;   //blackCan should be false too.
+                        remainUpdate();
                         computerRe();
                     }, 1000);
                 }
             }
-            if (reverseQue.length === 0) {
+            if (!reverseQue.length) {
                 if (round > 0) {
                     round += 1;
                 }
                 black_canvas2Proceed();
                 return;
             }
-            if (lives === 0) {
+            if (!lives) {
                 setTimeout(function () {
                     endAudio.play();
                 }, 800);
@@ -492,7 +531,7 @@ var clickEvent = function clickEvent(e) {
     }
 }
 
-game_interface();
+//game_interface();
 if (a_canvas && a_canvas.getContext) {
     a_canvas.addEventListener('click', clickEvent, false);
     FastClick.attach(document.body);
