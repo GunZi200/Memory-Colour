@@ -9,7 +9,7 @@
 //window.onload = function () {
 
 
-//--------------AUTHORIZE GAME CENTER LOGIN-------------->
+//--------------AUTHENTICATE GAME CENTER LOGIN-------------->
 document.addEventListener("deviceready", authUser, false);
 var failureCallback = "Error!";
 var successCallback = function (user) {
