@@ -7,13 +7,23 @@
 // computer uses turnEvent on BOTH boxex in que, in the right order.
 // user follows...
 //window.onload = function () {
+
+document.addEventListener("deviceready", authUser, false);
 var successCallback = function (user) {
     alert(user.alias);
     // user.alias, user.playerID, user.displayName
 };
+var failureCallback = "Error!";
 
-gamecenter.auth(successCallback, failureCallback);
-//console.log("Game is loaded...");
+function authUser(){
+    gamecenter.auth(successCallback, failureCallback);
+    var scoreData = { 
+        score: round, 
+        leaderboardId: "board1"
+    };
+    gamecenter.submitScore(onSuccess, onError, scoreData);
+    alert(ScoreData);
+}
 //};
 
 var a_canvas = document.getElementById("a");
@@ -42,10 +52,6 @@ var x_canvas = a_canvas.width;//310
 var y_canvas = a_canvas.height;//490
 var Xf = x / x_canvas; // X fraction
 var Yf = y / y_canvas; // Y fraction*/
-var scoreData = { 
-        score: round, 
-        leaderboardId: "board1"
-    };
 function resize_canvas() {
     if (a_canvas.width < x) {
         a_canvas.width = x;
@@ -256,8 +262,6 @@ function gameover(e) {
 }
 
 var gameover_interface = function game_over() {
-    gamecenter.submitScore(onSuccess, onError, scoreData);
-    gamecenter.showLeaderboard(successCallback, failureCallback, scoreData);
     ctx.fillStyle = "Black";
     ctx.fillRect(80 * Xf, 430 * Yf, 210 * Xf, 40 * Yf);//k11
     ctx.fillRect(80 * Xf, 370 * Yf, 210 * Xf, 40 * Yf);//k10
