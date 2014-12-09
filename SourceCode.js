@@ -8,13 +8,15 @@
 // user follows...
 //window.onload = function () {
 
+
+//--------------AUTHORIZE GAME CENTER LOGIN-------------->
 document.addEventListener("deviceready", authUser, false);
+var failureCallback = "Error!";
 var successCallback = function (user) {
     alert(user.alias);
     var onSuccess = true;
     // user.alias, user.playerID, user.displayName
 };
-var failureCallback = "Error!";
 
 function authUser(){
     gamecenter.auth(successCallback, failureCallback);
@@ -22,18 +24,17 @@ function authUser(){
     leaderboardId: "board1"
     };
 }
-
+//------------------------------------------------------->
+//--------------------CANVAS---------------------->
 var a_canvas = document.getElementById("a");
 var ctx = a_canvas.getContext("2d");
-//----GLOBAL----
+//------------------------------------------------>
+//--------------------GLOBAL---------------------->
 var x = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 var y = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 var userTurn = false;
 var blackCan = false;
 var round = 1;
-var myMedia = new Audio("Click.mp3");
-var endAudio = new Audio("GameOver.mp3");
-//--------------
 var que = [];
 var reverseQue = [];
 var remain = 1;
@@ -43,8 +44,10 @@ var ex = 0;
 var ey = 0;
 var counter = 0;
 var dpr = 1;
+var myMedia = new Audio("Click.mp3");
+var endAudio = new Audio("GameOver.mp3");
+//------------------------------------------------>
 if(window.devicePixelRatio !== undefined) dpr = window.devicePixelRatio;
-console.log(dpr);
 var scoreData = { 
         score: round = round, 
         leaderboardId: "board1"
@@ -52,7 +55,7 @@ var scoreData = {
 var x_canvas = a_canvas.width;//310
 var y_canvas = a_canvas.height;//490
 var Xf = x / x_canvas; // X fraction
-var Yf = y / y_canvas; // Y fraction*/
+var Yf = y / y_canvas; // Y fraction
 function resize_canvas() {
     if (a_canvas.width < x) {
         a_canvas.width = x;
@@ -61,11 +64,6 @@ function resize_canvas() {
         a_canvas.height = y;
     }
 }
-
-var x_canvas = a_canvas.width;//310
-var y_canvas = a_canvas.height;//490
-var Xf = x / x_canvas; // X fraction
-var Yf = y / y_canvas; // Y fraction
 resize_canvas();
 var k13Box = function drawK13() {
     ctx.fillStyle = "Black";
@@ -86,13 +84,13 @@ var xc = 90 * Xf, yc = 110 * Yf;
 
 var rects = [{x: 10 * Xf, y: 10 * Yf, w: xc, h: yc, color: 'Green'},        //Green
         {x: 110 * Xf, y: 10 * Yf, w: xc, h: yc, color: '#DC143C'},          //Red
-        {x: 10 * Xf, y: 130 * Yf, w: xc, h: yc, color: "#1E90FF"},          //Blue
-        {x: 10 * Xf, y: 250 * Yf, w: xc, h: yc, color: "Gold"},             //Gold
-        {x: 110 * Xf, y: 250 * Yf, w: xc, h: yc, color: "#8B008B"},         //Purple
-        {x: 210 * Xf, y: 10 * Yf, w: xc, h: yc, color: "#DDA0DD"},          //Pink
-        {x: 210 * Xf, y: 130 * Yf, w: xc, h: yc, color: "#FF8C00"},         //Orange k6
-        {x: 210 * Xf, y: 250 * Yf, w: xc, h: yc, color: "Lightseagreen"},   //Lightseagreen
-        {x: 110 * Xf, y: 130 * Yf, w: xc, h: yc, color: "Brown"}];          //Brown
+        {x: 10 * Xf, y: 130 * Yf, w: xc, h: yc, color: '#1E90FF'},          //Blue
+        {x: 10 * Xf, y: 250 * Yf, w: xc, h: yc, color: 'Gold'},             //Gold
+        {x: 110 * Xf, y: 250 * Yf, w: xc, h: yc, color: '#8B008B'},         //Purple
+        {x: 210 * Xf, y: 10 * Yf, w: xc, h: yc, color: '#DDA0DD'},          //Pink
+        {x: 210 * Xf, y: 130 * Yf, w: xc, h: yc, color: '#FF8C00'},         //Orange k6
+        {x: 210 * Xf, y: 250 * Yf, w: xc, h: yc, color: 'Lightseagreen'},   //Lightseagreen
+        {x: 110 * Xf, y: 130 * Yf, w: xc, h: yc, color: 'Brown'}];          //Brown
 
 var rects2 = [{x: 10, y: 10},   //Green
         {x: 110, y: 10},        //Red
@@ -135,6 +133,7 @@ var game_interface = function drawGame() {
     var lengd = rects.length, i;
     ctx.fillStyle = "Silver";
     ctx.fillRect(0, 0, x, y);
+    //--------------DRAW ALL MAIN COLOURED RECTANGLES---------------------->
     for (i = 0; i < lengd; i += 1) {
         ctx.beginPath();
         ctx.fillStyle = rects[i].color;
@@ -152,6 +151,7 @@ var game_interface = function drawGame() {
         ctx.strokeStyle = 'black';
         ctx.stroke();
     }
+    //--------------------------------------------------------------------->
     ctx.fillStyle = 'black';
     //------------------K10-----------------
     ctx.beginPath();
@@ -263,12 +263,13 @@ function gameover(e) {
 }
 
 var gameover_interface = function game_over() {
-
+    //------------SUBMIT HIGHSCORE-------------------->
     function authUser(){
         gamecenter.submitScore(successCallback, failureCallback, scoreData);
-        alert("hi");
+        alert("updating highscore...");
     }
     document.addEventListener("deviceready", authUser, false);
+    //------------------------------------------------>
     ctx.fillStyle = "Black";
     ctx.fillRect(80 * Xf, 430 * Yf, 210 * Xf, 40 * Yf);//k11
     ctx.fillRect(80 * Xf, 370 * Yf, 210 * Xf, 40 * Yf);//k10
@@ -282,6 +283,7 @@ var gameover_interface = function game_over() {
 };
 
 function randomInt(min, max) {
+    //Calculates a random number between a 'min' and 'max' number.
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
@@ -389,14 +391,13 @@ function computer() {
     a_canvas.removeEventListener('click', clickEvent, false);
     currentremain = remain; // reset values...
     var j = 0, i = setInterval(function () {
-        //do animation for the first object in Object, and then the next, and the next.
-        turnEvent(que[j].x, que[j].y);
-        myMedia.play();
+        turnEvent(que[j].x, que[j].y);  // do animation for the first object in Object, and then the next, and the next.
+        myMedia.play(); //play click sound
         j += 1; // stops when counter equals the length of que.
         if (j === que.length) {
             clearInterval(i);
-            a_canvas.addEventListener('click', clickEvent, false);
             userTurn = true;
+            a_canvas.addEventListener('click', clickEvent, false);
         }
     }, 450);
 }
@@ -405,19 +406,23 @@ function computerRe() {
     //same as computer function, but is timed faster.
     currentremain = remain;
     var j = 0, i = setInterval(function () {
-        turnEvent(que[j].x, que[j].y);
-        myMedia.play();
+        turnEvent(que[j].x, que[j].y);  // do animation for the first object in Object, and then the next, and the next.
+        myMedia.play(); // play click sound
         j += 1;
         if (j === que.length) {
             clearInterval(i);
-            a_canvas.addEventListener('click', clickEvent, false);
             userTurn = true;
+            a_canvas.addEventListener('click', clickEvent, false);
         }
     }, 400);//faster version
 }
 function randomXY() {
     //chooses random coordinates for the computer.
-    var minXY = 10 * Xf, maxX = 300 * Xf, maxY = 360 * Yf, X = randomInt(minXY, maxX), Y = randomInt(minXY, maxY);
+    var minXY = 10 * Xf,// minimum coordinates in which X and Y meet first.
+    maxX = 300 * Xf,    // maximum length computer reaches on the X plane.
+    maxY = 360 * Yf,    // maximum length computer reaches on the Y plane.
+    X = randomInt(minXY, maxX),
+    Y = randomInt(minXY, maxY);
     while (!collides(rects, X, Y)) {
         // new coordinates if the other ones do not match.
         X = randomInt(minXY, maxX);
@@ -427,11 +432,12 @@ function randomXY() {
 }
 
 function startPlaying() {
-    var lengd = rects.length, g = { 'x': 0, 'y': 0 }, i;
-    if (collides(startRects, ex, ey)) {
+    var lengd = rects.length,
+    g = { 'x': 0, 'y': 0 }, i;
+    if (collides(startRects, ex, ey)) { // if start button...
         black_canvas2();
         blackCan = true;
-        g = randomXY();
+        g = randomXY(); // generate coordinates for computer.
     }
     if (blackCan && !userTurn) {
         for (i = 0; i < lengd; i += 1) {
@@ -449,10 +455,7 @@ function startPlaying() {
         if (collides(rects, ex, ey)) {
             //if clicked n box is the same as n box from computer.
             if (collides(rects, ex, ey) === que[counter]) {
-                //do animation
-                console.time('USERturnEvent');
-                turnEvent(ex, ey);
-                console.timeEnd('USERturnEvent');
+                turnEvent(ex, ey);      //do animation
                 reverseQue.shift();     //pops the first object in array.
                 counter += 1; 
                 currentremain -= 1;     //update number of remaining boxes for user.
@@ -471,6 +474,7 @@ function startPlaying() {
                 var rectangleY110 = calculateXY(rectangle, 110, false);
                 var rectangleY100 = calculateXY(rectangle, 100, false);
                 var rectangleYTen = calculateXY(rectangle, 10, false);
+                //---------------DRAW A RED BORDER------------------->
                 ctx.beginPath();
                 ctx.moveTo(rectangleXTen, rightBox.y);
                 ctx.lineTo(rectangleX80, rightBox.y);
@@ -484,6 +488,7 @@ function startPlaying() {
                 ctx.lineWidth = 4*Xf;
                 ctx.strokeStyle = 'red';
                 ctx.stroke();
+                //--------------------------------------------------->
                 //display normal banner after 300ms.
                 setTimeout(loopALoop, 300);
                 counter = 0;    //reset counter.
@@ -502,9 +507,9 @@ function startPlaying() {
                     }, 1000);
                 }
             }
-            if (!reverseQue.length) {
+            if (!reverseQue.length) { // if it's still user's turn.
                 round += 1;
-                scoreData.score = round;
+                scoreData.score = round; // increase score by one.
                 black_canvas2Proceed();
                 return;
             }
