@@ -495,8 +495,9 @@ var clickEvent = function clickEvent(e) {
 
 function secondCanvasFirst(){
     //if (collides(secondCanvas, exx, eyy)) {
-        console.log("true");
-        var j = 0, i = setInterval(function () {
+    console.log("true");
+    var j = 0, 
+    i = setInterval(function () {
         context.globalAlpha = j;
         context.fillStyle = '#F8F8FF';
         context.fillRect(0, 0, x, y);
