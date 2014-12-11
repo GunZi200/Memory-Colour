@@ -27,9 +27,9 @@ function authUser(){
 //--------------------------------------------------------->
 //--------------------CANVAS---------------------->
 var a_canvas = document.getElementById("a");
-var b_canvas = document.getElementById("b");
+//var b_canvas = document.getElementById("b");
 var ctx = a_canvas.getContext("2d");
-var context = b_canvas.getContext("2d");
+//var context = b_canvas.getContext("2d");
 //------------------------------------------------>
 //--------------------GLOBAL---------------------->
 var x = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -61,38 +61,34 @@ var Xf = x / x_canvas; // X fraction
 var Yf = y / y_canvas; // Y fraction
 function resize_canvas() {
     if (a_canvas.width < x) {
-        a_canvas.width = b_canvas.width = x;
+        a_canvas.width = x;
     }
     if (a_canvas.height < y) {
-        a_canvas.height = b_canvas.height = y;
+        a_canvas.height = y;
     }
 }
 resize_canvas();
-var k13Box = function drawK13() {
-    ctx.fillStyle = "Black";
-    ctx.beginPath();
-    ctx.moveTo(20 * Xf, 430 * Yf);
-    ctx.lineTo(50 * Xf, 430 * Yf);
-    ctx.quadraticCurveTo(60 * Xf, 430 * Yf, 60 * Xf, 440 * Yf);
-    ctx.lineTo(60 * Xf, 470 * Yf);
-    ctx.quadraticCurveTo(60 * Xf, 480 * Yf, 50 * Xf, 480 * Yf);
-    ctx.lineTo(20 * Xf, 480 * Yf);
-    ctx.quadraticCurveTo(10 * Xf, 480 * Yf, 10 * Xf, 470 * Yf);
-    ctx.lineTo(10 * Xf, 440 * Yf);
-    ctx.quadraticCurveTo(10 * Xf, 430 * Yf, 20 * Xf, 430 * Yf);
-    ctx.fill();
-};
+
 var pixels = (20 * Yf).toFixed(0);
 var xc = 90 * Xf, yc = 110 * Yf;
+/*var rects = [{x: 10 * Xf, y: 10 * Yf, w: xc, h: yc, color: 'Green', shade: ''},        //Green
+        {x: 110 * Xf, y: 10 * Yf, w: xc, h: yc, color: '#DC143C', shade: ''},          //Red
+        {x: 10 * Xf, y: 130 * Yf, w: xc, h: yc, color: '#1E90FF', shade: ''},          //Blue
+        {x: 10 * Xf, y: 250 * Yf, w: xc, h: yc, color: 'Gold', shade: ''},             //Gold
+        {x: 110 * Xf, y: 250 * Yf, w: xc, h: yc, color: '#8B008B', shade: ''},         //Purple
+        {x: 210 * Xf, y: 10 * Yf, w: xc, h: yc, color: '#DDA0DD', shade: ''},          //Pink
+        {x: 210 * Xf, y: 130 * Yf, w: xc, h: yc, color: '#FF8C00', shade: ''},         //Orange k6
+        {x: 210 * Xf, y: 250 * Yf, w: xc, h: yc, color: 'Lightseagreen', shade: ''},   //Lightseagreen
+        {x: 110 * Xf, y: 130 * Yf, w: xc, h: yc, color: 'Brown', shade: ''}]; */ 
 
-var rects = [{x: 10 * Xf, y: 10 * Yf, w: xc, h: yc, color: 'Green'},        //Green
-        {x: 110 * Xf, y: 10 * Yf, w: xc, h: yc, color: '#DC143C'},          //Red
+var rects = [{x: 10 * Xf, y: 10 * Yf, w: xc, h: yc, color: '#26A65B'},        //Green
+        {x: 110 * Xf, y: 10 * Yf, w: xc, h: yc, color: '#F22613'},          //Red
         {x: 10 * Xf, y: 130 * Yf, w: xc, h: yc, color: '#1E90FF'},          //Blue
-        {x: 10 * Xf, y: 250 * Yf, w: xc, h: yc, color: 'Gold'},             //Gold
-        {x: 110 * Xf, y: 250 * Yf, w: xc, h: yc, color: '#8B008B'},         //Purple
+        {x: 10 * Xf, y: 250 * Yf, w: xc, h: yc, color: '#F7CA18'},             //Gold
+        {x: 110 * Xf, y: 250 * Yf, w: xc, h: yc, color: '#8E44AD'},         //Purple
         {x: 210 * Xf, y: 10 * Yf, w: xc, h: yc, color: '#DDA0DD'},          //Pink
         {x: 210 * Xf, y: 130 * Yf, w: xc, h: yc, color: '#FF8C00'},         //Orange k6
-        {x: 210 * Xf, y: 250 * Yf, w: xc, h: yc, color: 'Lightseagreen'},   //Lightseagreen
+        {x: 210 * Xf, y: 250 * Yf, w: xc, h: yc, color: '#36D7B7'},   //Lightseagreen
         {x: 110 * Xf, y: 130 * Yf, w: xc, h: yc, color: 'Brown'}];          //Brown
 
 var rects2 = [{x: 10, y: 10},   //Green
@@ -151,18 +147,58 @@ function rounded_rect(x, y, w, h, r, fillstyle, strokestyle){
     ctx.stroke();
     ctx.closePath();
 }
+function complexDraw(ctx){
+    //ctx.drawImage(img, 70*Xf, 380*Yf, 230*Xf, 50*Yf);
+    ctx.fillStyle = "Black";
+    ctx.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
+    ctx.fillStyle = "White";
+    ctx.font = pixels + "px monospace";
+    ctx.textAlign = "center";
+    ctx.fillText("Left: " + currentremain, 185 * Xf, 400 * Yf);
+}
+
+function cloneCanvas(oldCanvas) {
+
+    //create a new canvas
+    var newCanvas = document.createElement('canvas');
+    var context = newCanvas.getContext('2d');
+
+    //set dimensions
+    newCanvas.width = oldCanvas.width;
+    newCanvas.height = oldCanvas.height;
+
+    //apply the old canvas to the new one
+    context.drawImage(oldCanvas, 0, 0);
+
+    //return the new canvas
+    return newCanvas;
+}
+
+var cacheCanvas = cloneCanvas(a_canvas); // newCanvas
+var cacheCtx = cacheCanvas.getContext('2d'); // context
+
+//complexDraw(cacheCtx);
+
+var draw = function draw(){
+    complexDraw(cacheCtx);
+    ctx.drawImage(cacheCanvas,0,0);
+}
+
+var k13Box = function drawK13() {
+    rounded_rect(10, 430, 50, 50, 10, 'black', 'silver')
+};
 
 function heart(){
         ctx.fillStyle = 'red';
         ctx.beginPath();
-        ctx.moveTo(55*Xf, 455*Yf);
-        ctx.lineTo(45*Xf, 465*Yf);
-        ctx.lineTo(35*Xf, 455*Yf);
-        ctx.lineTo(45*Xf, 445*Yf);
+        ctx.moveTo(52*Xf, 455*Yf);
+        ctx.lineTo(42*Xf, 465*Yf);
+        ctx.lineTo(32*Xf, 455*Yf);
+        ctx.lineTo(42*Xf, 447*Yf);
         ctx.fill()
         ctx.beginPath();
-        ctx.arc(40*Xf, 450*Yf, 7*Xf, 2*Math.PI, 0, true);
-        ctx.arc(50*Xf, 450*Yf, 7*Xf, 2*Math.PI, 0, true);
+        ctx.arc(37*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
+        ctx.arc(47*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
         ctx.fill();
     }
 
@@ -176,43 +212,13 @@ var game_interface = function drawGame() {
     //--------------------------------------------------------------------->
     ctx.fillStyle = 'black';
     //------------------K10-----------------
-    ctx.beginPath();
-    ctx.moveTo(80 * Xf, 370 * Yf);
-    ctx.lineTo(290 * Xf, 370 * Yf);
-    ctx.quadraticCurveTo(300 * Xf, 370 * Yf, 300 * Xf, 380 * Yf);
-    ctx.lineTo(300 * Xf, 410 * Yf);
-    ctx.quadraticCurveTo(300 * Xf, 420 * Yf, 290 * Xf, 420 * Yf);
-    ctx.lineTo(80 * Xf, 420 * Yf);
-    ctx.quadraticCurveTo(70 * Xf, 420 * Yf, 70 * Xf, 410 * Yf);
-    ctx.lineTo(70 * Xf, 380 * Yf);
-    ctx.quadraticCurveTo(70 * Xf, 370 * Yf, 80 * Xf, 370 * Yf);
-    ctx.fill();
+    rounded_rect(70, 370, 230, 50, 10, null, 'silver');
     //--------------------------------------
     //------------------K11-----------------
-    ctx.beginPath();
-    ctx.moveTo(80 * Xf, 430 * Yf);
-    ctx.lineTo(290 * Xf, 430 * Yf);
-    ctx.quadraticCurveTo(300 * Xf, 430 * Yf, 300 * Xf, 440 * Yf);
-    ctx.lineTo(300 * Xf, 470 * Yf);
-    ctx.quadraticCurveTo(300 * Xf, 480 * Yf, 290 * Xf, 480 * Yf);
-    ctx.lineTo(80 * Xf, 480 * Yf);
-    ctx.quadraticCurveTo(70 * Xf, 480 * Yf, 70 * Xf, 470 * Yf);
-    ctx.lineTo(70 * Xf, 440 * Yf);
-    ctx.quadraticCurveTo(70 * Xf, 430 * Yf, 80 * Xf, 430 * Yf);
-    ctx.fill();
+    rounded_rect(70, 430, 230, 50, 10, null, 'silver');
     //--------------------------------------
     //----------------K12-------------------
-    ctx.beginPath();
-    ctx.moveTo(20 * Xf, 370 * Yf);
-    ctx.lineTo(50 * Xf, 370 * Yf);
-    ctx.quadraticCurveTo(60 * Xf, 370 * Yf, 60 * Xf, 380 * Yf);
-    ctx.lineTo(60 * Xf, 410 * Yf);
-    ctx.quadraticCurveTo(60 * Xf, 420 * Yf, 50 * Xf, 420 * Yf);
-    ctx.lineTo(20 * Xf, 420 * Yf);
-    ctx.quadraticCurveTo(10 * Xf, 420 * Yf, 10 * Xf, 410 * Yf);
-    ctx.lineTo(10 * Xf, 380 * Yf);
-    ctx.quadraticCurveTo(10 * Xf, 370 * Yf, 20 * Xf, 370 * Yf);
-    ctx.fill();
+    rounded_rect(10, 370, 50, 50, 10, null, 'silver');
     //--------------------------------------
     k13Box();
     ctx.fillStyle = "White";
@@ -238,16 +244,15 @@ var game_interface = function drawGame() {
 
 var black_canvas = function blackBox() {
     ctx.fillStyle = "Black";
-    ctx.fillRect(80 * Xf, 370 * Yf, 210 * Xf, 40 * Yf);//k10
+    ctx.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
     ctx.fillStyle = "White";
     ctx.font = pixels + "px monospace";
     ctx.textAlign = "center";
-    ctx.fillText("Remaining: " + currentremain, 185 * Xf, 400 * Yf);
+    ctx.fillText("Left: " + currentremain, 185 * Xf, 400 * Yf);
 };
-
-black_canvas2 = function blackBox2() {
+var black_canvas2 = function blackBox2() {
         ctx.fillStyle = "Black";
-        ctx.fillRect(80 * Xf, 430 * Yf, 210 * Xf, 40 * Yf);//k11
+        ctx.fillRect(90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);//k11
         ctx.fillStyle = "White";
         ctx.font = pixels + "px monospace";
         ctx.textAlign = "center";
@@ -260,7 +265,7 @@ var black_canvas2Proceed = function proCeed() {
     blackCan = false;
     userTurn = false;
     ctx.fillStyle = "Black";
-    ctx.fillRect(80 * Xf, 430 * Yf, 210 * Xf, 40 * Yf);
+    ctx.fillRect(90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);
     ctx.fillStyle = "White";
     ctx.font = pixels + "px monospace";
     ctx.textAlign = "center";
@@ -269,7 +274,7 @@ var black_canvas2Proceed = function proCeed() {
 
  var remainUpdate = function remainUpdate() {
     ctx.fillStyle = "Black";
-    ctx.fillRect(80 * Xf, 370 * Yf, 210 * Xf, 40 * Yf);//k10
+    ctx.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
     ctx.fillStyle = "White";
     ctx.font = pixels + "px monospace";
     ctx.textAlign = "center";
@@ -294,8 +299,10 @@ var gameover_interface = function game_over() {
     document.addEventListener("deviceready", authUser, false);
     //------------------------------------------------>
     ctx.fillStyle = "Black";
-    ctx.fillRect(80 * Xf, 430 * Yf, 210 * Xf, 40 * Yf);//k11
-    ctx.fillRect(80 * Xf, 370 * Yf, 210 * Xf, 40 * Yf);//k10
+    ctx.fillRect(90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);//k10
+    ctx.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
+    //ctx.fillRect(80 * Xf, 430 * Yf, 210 * Xf, 40 * Yf);//k11
+    //ctx.fillRect(80 * Xf, 370 * Yf, 210 * Xf, 40 * Yf);//k10
     ctx.fillStyle = "White";
     ctx.font = pixels + "px monospace";
     ctx.textAlign = "center";
@@ -403,7 +410,6 @@ function randomXY() {
 }
 
 function startPlaying() {
-    console.log("game started...");
     var lengd = rects.length,
     g = { 'x': 0, 'y': 0 }, i;
     if (collides(startRects, ex, ey)) { // if start button...
@@ -431,7 +437,12 @@ function startPlaying() {
                 reverseQue.shift();     //pops the first object in array.
                 counter += 1; 
                 currentremain -= 1;     //update number of remaining boxes for user.
-                black_canvas(); 
+                console.time("new");
+                draw();
+                console.timeEnd("new")
+                //console.time("old");
+                //black_canvas();
+                //console.timeEnd("old")
             } else {
                 a_canvas.removeEventListener('click', clickEvent, false);
                 for (i = 0; i < lengd; i += 1) {
@@ -480,9 +491,9 @@ function startPlaying() {
         }
     }
 }
-
 var clickEvent = function clickEvent(e) {
     new FastClick.attach(document.body);
+    console.log("clickevent");
     ex = e.offsetX;
     ey = e.offsetY;
     startPlaying();
@@ -493,47 +504,10 @@ var clickEvent = function clickEvent(e) {
     }
 }
 
-function secondCanvasFirst(){
-    //if (collides(secondCanvas, exx, eyy)) {
-    console.log("true");
-    var j = 0, 
-    i = setInterval(function () {
-        context.globalAlpha = j;
-        context.fillStyle = '#F8F8FF';
-        context.fillRect(0, 0, x, y);
-        j += 0.1;
-        console.log(context.globalAlpha);
-        if (context.globalAlpha.toFixed(0) === 1) {
-            clearInterval(i);
-            userTurn = true;
-            b_canvas.addEventListener('click', clickEvent, false);
-            alert("hi");
-            second = true;
-            game_interface();
-        }
-    }, 100);
-}
-var clickEvent1 = function clickEvent1(e) {
-    new FastClick.attach(document.body);
-    console.log("clickevent1");
-    exx = e.offsetX;
-    eyy = e.offsetY;
-    secondCanvasFirst();
-}
-context.save();
-context.globalAlpha = 0.7;
-context.fillStyle = '#F8F8FF';
-context.fillRect(0, 0, x, y);
-context.globalAlpha = 1;
 game_interface();
-context.restore();
-if (second && a_canvas && a_canvas.getContext) {
+if (a_canvas && a_canvas.getContext) {
+    console.log("hi");
     a_canvas.addEventListener('click', clickEvent, false);
     FastClick.attach(document.body);
     Howler.iOSAutoEnable = true;
-}
-
-if (b_canvas && b_canvas.getContext) {
-    b_canvas.addEventListener('click', clickEvent1, false);
-    FastClick.attach(document.body);
 }
