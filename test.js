@@ -147,15 +147,25 @@ function rounded_rect(x, y, w, h, r, fillstyle, strokestyle){
     ctx.stroke();
     ctx.closePath();
 }
-function complexDraw(ctx){
-    //ctx.drawImage(img, 70*Xf, 380*Yf, 230*Xf, 50*Yf);
-    ctx.fillStyle = "Black";
-    ctx.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
-    ctx.fillStyle = "White";
-    ctx.font = pixels + "px monospace";
-    ctx.textAlign = "center";
-    ctx.fillText("Left: " + currentremain, 185 * Xf, 400 * Yf);
+function complexDraw(canvas){
+    console.time("time");
+    canvas.fillStyle = "Black";
+    canvas.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
+    canvas.fillStyle = "White";
+    canvas.font = pixels + "px monospace";
+    canvas.textAlign = "center";
+    canvas.fillText("Left: ", 185 * Xf, 400 * Yf);
+    console.timeEnd("time");
 }
+
+function proCeed(canvas) {
+    canvas.fillStyle = "Black";
+    canvas.fillRect(90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);
+    canvas.fillStyle = "White";
+    canvas.font = pixels + "px monospace";
+    canvas.textAlign = "center";
+    canvas.fillText("Next round", 185 * Xf, 460 * Yf);
+};
 
 function cloneCanvas(oldCanvas) {
 
@@ -176,31 +186,29 @@ function cloneCanvas(oldCanvas) {
 
 var cacheCanvas = cloneCanvas(a_canvas); // newCanvas
 var cacheCtx = cacheCanvas.getContext('2d'); // context
-
-//complexDraw(cacheCtx);
-
-var draw = function draw(){
-    complexDraw(cacheCtx);
-    ctx.drawImage(cacheCanvas,0,0);
-}
+//complexDraw(cacheCtx, currentremain);
+//--------------CACHE DRAWINGS-----------
+complexDraw(cacheCtx);
+proCeed(cacheCtx);
+//---------------------------------------
 
 var k13Box = function drawK13() {
     rounded_rect(10, 430, 50, 50, 10, 'black', 'silver')
 };
 
 function heart(){
-        ctx.fillStyle = 'red';
-        ctx.beginPath();
-        ctx.moveTo(52*Xf, 455*Yf);
-        ctx.lineTo(42*Xf, 465*Yf);
-        ctx.lineTo(32*Xf, 455*Yf);
-        ctx.lineTo(42*Xf, 447*Yf);
-        ctx.fill()
-        ctx.beginPath();
-        ctx.arc(37*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
-        ctx.arc(47*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
-        ctx.fill();
-    }
+    ctx.fillStyle = 'red';
+    ctx.beginPath();
+    ctx.moveTo(52*Xf, 455*Yf);
+    ctx.lineTo(42*Xf, 465*Yf);
+    ctx.lineTo(32*Xf, 455*Yf);
+    ctx.lineTo(42*Xf, 447*Yf);
+    ctx.fill()
+    ctx.beginPath();
+    ctx.arc(37*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
+    ctx.arc(47*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
+    ctx.fill();
+}
 
 var game_interface = function drawGame() {
     var lengd = rects.length, i;
@@ -242,14 +250,14 @@ var game_interface = function drawGame() {
     ctx.fillText("Start", 185 * Xf, 460 * Yf);
 };
 
-var black_canvas = function blackBox() {
+/*var black_canvas = function blackBox() {
     ctx.fillStyle = "Black";
     ctx.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
     ctx.fillStyle = "White";
     ctx.font = pixels + "px monospace";
     ctx.textAlign = "center";
     ctx.fillText("Left: " + currentremain, 185 * Xf, 400 * Yf);
-};
+};*/
 var black_canvas2 = function blackBox2() {
         ctx.fillStyle = "Black";
         ctx.fillRect(90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);//k11
@@ -259,18 +267,7 @@ var black_canvas2 = function blackBox2() {
         ctx.fillText("Score: " + round, 185 * Xf, 460 * Yf);
 };
 
-var black_canvas2Proceed = function proCeed() {
-    remain += 1;
-    counter = 0;
-    blackCan = false;
-    userTurn = false;
-    ctx.fillStyle = "Black";
-    ctx.fillRect(90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);
-    ctx.fillStyle = "White";
-    ctx.font = pixels + "px monospace";
-    ctx.textAlign = "center";
-    ctx.fillText("Next round", 185 * Xf, 460 * Yf);
-};
+
 
  var remainUpdate = function remainUpdate() {
     ctx.fillStyle = "Black";
@@ -437,12 +434,10 @@ function startPlaying() {
                 reverseQue.shift();     //pops the first object in array.
                 counter += 1; 
                 currentremain -= 1;     //update number of remaining boxes for user.
-                console.time("new");
-                draw();
-                console.timeEnd("new")
-                //console.time("old");
-                //black_canvas();
-                //console.timeEnd("old")
+                ctx.drawImage(cacheCanvas, 90*Xf, 380*Yf, 200*Xf, 30*Yf, 90*Xf, 380*Yf, 200*Xf, 30*Yf);
+                ctx.fillStyle = 'white';
+                ctx.font = pixels + "px monospace";
+                ctx.fillText(""+currentremain, 230 * Xf, 400 * Yf);
             } else {
                 a_canvas.removeEventListener('click', clickEvent, false);
                 for (i = 0; i < lengd; i += 1) {
@@ -461,7 +456,9 @@ function startPlaying() {
                 counter = 0;    //reset counter.
                 lives -= 1;
                 reverseQue = que.slice(0);  //reset the reverseQue.
+                console.time("time1");
                 k13Box();
+                console.timeEnd("time1");
                 ctx.fillStyle = "White";
                 ctx.font = pixels + "px monospace";
                 ctx.textAlign = "center";
@@ -478,7 +475,11 @@ function startPlaying() {
             if (!reverseQue.length) { // if it's still user's turn.
                 round += 1;
                 scoreData.score = round; // increase score by one.
-                black_canvas2Proceed();
+                remain += 1;
+                counter = 0;
+                blackCan = false;
+                userTurn = false;
+                ctx.drawImage(cacheCanvas, 90*Xf, 440*Yf, 200*Xf, 30*Yf,90*Xf, 440*Yf, 200*Xf, 30*Yf);
                 return;
             }
             if (!lives) {
