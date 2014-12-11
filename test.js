@@ -148,14 +148,12 @@ function rounded_rect(x, y, w, h, r, fillstyle, strokestyle){
     ctx.closePath();
 }
 function complexDraw(canvas){
-    console.time("time");
     canvas.fillStyle = "Black";
     canvas.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
     canvas.fillStyle = "White";
     canvas.font = pixels + "px monospace";
     canvas.textAlign = "center";
     canvas.fillText("Left: ", 185 * Xf, 400 * Yf);
-    console.timeEnd("time");
 }
 
 function proCeed(canvas) {
@@ -166,6 +164,52 @@ function proCeed(canvas) {
     canvas.textAlign = "center";
     canvas.fillText("Next round", 185 * Xf, 460 * Yf);
 };
+
+function cacheAnimation(){
+    var one30 = 10,
+    one40 = 10, 
+    one301 = false, 
+    one401 = false,
+    temp = setInterval(myAnimation, 10);
+
+    for (i = 0; i < lengd; i += 1) {
+        if (collides([rects[i]], AnX, AnY)) {
+            var rightBox = rects[i];
+            var rectangle = rects2[i];
+        }
+    }
+
+    function myAnimation() {
+        ctx.beginPath();
+        ctx.fillStyle = rightBox.color;
+        ctx.moveTo((rectangle.x + 43 - one40) * Xf, (rectangle.y + 33 - one30) * Yf);
+        ctx.lineTo((rectangle.x + 50 + one40) * Xf, (rectangle.y + 33 - one30) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 58 + one30) * Xf, (rectangle.y + 33 - one30) * Yf, (rectangle.x + 58 + one30) * Xf, (rectangle.y + 43 - one40) * Yf);
+        ctx.lineTo((rectangle.x + 58 + one30) * Xf, (rectangle.y + 70 + one40) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 58 + one30) * Xf, (rectangle.y + 78 + one30) * Yf, (rectangle.x + 50 + one40) * Xf, (rectangle.y + 78 + one30) * Yf);
+        ctx.lineTo((rectangle.x + 43 - one40) * Xf, (rectangle.y + 78 + one30) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 33 - one30) * Xf, (rectangle.y + 78 + one30) * Yf, (rectangle.x + 33 - one30) * Xf, (rectangle.y + 70 + one40) * Yf);
+        ctx.lineTo((rectangle.x + 33 - one30) * Xf, (rectangle.y + 43 - one40) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 33 - one30) * Xf, (rectangle.y + 33 - one30) * Yf, (rectangle.x + 43 - one40) * Xf, (rectangle.y + 33 - one30) * Yf);
+        ctx.fill();
+        ctx.closePath();
+        if (one30 === 30) {
+            one301 = true;
+        } else {
+            one30 += 2;
+        }
+        if (one40 === 40) {
+            one401 = true;
+        } else {
+            one40 += 2;
+        }
+        if (one301 && one401) {
+            rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, null, 'black');
+            console.timeEnd('Infunction');
+            clearInterval(temp);
+        }
+    }
+}
 
 function cloneCanvas(oldCanvas) {
 
@@ -250,14 +294,6 @@ var game_interface = function drawGame() {
     ctx.fillText("Start", 185 * Xf, 460 * Yf);
 };
 
-/*var black_canvas = function blackBox() {
-    ctx.fillStyle = "Black";
-    ctx.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
-    ctx.fillStyle = "White";
-    ctx.font = pixels + "px monospace";
-    ctx.textAlign = "center";
-    ctx.fillText("Left: " + currentremain, 185 * Xf, 400 * Yf);
-};*/
 var black_canvas2 = function blackBox2() {
         ctx.fillStyle = "Black";
         ctx.fillRect(90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);//k11
@@ -298,8 +334,6 @@ var gameover_interface = function game_over() {
     ctx.fillStyle = "Black";
     ctx.fillRect(90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);//k10
     ctx.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
-    //ctx.fillRect(80 * Xf, 430 * Yf, 210 * Xf, 40 * Yf);//k11
-    //ctx.fillRect(80 * Xf, 370 * Yf, 210 * Xf, 40 * Yf);//k10
     ctx.fillStyle = "White";
     ctx.font = pixels + "px monospace";
     ctx.textAlign = "center";
@@ -314,6 +348,7 @@ function randomInt(min, max) {
     //Calculates a random number between a 'min' and 'max' number.
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
 
 var turnEvent = function turnEvent(AnX, AnY) {
     console.time('Infunction');
