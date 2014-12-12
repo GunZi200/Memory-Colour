@@ -27,9 +27,7 @@ function authUser(){
 //--------------------------------------------------------->
 //--------------------CANVAS---------------------->
 var a_canvas = document.getElementById("a");
-//var b_canvas = document.getElementById("b");
 var ctx = a_canvas.getContext("2d");
-//var context = b_canvas.getContext("2d");
 //------------------------------------------------>
 //--------------------GLOBAL---------------------->
 var x = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -198,7 +196,6 @@ function cloneCanvas(oldCanvas) {
 
 var cacheCanvas = cloneCanvas(a_canvas); // newCanvas
 var cacheCtx = cacheCanvas.getContext('2d'); // context
-//complexDraw(cacheCtx, currentremain);
 //--------------CACHE DRAWINGS-----------
 complexDraw(cacheCtx);
 proCeed(cacheCtx);
@@ -208,8 +205,6 @@ drawK13(cacheCtx);
 function k13Box(){
     ctx.drawImage(cacheCanvas, 6 * Xf, 426 * Yf, 60*Xf, 56*Yf, 6* Xf, 426*Yf, 60*Xf, 56*Yf);
 }
-
-
 
 var game_interface = function drawGame() {
     var lengd = rects.length, i;
@@ -314,33 +309,6 @@ window.requestAnimFrame = (function(){
             window.setTimeout(callback, 1000 / 60);
           };
 })();
-
-(function() {
-    var lastTime = 0;
-    var vendors = ['webkit', 'moz'];
-    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame =
-          window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
-    }
-
-    if (!window.requestAnimationFrame)
-        window.requestAnimationFrame = function(callback, element) {
-            var currTime = new Date().getTime();
-            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
-              timeToCall);
-            lastTime = currTime + timeToCall;
-            return id;
-        };
-
-    if (!window.cancelAnimationFrame)
-        window.cancelAnimationFrame = function(id) {
-            clearTimeout(id);
-        };
-}());
-
-
 
 function turnEvent(AnX, AnY) {
     var lengd = rects.length, i;
@@ -491,9 +459,7 @@ function startPlaying() {
                 counter = 0;    //reset counter.
                 lives -= 1;
                 reverseQue = que.slice(0);  //reset the reverseQue.
-                console.time("time1");
                 k13Box();
-                console.timeEnd("time1");
                 ctx.fillStyle = "White";
                 ctx.font = pixels + "px monospace";
                 ctx.textAlign = "center";
@@ -541,7 +507,6 @@ var clickEvent = function clickEvent(e) {
 
 game_interface();
 if (a_canvas && a_canvas.getContext) {
-    console.log("hi");
     a_canvas.addEventListener('click', clickEvent, false);
     FastClick.attach(document.body);
     Howler.iOSAutoEnable = true;
