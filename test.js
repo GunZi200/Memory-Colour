@@ -416,6 +416,13 @@ function randomXY() {
 function startPlaying() {
     var lengd = rects.length,
     g = { 'x': 0, 'y': 0 };
+    for (var i = 0; i < lengd; i += 1) {
+        // Identify the rectangle in use.
+        if (collides([rects[i]], ex, ey)) {
+            rightBox = rects[i];
+            rectangle = rects2[i];
+        }
+    }
     if (collides(startRects, ex, ey)) { // if start button...
         console.log("start rects");
         black_canvas2();
@@ -437,70 +444,61 @@ function startPlaying() {
     } else if (userTurn) {
         console.log("userturn");
         //If a box is clicked
-        if (collides(rects, ex, ey)) {
-            //if clicked n box is the same as n box from computer.
-            console.log("collides(rects, ex, ey) === que[counter]");
-            if (collides(rects, ex, ey) === que[counter]) {
-                console.time('turnEvent');
-                turnEvent(ex, ey);      //do animation
-                console.timeEnd('turnEvent');
-                reverseQue.shift();     //pops the first object in array.
-                counter += 1; 
-                currentremain -= 1;     //update number of remaining boxes for user.
-                ctx.drawImage(cacheCanvas, 90*Xf, 380*Yf, 200*Xf, 30*Yf, 90*Xf, 380*Yf, 200*Xf, 30*Yf);
-                ctx.fillStyle = 'white';
-                ctx.font = pixels + "px monospace";
-                ctx.fillText(""+currentremain, 230 * Xf, 400 * Yf);
-            } else {
-                a_canvas.removeEventListener('click', clickEvent, false);
-                for (var i = 0; i < lengd; i += 1) {
-                    // Identify the rectangle in use.
-                    if (collides([rects[i]], ex, ey)) {
-                        var rightBox = rects[i];
-                        var rectangle = rects2[i];
-                    }
-                }
-                //---------------DRAW A RED BORDER------------------->
-                rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'red');
-                //--------------------------------------------------->
-                //display normal banner after 300ms.
+        //if clicked n box is the same as n box from computer.
+        console.log("collides(rects, ex, ey) === que[counter]");
+        if (rightBox === que[counter]) {
+            console.time('turnEvent');
+            turnEvent(ex, ey);      //do animation
+            console.timeEnd('turnEvent');
+            reverseQue.shift();     //pops the first object in array.
+            counter += 1; 
+            currentremain -= 1;     //update number of remaining boxes for user.
+            ctx.drawImage(cacheCanvas, 90*Xf, 380*Yf, 200*Xf, 30*Yf, 90*Xf, 380*Yf, 200*Xf, 30*Yf);
+            ctx.fillStyle = 'white';
+            ctx.font = pixels + "px monospace";
+            ctx.fillText(""+currentremain, 230 * Xf, 400 * Yf);
+        } else {
+            a_canvas.removeEventListener('click', clickEvent, false);
+            //---------------DRAW A RED BORDER------------------->
+            rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'red');
+            //--------------------------------------------------->
+            //display normal banner after 300ms.
+            setTimeout(function () {
+                rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'black');
+            }, 300);
+            counter = 0;    //reset counter.
+            lives -= 1;
+            reverseQue = que.slice(0);  //reset the reverseQue.
+            k13Box();
+            ctx.fillStyle = "White";
+            ctx.font = pixels + "px monospace";
+            ctx.textAlign = "center";
+            ctx.fillText(lives + "", 25 * Xf, 460 * Yf);
+            //heart();
+            if (lives !== 0) {  //if not game over.
                 setTimeout(function () {
-                    rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'black');
-                }, 300);
-                counter = 0;    //reset counter.
-                lives -= 1;
-                reverseQue = que.slice(0);  //reset the reverseQue.
-                k13Box();
-                ctx.fillStyle = "White";
-                ctx.font = pixels + "px monospace";
-                ctx.textAlign = "center";
-                ctx.fillText(lives + "", 25 * Xf, 460 * Yf);
-                //heart();
-                if (lives !== 0) {  //if not game over.
-                    setTimeout(function () {
-                        userTurn = false;   //blackCan should be false too.
-                        remainUpdate();
-                        computerRe();
-                    }, 1000);
-                }
+                    userTurn = false;   //blackCan should be false too.
+                    remainUpdate();
+                    computerRe();
+                }, 1000);
             }
-            if (!reverseQue.length) { // if it's still user's turn.
-                round += 1;
-                scoreData.score = round; // increase score by one.
-                remain += 1;
-                counter = 0;
-                blackCan = false;
-                userTurn = false;
-                ctx.drawImage(cacheCanvas, 90*Xf, 440*Yf, 200*Xf, 30*Yf,90*Xf, 440*Yf, 200*Xf, 30*Yf);
-                return;
-            }
-            if (!lives) {
-                setTimeout(function () {
-                    endAudio.play();
-                }, 800);
-                gameover_interface();
-                return;
-            }
+        }
+        if (!reverseQue.length) { // if it's still user's turn.
+            round += 1;
+            scoreData.score = round; // increase score by one.
+            remain += 1;
+            counter = 0;
+            blackCan = false;
+            userTurn = false;
+            ctx.drawImage(cacheCanvas, 90*Xf, 440*Yf, 200*Xf, 30*Yf,90*Xf, 440*Yf, 200*Xf, 30*Yf);
+            return;
+        }
+        if (!lives) {
+            setTimeout(function () {
+                endAudio.play();
+            }, 800);
+            gameover_interface();
+            return;
         }
     }
 }
