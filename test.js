@@ -94,19 +94,21 @@ var consoleRects = [{x: 10 * Xf, y: 370 * Yf, w: 50 * Xf, h: 50 * Yf}];//k12
 var startRects = [{x: 70 * Xf, y: 430 * Yf, w: 230 * Xf, h: 50 * Yf}];//k11
 var secondCanvas = [{x: 0, y: 0, w: x, h: y}];
 //---------------------------------------------------------------->
+
 function collides(rect, x, y) {
+    //console.time("collides");
     // check if a click/tap x, y coordiantes 'collide' with a rectangle in use.
-    var isCollision = false, i = 0, left = 0, right = 0, top = 0, bottom = 0, lengd = rect.length;
-    for (i = 0; i < lengd; i += 1) {
+    var isCollision = false, left = 0, right = 0, top = 0, bottom = 0, lengd = rect.length;
+    for (var i = 0; i < lengd; i += 1) {
         left = rect[i].x;
         right = rect[i].x + rect[i].w;
         top = rect[i].y;
         bottom = rect[i].y + rect[i].h;
         if (right >= x && left <= x && bottom >= y && top <= y) {
             isCollision = rect[i];
-            break;
         }
     }
+    //console.timeEnd("collides");
     return isCollision;
 }
 
@@ -302,24 +304,16 @@ function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame       ||
-          window.webkitRequestAnimationFrame ||
-          window.mozRequestAnimationFrame    ||
-          function( callback ){
-            window.setTimeout(callback, 1000 / 60);
-          };
-})();
-
 function turnEvent(AnX, AnY) {
     var lengd = rects.length, i;
     eventDone = false,
-    one30 = 10,
-    one40 = 10,  
+    one30 = 9,
+    one40 = 8,  
     one301 = false, 
     one401 = false;
     for (i = 0; i < lengd; i += 1) {
         // Indentifying rectangle in use, so we can access the color, and position.
+        console.log("for loop");
         if (collides([rects[i]], AnX, AnY)) {
             var rightBox = rects[i];
             var rectangle = rects2[i];
@@ -327,6 +321,7 @@ function turnEvent(AnX, AnY) {
     }
     rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, 'black', 'black');
     function render() {
+        console.time("requestAnimationFrame")
         ctx.beginPath();
         ctx.fillStyle = rightBox.color;
         ctx.moveTo((rectangle.x + 43 - one40) * Xf, (rectangle.y + 33 - one30) * Yf);
@@ -343,7 +338,7 @@ function turnEvent(AnX, AnY) {
         if (one30 === 30) {
             one301 = true;
         } else {
-            one30 += 2;
+            one30 += 3;
         }
         if (one40 === 40) {
             one401 = true;
@@ -351,14 +346,21 @@ function turnEvent(AnX, AnY) {
             one40 += 2;
         }
         if (one301 && one401) {
-            rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, null, 'black');
             eventDone = true;
         }
     }
+    window.requestAnimFrame = (function(){
+        return  window.requestAnimationFrame       ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame    ||
+                function( callback ){
+                window.setTimeout(callback, 1000 / 60);
+                };
+    })();
     (function animloop(){
-        //condition to stop requestAnimationFrame();
-        if (eventDone) {
+        if (eventDone) {//condition to stop requestAnimationFrame();
             eventDone = false;
+            rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'black');
             return;
         };
         requestAnimFrame(animloop);
@@ -403,6 +405,7 @@ function randomXY() {
     X = randomInt(minXY, maxX),
     Y = randomInt(minXY, maxY);
     while (!collides(rects, X, Y)) {
+        console.log("renew");
         // new coordinates if the other ones do not match.
         X = randomInt(minXY, maxX);
         Y = randomInt(minXY, maxY);
@@ -412,14 +415,16 @@ function randomXY() {
 
 function startPlaying() {
     var lengd = rects.length,
-    g = { 'x': 0, 'y': 0 }, i;
+    g = { 'x': 0, 'y': 0 };
     if (collides(startRects, ex, ey)) { // if start button...
+        console.log("start rects");
         black_canvas2();
         blackCan = true;
         g = randomXY(); // generate coordinates for computer.
     }
     if (blackCan && !userTurn) {
-        for (i = 0; i < lengd; i += 1) {
+        for (var i = 0; i < lengd; i += 1) {
+            console.log("computer");
             if (collides([rects[i]], g.x, g.y)) {
                 remainUpdate();
                 var boxy = rects[i];
@@ -430,9 +435,11 @@ function startPlaying() {
             }
         }
     } else if (userTurn) {
+        console.log("userturn");
         //If a box is clicked
         if (collides(rects, ex, ey)) {
             //if clicked n box is the same as n box from computer.
+            console.log("collides(rects, ex, ey) === que[counter]");
             if (collides(rects, ex, ey) === que[counter]) {
                 console.time('turnEvent');
                 turnEvent(ex, ey);      //do animation
@@ -446,7 +453,7 @@ function startPlaying() {
                 ctx.fillText(""+currentremain, 230 * Xf, 400 * Yf);
             } else {
                 a_canvas.removeEventListener('click', clickEvent, false);
-                for (i = 0; i < lengd; i += 1) {
+                for (var i = 0; i < lengd; i += 1) {
                     // Identify the rectangle in use.
                     if (collides([rects[i]], ex, ey)) {
                         var rightBox = rects[i];
@@ -511,7 +518,6 @@ var clickEvent = function clickEvent(e) {
 
 game_interface();
 if (a_canvas && a_canvas.getContext) {
-    console.log("hi");
     a_canvas.addEventListener('click', clickEvent, false);
     FastClick.attach(document.body);
     Howler.iOSAutoEnable = true;
