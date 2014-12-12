@@ -48,7 +48,7 @@ var dpr = 1;
 var myMedia = new Audio("Click.mp3");
 var endAudio = new Audio("GameOver.mp3");
 //------------------------------------------------>
-if(window.devicePixelRatio !== undefined) dpr = window.devicePixelRatio;
+//if(window.devicePixelRatio !== undefined) dpr = window.devicePixelRatio;
 var scoreData = { 
         score: round = round, 
         leaderboardId: "board1"
@@ -69,7 +69,7 @@ resize_canvas();
 
 var pixels = (20 * Yf).toFixed(0);
 var xc = 90 * Xf, yc = 110 * Yf;
-
+//-------------------RECTANGLES THAT USE CLICKEVENY-------------->
 var rects = [{x: 10 * Xf, y: 10 * Yf, w: xc, h: yc, color: '#26A65B'},        //Green
         {x: 110 * Xf, y: 10 * Yf, w: xc, h: yc, color: '#F22613'},          //Red
         {x: 10 * Xf, y: 130 * Yf, w: xc, h: yc, color: '#1E90FF'},          //Blue
@@ -93,8 +93,9 @@ var rects2 = [{x: 10, y: 10},   //Green
 var consoleRects = [{x: 10 * Xf, y: 370 * Yf, w: 50 * Xf, h: 50 * Yf}];//k12
 var startRects = [{x: 70 * Xf, y: 430 * Yf, w: 230 * Xf, h: 50 * Yf}];//k11
 var secondCanvas = [{x: 0, y: 0, w: x, h: y}];
-
+//---------------------------------------------------------------->
 function collides(rect, x, y) {
+    // check if a click/tap x, y coordiantes 'collide' with a rectangle in use.
     var isCollision = false, i = 0, left = 0, right = 0, top = 0, bottom = 0, lengd = rect.length;
     for (i = 0; i < lengd; i += 1) {
         left = rect[i].x;
@@ -103,6 +104,7 @@ function collides(rect, x, y) {
         bottom = rect[i].y + rect[i].h;
         if (right >= x && left <= x && bottom >= y && top <= y) {
             isCollision = rect[i];
+            break;
         }
     }
     return isCollision;
@@ -126,6 +128,7 @@ function rounded_rect(x, y, w, h, r, fillstyle, strokestyle){
     ctx.stroke();
     ctx.closePath();
 }
+//--------------------DRAWINGS TO CACHE--------------->
 function complexDraw(canvas){
     canvas.fillStyle = "Black";
     canvas.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
@@ -176,7 +179,8 @@ function drawK13(ctx) {
     ctx.fill();
     ctx.clip();
 };
-
+//-------------------------------------------------------->
+//----------CACHED CANVAS------------->
 function cloneCanvas(oldCanvas) {
 
     //create a new canvas
@@ -196,11 +200,12 @@ function cloneCanvas(oldCanvas) {
 
 var cacheCanvas = cloneCanvas(a_canvas); // newCanvas
 var cacheCtx = cacheCanvas.getContext('2d'); // context
-//--------------CACHE DRAWINGS-----------
+//----------------------------------------------------->
+//--------------CACHE DRAWINGS----------->
 complexDraw(cacheCtx);
 proCeed(cacheCtx);
 drawK13(cacheCtx);
-//---------------------------------------
+//--------------------------------------->
 
 function k13Box(){
     ctx.drawImage(cacheCanvas, 6 * Xf, 426 * Yf, 60*Xf, 56*Yf, 6* Xf, 426*Yf, 60*Xf, 56*Yf);
@@ -229,9 +234,7 @@ var game_interface = function drawGame() {
     ctx.font = pixels + "px monospace";
     ctx.textAlign = "center";
     ctx.fillText("3", 25 * Xf, 460 * Yf);// Number of lives to start with.
-    //heart();
-
-    ctx.fillStyle = "White";
+    //ctx.fillStyle = "White";
     ctx.beginPath();
     ctx.arc(35 * Xf, 395 * Yf, 20 * Xf, (5 * Math.PI) / 4, (Math.PI), false);
     ctx.lineWidth = 3 * Xf;
@@ -254,8 +257,6 @@ var black_canvas2 = function blackBox2() {
         ctx.textAlign = "center";
         ctx.fillText("Score: " + round, 185 * Xf, 460 * Yf);
 };
-
-
 
  var remainUpdate = function remainUpdate() {
     ctx.fillStyle = "Black";
@@ -318,6 +319,7 @@ function turnEvent(AnX, AnY) {
     one301 = false, 
     one401 = false;
     for (i = 0; i < lengd; i += 1) {
+        // Indentifying rectangle in use, so we can access the color, and position.
         if (collides([rects[i]], AnX, AnY)) {
             var rightBox = rects[i];
             var rectangle = rects2[i];
@@ -354,6 +356,7 @@ function turnEvent(AnX, AnY) {
         }
     }
     (function animloop(){
+        //condition to stop requestAnimationFrame();
         if (eventDone) {
             eventDone = false;
             return;
@@ -444,6 +447,7 @@ function startPlaying() {
             } else {
                 a_canvas.removeEventListener('click', clickEvent, false);
                 for (i = 0; i < lengd; i += 1) {
+                    // Identify the rectangle in use.
                     if (collides([rects[i]], ex, ey)) {
                         var rightBox = rects[i];
                         var rectangle = rects2[i];
@@ -507,6 +511,7 @@ var clickEvent = function clickEvent(e) {
 
 game_interface();
 if (a_canvas && a_canvas.getContext) {
+    console.log("hi");
     a_canvas.addEventListener('click', clickEvent, false);
     FastClick.attach(document.body);
     Howler.iOSAutoEnable = true;
