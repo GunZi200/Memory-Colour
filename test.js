@@ -6,9 +6,6 @@
 // computer and ANOTHER box in to que.
 // computer uses turnEvent on BOTH boxex in que, in the right order.
 // user follows...
-//window.onload = function () {
-//};
-
 //--------------AUTHENTICATE GAME CENTER LOGIN-------------->
 document.addEventListener("deviceready", authUser, false);
 var failureCallback = "Error!";
@@ -44,19 +41,19 @@ var lives = 3;
 var ex = undefined;
 var ey = undefined;
 var counter = 0;
-var dpr = 1;
 var myMedia = new Audio("Click.mp3");
 var endAudio = new Audio("GameOver.mp3");
 //------------------------------------------------>
-//if(window.devicePixelRatio !== undefined) dpr = window.devicePixelRatio;
 var scoreData = { 
         score: round = round, 
         leaderboardId: "board1"
     };
 var x_canvas = a_canvas.width;//310
 var y_canvas = a_canvas.height;//490
-var Xf = x / x_canvas; // X fraction
-var Yf = y / y_canvas; // Y fraction
+var Xf = (x / x_canvas).toFixed(5); // X fraction
+console.log(Xf);
+var Yf = (y / y_canvas).toFixed(5); // Y fraction
+console.log(Yf);
 function resize_canvas() {
     if (a_canvas.width < x) {
         a_canvas.width = x;
@@ -96,7 +93,6 @@ var secondCanvas = [{x: 0, y: 0, w: x, h: y}];
 //---------------------------------------------------------------->
 
 function collides(rect, x, y) {
-    //console.time("collides");
     // check if a click/tap x, y coordiantes 'collide' with a rectangle in use.
     var isCollision = false, left = 0, right = 0, top = 0, bottom = 0, lengd = rect.length;
     for (var i = 0; i < lengd; i += 1) {
@@ -108,7 +104,6 @@ function collides(rect, x, y) {
             isCollision = rect[i];
         }
     }
-    //console.timeEnd("collides");
     return isCollision;
 }
 
@@ -236,7 +231,6 @@ var game_interface = function drawGame() {
     ctx.font = pixels + "px monospace";
     ctx.textAlign = "center";
     ctx.fillText("3", 25 * Xf, 460 * Yf);// Number of lives to start with.
-    //ctx.fillStyle = "White";
     ctx.beginPath();
     ctx.arc(35 * Xf, 395 * Yf, 20 * Xf, (5 * Math.PI) / 4, (Math.PI), false);
     ctx.lineWidth = 3 * Xf;
@@ -305,15 +299,14 @@ function randomInt(min, max) {
 }
 
 function turnEvent(AnX, AnY) {
-    var lengd = rects.length, i;
+    var lengd = rects.length;
     eventDone = false,
     one30 = 9,
     one40 = 8,  
     one301 = false, 
     one401 = false;
-    for (i = 0; i < lengd; i += 1) {
+    for (var i = 0; i < lengd; i += 1) {
         // Indentifying rectangle in use, so we can access the color, and position.
-        console.log("for loop");
         if (collides([rects[i]], AnX, AnY)) {
             var rightBox = rects[i];
             var rectangle = rects2[i];
@@ -507,5 +500,4 @@ game_interface();
 if (a_canvas && a_canvas.getContext) {
     a_canvas.addEventListener('click', clickEvent, false);
     FastClick.attach(document.body);
-    Howler.iOSAutoEnable = true;
 }
