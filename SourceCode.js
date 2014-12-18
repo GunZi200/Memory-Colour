@@ -202,6 +202,7 @@ var cacheCtx = cacheCanvas.getContext('2d'); // context
 complexDraw(cacheCtx);
 proCeed(cacheCtx);
 drawK13(cacheCtx);
+
 //--------------------------------------->
 
 function k13Box(){
@@ -243,6 +244,7 @@ var game_interface = function drawGame() {
     ctx.lineTo(20 * Xf, 395 * Yf);
     ctx.fill();
     ctx.fillText("Start", 185 * Xf, 460 * Yf);
+
 };
 
 var black_canvas2 = function blackBox2() {
@@ -397,7 +399,6 @@ function randomXY() {
     X = randomInt(minXY, maxX),
     Y = randomInt(minXY, maxY);
     while (!collides(rects, X, Y)) {
-        console.log("renew");
         // new coordinates if the other ones do not match.
         X = randomInt(minXY, maxX);
         Y = randomInt(minXY, maxY);
@@ -413,6 +414,7 @@ function startPlaying() {
         if (collides([rects[i]], ex, ey)) {
             var rightBox = rects[i];
             var rectangle = rects2[i];
+            console.log(rightBox);
         }
     }
     if (collides(startRects, ex, ey)) { // if start button...
@@ -429,42 +431,56 @@ function startPlaying() {
             blackCan = false;
             computer();
         }
-    } else if (userTurn) {
-        //if clicked n box is the same as n box from computer.
-        if (rightBox === que[counter]) {
-            turnEvent(ex, ey);      //do animation
-            reverseQue.shift();     //pops the first object in array.
-            counter += 1; 
-            currentremain -= 1;     //update number of remaining boxes for user.
-            ctx.drawImage(cacheCanvas, 90*Xf, 380*Yf, 200*Xf, 30*Yf, 90*Xf, 380*Yf, 200*Xf, 30*Yf);
-            ctx.fillStyle = 'white';
-            ctx.font = pixels + "px monospace";
-            ctx.fillText(""+currentremain, 230 * Xf, 400 * Yf);
-        } else {
-            a_canvas.removeEventListener('click', clickEvent, false);
-            //---------------DRAW A RED BORDER------------------->
-            rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'red');
-            //--------------------------------------------------->
-            //display normal banner after 300ms.
-            setTimeout(function () {
-                rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'black');
-            }, 300);
-            counter = 0;    //reset counter.
-            lives -= 1;
-            reverseQue = que.slice(0);  //reset the reverseQue.
-            k13Box();
-            ctx.fillStyle = "White";
-            ctx.font = pixels + "px monospace";
-            ctx.textAlign = "center";
-            ctx.fillText(lives + "", 25 * Xf, 460 * Yf);
-            if (lives !== 0) {  //if not game over.
+    } 
+    if (collides(rects, ex, ey)) {
+        if (userTurn) {
+            //if clicked n box is the same as n box from computer.
+            if (collides(rects, ex, ey) === que[counter]) {
+                turnEvent(ex, ey);      //do animation
+                reverseQue.shift();     //pops the first object in array.
+                counter += 1; 
+                currentremain -= 1;     //update number of remaining boxes for user.
+                ctx.drawImage(cacheCanvas, 90*Xf, 380*Yf, 200*Xf, 30*Yf, 90*Xf, 380*Yf, 200*Xf, 30*Yf);
+                ctx.fillStyle = 'white';
+                ctx.font = pixels + "px monospace";
+                ctx.fillText(""+currentremain, 230 * Xf, 400 * Yf);
+            }
+            else {
+                for (var i = 0; i < lengd; i += 1) {
+                    // Identify the rectangle in use.
+                    if (collides([rects[i]], ex, ey)) {
+                        var rightBox = rects[i];
+                        var rectangle = rects2[i];
+                        console.log(rightBox);
+                    }
+                }
+
+                a_canvas.removeEventListener('click', clickEvent, false);
+                //---------------DRAW A RED BORDER------------------->
+                rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'red');
+                //--------------------------------------------------->
+                //display normal banner after 300ms.
                 setTimeout(function () {
-                    userTurn = false;   //blackCan should be false too.
-                    remainUpdate();
-                    computerRe();
-                }, 1000);
+                    rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'black');
+                }, 300);
+                counter = 0;    //reset counter.
+                lives -= 1;
+                reverseQue = que.slice(0);  //reset the reverseQue.
+                k13Box();
+                ctx.fillStyle = "White";
+                ctx.font = pixels + "px monospace";
+                ctx.textAlign = "center";
+                ctx.fillText(lives + "", 25 * Xf, 460 * Yf);
+                if (lives !== 0) {  //if not game over.
+                    setTimeout(function () {
+                        userTurn = false;   //blackCan should be false too.
+                        remainUpdate();
+                        computerRe();
+                    }, 1000);
+                }
             }
         }
+    }
         if (!reverseQue.length) { // if it's still user's turn.
             round += 1;
             scoreData.score = round; // increase score by one.
@@ -482,7 +498,6 @@ function startPlaying() {
             gameover_interface();
             return;
         }
-    }
 }
 var clickEvent = function clickEvent(e) {
     new FastClick.attach(document.body);
