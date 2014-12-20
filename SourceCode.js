@@ -33,6 +33,7 @@ var userTurn = false;
 var blackCan = false;
 var second = false;
 var round = 1;
+var colours = 0;
 var que = [];
 var reverseQue = [];
 var remain = 1;
@@ -43,17 +44,20 @@ var ey = undefined;
 var counter = 0;
 var myMedia = new Audio("Click.mp3");
 var endAudio = new Audio("GameOver.mp3");
+var roundDone = new Audio("CorrectSound.mp3");
 //------------------------------------------------>
 var scoreData = { 
         score: round = round, 
         leaderboardId: "board1"
     };
+var colourNumberData = { 
+        score: colours = colours, 
+        leaderboardId: "board2"
+    };
 var x_canvas = a_canvas.width;//310
 var y_canvas = a_canvas.height;//490
 var Xf = (x / x_canvas).toFixed(5); // X fraction
-console.log(Xf);
 var Yf = (y / y_canvas).toFixed(5); // Y fraction
-console.log(Yf);
 function resize_canvas() {
     if (a_canvas.width < x) {
         a_canvas.width = x;
@@ -248,8 +252,7 @@ var game_interface = function drawGame() {
 };
 
 var black_canvas2 = function blackBox2() {
-        ctx.fillStyle = "Black";
-        ctx.fillRect(90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);//k11
+        rounded_rect(70, 430, 230, 50, 10, 'black', 'silver');
         ctx.fillStyle = "White";
         ctx.font = pixels + "px monospace";
         ctx.textAlign = "center";
@@ -279,6 +282,8 @@ var gameover_interface = function game_over() {
     //------------SUBMIT HIGHSCORE-------------------->
     function authUser(){
         gamecenter.submitScore(successCallback, failureCallback, scoreData);
+        gamecenter.submitScore(successCallback, failureCallback, colourNumberData);
+
     }
     document.addEventListener("deviceready", authUser, false);
     //------------------------------------------------>
@@ -343,21 +348,13 @@ function turnEvent(AnX, AnY) {
             eventDone = true;
         }
     }
-    window.requestAnimFrame = (function(){
-        return  window.requestAnimationFrame       ||
-                window.webkitRequestAnimationFrame ||
-                window.mozRequestAnimationFrame    ||
-                function( callback ){
-                window.setTimeout(callback, 1000 / 60);
-                };
-    })();
     (function animloop(){
         if (eventDone) {//condition to stop requestAnimationFrame();
             eventDone = false;
             rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'black');
             return;
         };
-        requestAnimFrame(animloop);
+        requestAnimationFrame(animloop);
         render();
     })();
 }
@@ -414,7 +411,6 @@ function startPlaying() {
         if (collides([rects[i]], ex, ey)) {
             var rightBox = rects[i];
             var rectangle = rects2[i];
-            console.log(rightBox);
         }
     }
     if (collides(startRects, ex, ey)) { // if start button...
@@ -437,6 +433,9 @@ function startPlaying() {
             //if clicked n box is the same as n box from computer.
             if (collides(rects, ex, ey) === que[counter]) {
                 turnEvent(ex, ey);      //do animation
+                colours += 1;
+                colourNumberData.score = colours;
+                console.log(colours);
                 reverseQue.shift();     //pops the first object in array.
                 counter += 1; 
                 currentremain -= 1;     //update number of remaining boxes for user.
@@ -446,15 +445,6 @@ function startPlaying() {
                 ctx.fillText(""+currentremain, 230 * Xf, 400 * Yf);
             }
             else {
-                for (var i = 0; i < lengd; i += 1) {
-                    // Identify the rectangle in use.
-                    if (collides([rects[i]], ex, ey)) {
-                        var rightBox = rects[i];
-                        var rectangle = rects2[i];
-                        console.log(rightBox);
-                    }
-                }
-
                 a_canvas.removeEventListener('click', clickEvent, false);
                 //---------------DRAW A RED BORDER------------------->
                 rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'red');
@@ -482,6 +472,8 @@ function startPlaying() {
         }
     }
         if (!reverseQue.length) { // if it's still user's turn.
+            roundDone.play();
+            rounded_rect(70, 430, 230, 50, 10, 'black', 'green');
             round += 1;
             scoreData.score = round; // increase score by one.
             remain += 1;
@@ -494,7 +486,7 @@ function startPlaying() {
         if (!lives) {
             setTimeout(function () {
                 endAudio.play();
-            }, 800);
+            }, 750);
             gameover_interface();
             return;
         }
