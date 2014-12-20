@@ -58,6 +58,7 @@ var x_canvas = a_canvas.width;//310
 var y_canvas = a_canvas.height;//490
 var Xf = (x / x_canvas).toFixed(5); // X fraction
 var Yf = (y / y_canvas).toFixed(5); // Y fraction
+
 function resize_canvas() {
     if (a_canvas.width < x) {
         a_canvas.width = x;
@@ -132,12 +133,20 @@ function rounded_rect(x, y, w, h, r, fillstyle, strokestyle){
 //--------------------DRAWINGS TO CACHE--------------->
 function complexDraw(canvas){
     canvas.fillStyle = "Black";
-    canvas.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
+    canvas.fillRect(0, 0, 200 * Xf, 30 * Yf);//k10
     canvas.fillStyle = "White";
     canvas.font = pixels + "px monospace";
     canvas.textAlign = "center";
-    canvas.fillText("Left: ", 185 * Xf, 400 * Yf);
+    canvas.fillText("Left: ", 100 * Xf, 20*Yf);
 }
+function blackBox2(canvas) {
+    canvas.fillStyle = "Black";
+    canvas.fillRect(0, 30*Yf, 200 * Xf, 30 * Yf);//k10
+    canvas.fillStyle = "White";
+    canvas.font = pixels + "px monospace";
+    canvas.textAlign = "center";
+    canvas.fillText("Score: ", 100 * Xf, 50 * Yf);
+};
 
 function proCeed(canvas) {
     canvas.fillStyle = "Black";
@@ -148,8 +157,15 @@ function proCeed(canvas) {
     canvas.fillText("Next round", 185 * Xf, 460 * Yf);
 };
 
+function remainUpdate(canvas) {
+    canvas.fillStyle = "Black";
+    canvas.fillRect(0, 60 * Yf, 200 * Xf, 30 * Yf);//k10
+    canvas.fillStyle = "White";
+    canvas.font = pixels + "px monospace";
+    canvas.textAlign = "center";
+    canvas.fillText("Remaining: ", 100  * Xf, 80 * Yf);//k10
+};
 function drawK13(ctx) {
-    //rounded_rect(10, 430, 50, 50, 10, 'black', 'silver');
     ctx.fillStyle = "Black";
     ctx.beginPath();
     ctx.moveTo(20 * Xf, 430 * Yf);
@@ -204,8 +220,11 @@ var cacheCtx = cacheCanvas.getContext('2d'); // context
 //----------------------------------------------------->
 //--------------CACHE DRAWINGS----------->
 complexDraw(cacheCtx);
+blackBox2(cacheCtx);
 proCeed(cacheCtx);
+remainUpdate(cacheCtx);
 drawK13(cacheCtx);
+
 
 //--------------------------------------->
 
@@ -249,23 +268,6 @@ var game_interface = function drawGame() {
     ctx.fill();
     ctx.fillText("Start", 185 * Xf, 460 * Yf);
 
-};
-
-var black_canvas2 = function blackBox2() {
-        rounded_rect(70, 430, 230, 50, 10, 'black', 'silver');
-        ctx.fillStyle = "White";
-        ctx.font = pixels + "px monospace";
-        ctx.textAlign = "center";
-        ctx.fillText("Score: " + round, 185 * Xf, 460 * Yf);
-};
-
- var remainUpdate = function remainUpdate() {
-    ctx.fillStyle = "Black";
-    ctx.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
-    ctx.fillStyle = "White";
-    ctx.font = pixels + "px monospace";
-    ctx.textAlign = "center";
-    ctx.fillText("Remaining: " + remain, 185 * Xf, 400 * Yf);//k10
 };
 
 function gameover(e) {
@@ -414,14 +416,25 @@ function startPlaying() {
         }
     }
     if (collides(startRects, ex, ey)) { // if start button...
-        black_canvas2();
+        //black_canvas2();
+        rounded_rect(70, 430, 230, 50, 10, 'black', 'silver');
+        ctx.drawImage(cacheCanvas, 0, 30*Yf, 200 * Xf, 30 * Yf, 90*Xf, 440*Yf, 200*Xf, 30*Yf);
+        ctx.fillStyle = "White";
+        ctx.font = pixels + "px monospace";
+        ctx.textAlign = "center";
+        ctx.fillText(round + "", 230 * Xf, 460 * Yf);
         blackCan = true;
         g = randomXY(); // generate coordinates for computer.
     }
     if (blackCan && !userTurn) {
         var computerBox = collides(rects, g.x, g.y);
         if (computerBox) {
-            remainUpdate();
+            ctx.drawImage(cacheCanvas, 0, 60 * Yf, 200 * Xf, 30 * Yf, 90*Xf, 380*Yf, 200*Xf, 30*Yf);
+            ctx.fillStyle = "White";
+            ctx.font = pixels + "px monospace";
+            ctx.textAlign = "center";
+            ctx.fillText("" + remain, 260 * Xf, 400 * Yf);
+            //remainUpdate();
             que.push(computerBox);
             reverseQue = que.slice(0);
             blackCan = false;
@@ -439,7 +452,7 @@ function startPlaying() {
                 reverseQue.shift();     //pops the first object in array.
                 counter += 1; 
                 currentremain -= 1;     //update number of remaining boxes for user.
-                ctx.drawImage(cacheCanvas, 90*Xf, 380*Yf, 200*Xf, 30*Yf, 90*Xf, 380*Yf, 200*Xf, 30*Yf);
+                ctx.drawImage(cacheCanvas, 0, 0, 200*Xf, 30*Yf, 90*Xf, 380*Yf, 200*Xf, 30*Yf);
                 ctx.fillStyle = 'white';
                 ctx.font = pixels + "px monospace";
                 ctx.fillText(""+currentremain, 230 * Xf, 400 * Yf);
@@ -504,6 +517,7 @@ var clickEvent = function clickEvent(e) {
 }
 
 game_interface();
+//ctx.drawImage(cacheCanvas, 0, 0, x, y, 0, 0, x, y);
 if (a_canvas && a_canvas.getContext) {
     a_canvas.addEventListener('click', clickEvent, false);
     FastClick.attach(document.body);
