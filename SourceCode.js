@@ -37,7 +37,7 @@ var colours = 0;
 var que = [];
 var reverseQue = [];
 var remain = 1;
-var currentremain = 1;
+var currentremain;
 var lives = 3;
 var ex = undefined;
 var ey = undefined;
@@ -56,8 +56,8 @@ var colourNumberData = {
     };
 var x_canvas = a_canvas.width;//310
 var y_canvas = a_canvas.height;//490
-var Xf = (x / x_canvas).toFixed(5); // X fraction
-var Yf = (y / y_canvas).toFixed(5); // Y fraction
+var Xf = (x / x_canvas).toFixed(3); // X fraction
+var Yf = (y / y_canvas).toFixed(3); // Y fraction
 
 function resize_canvas() {
     if (a_canvas.width < x) {
@@ -113,7 +113,9 @@ function collides(rect, x, y) {
 }
 
 function rounded_rect(x, y, w, h, r, fillstyle, strokestyle){
+    //ctx.lineCap = "round";
     ctx.beginPath();
+    //ctx.lineCap = "round";
     ctx.fillStyle = fillstyle;
     ctx.moveTo((x + r) * Xf, y * Yf);
     ctx.lineTo((x + w - r) * Xf, y * Yf);
@@ -125,27 +127,27 @@ function rounded_rect(x, y, w, h, r, fillstyle, strokestyle){
     ctx.lineTo(x * Xf, (y + r) * Yf);
     ctx.quadraticCurveTo(x * Xf, y * Yf, (x + r) * Xf, y * Yf);
     ctx.fill();
-    ctx.lineWidth = 4*Xf;
+    ctx.lineWidth = 3*Xf;
     ctx.strokeStyle = strokestyle;
     ctx.stroke();
     ctx.closePath();
 }
 //--------------------DRAWINGS TO CACHE--------------->
-function complexDraw(canvas){
+/*function complexDraw(canvas){
     canvas.fillStyle = "Black";
     canvas.fillRect(0, 0, 200 * Xf, 30 * Yf);//k10
     canvas.fillStyle = "White";
     canvas.font = pixels + "px monospace";
     canvas.textAlign = "center";
     canvas.fillText("Left: ", 100 * Xf, 20*Yf);
-}
+}*/
 function blackBox2(canvas) {
     canvas.fillStyle = "Black";
     canvas.fillRect(0, 30*Yf, 200 * Xf, 30 * Yf);//k10
     canvas.fillStyle = "White";
     canvas.font = pixels + "px monospace";
     canvas.textAlign = "center";
-    canvas.fillText("Score: ", 100 * Xf, 50 * Yf);
+    canvas.fillText("Round: ", 100 * Xf, 50 * Yf);
 };
 
 function proCeed(canvas) {
@@ -158,13 +160,36 @@ function proCeed(canvas) {
 };
 
 function remainUpdate(canvas) {
-    canvas.fillStyle = "Black";
-    canvas.fillRect(0, 60 * Yf, 200 * Xf, 30 * Yf);//k10
     canvas.fillStyle = "White";
     canvas.font = pixels + "px monospace";
     canvas.textAlign = "center";
-    canvas.fillText("Remaining: ", 100  * Xf, 80 * Yf);//k10
+    canvas.fillText("Progress", 60*Xf, 80 * Yf);
+    canvas.beginPath();
+    canvas.moveTo(180*Xf, 60*Yf);
+    canvas.lineTo(190*Xf, 60*Yf);
+    canvas.quadraticCurveTo(200*Xf, 60*Yf, 200*Xf, 70*Yf);
+    canvas.lineTo(200*Xf, 80*Yf);
+    canvas.quadraticCurveTo(200*Xf, 90*Yf, 190*Xf, 90*Yf);
+    canvas.lineTo(180*Xf, 90*Yf);
+    canvas.quadraticCurveTo(170*Xf,90*Yf, 170*Xf, 80*Yf);
+    canvas.lineTo(170*Xf, 70*Yf);
+    canvas.quadraticCurveTo(170*Xf, 60*Yf, 180*Xf, 60*Yf);
+    canvas.fill();
+    canvas.closePath();
+    canvas.beginPath();
+    canvas.moveTo(140*Xf, 60*Yf);
+    canvas.lineTo(150*Xf, 60*Yf);
+    canvas.quadraticCurveTo(160*Xf, 60*Yf, 160*Xf, 70*Yf);
+    canvas.lineTo(160*Xf, 80*Yf);
+    canvas.quadraticCurveTo(160*Xf, 90*Yf, 150*Xf, 90*Yf);
+    canvas.lineTo(140*Xf, 90*Yf);
+    canvas.quadraticCurveTo(130*Xf,90*Yf, 130*Xf, 80*Yf);
+    canvas.lineTo(130*Xf, 70*Yf);
+    canvas.quadraticCurveTo(130*Xf, 60*Yf, 140*Xf, 60*Yf);
+    canvas.fill();
+    canvas.closePath();
 };
+
 function drawK13(ctx) {
     ctx.fillStyle = "Black";
     ctx.beginPath();
@@ -178,7 +203,7 @@ function drawK13(ctx) {
     ctx.lineTo(10 * Xf, 440 * Yf);
     ctx.quadraticCurveTo(10 * Xf, 430 * Yf, 20 * Xf, 430 * Yf);
     ctx.fill();
-    ctx.lineWidth = 4*Xf;
+    ctx.lineWidth = 3*Xf;
     ctx.strokeStyle = 'silver';
     ctx.stroke();
     ctx.closePath();
@@ -190,11 +215,12 @@ function drawK13(ctx) {
     ctx.lineTo(32*Xf, 455*Yf);
     ctx.lineTo(42*Xf, 447*Yf);
     ctx.fill()
+    ctx.closePath();
     ctx.beginPath();
     ctx.arc(37*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
     ctx.arc(47*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
     ctx.fill();
-    ctx.clip();
+    ctx.closePath();
 };
 //-------------------------------------------------------->
 //----------CACHED CANVAS------------->
@@ -219,13 +245,11 @@ var cacheCanvas = cloneCanvas(a_canvas); // newCanvas
 var cacheCtx = cacheCanvas.getContext('2d'); // context
 //----------------------------------------------------->
 //--------------CACHE DRAWINGS----------->
-complexDraw(cacheCtx);
+//complexDraw(cacheCtx);
 blackBox2(cacheCtx);
 proCeed(cacheCtx);
 remainUpdate(cacheCtx);
 drawK13(cacheCtx);
-
-
 //--------------------------------------->
 
 function k13Box(){
@@ -408,32 +432,25 @@ function randomXY() {
 function startPlaying() {
     var lengd = rects.length,
     g = { 'x': 0, 'y': 0 };
-    for (var i = 0; i < lengd; i += 1) {
-        // Identify the rectangle in use.
-        if (collides([rects[i]], ex, ey)) {
-            var rightBox = rects[i];
-            var rectangle = rects2[i];
-        }
-    }
     if (collides(startRects, ex, ey)) { // if start button...
-        //black_canvas2();
         rounded_rect(70, 430, 230, 50, 10, 'black', 'silver');
         ctx.drawImage(cacheCanvas, 0, 30*Yf, 200 * Xf, 30 * Yf, 90*Xf, 440*Yf, 200*Xf, 30*Yf);
         ctx.fillStyle = "White";
         ctx.font = pixels + "px monospace";
         ctx.textAlign = "center";
-        ctx.fillText(round + "", 230 * Xf, 460 * Yf);
+        ctx.fillText(round + "", 235 * Xf, 460 * Yf);
         blackCan = true;
         g = randomXY(); // generate coordinates for computer.
     }
     if (blackCan && !userTurn) {
         var computerBox = collides(rects, g.x, g.y);
         if (computerBox) {
-            ctx.drawImage(cacheCanvas, 0, 60 * Yf, 200 * Xf, 30 * Yf, 90*Xf, 380*Yf, 200*Xf, 30*Yf);
-            ctx.fillStyle = "White";
+            ctx.drawImage(cacheCanvas, 0, 60 * Yf, 200 * Xf, 30 * Yf, 90*Xf, 380*Yf, 200*Xf, 30*Yf); //Remaining;
+            ctx.fillStyle = "black";
             ctx.font = pixels + "px monospace";
             ctx.textAlign = "center";
-            ctx.fillText("" + remain, 260 * Xf, 400 * Yf);
+            ctx.fillText("" + round, 235 * Xf, 400 * Yf);
+            ctx.fillText("" + colours, 275 * Xf, 400 * Yf);
             //remainUpdate();
             que.push(computerBox);
             reverseQue = que.slice(0);
@@ -442,20 +459,28 @@ function startPlaying() {
         }
     } 
     if (collides(rects, ex, ey)) {
+        for (var i = 0; i < lengd; i += 1) {
+            // Identify the rectangle in use.
+            if (collides([rects[i]], ex, ey)) {
+                var rightBox = rects[i];
+                var rectangle = rects2[i];
+            }
+        }
         if (userTurn) {
             //if clicked n box is the same as n box from computer.
             if (collides(rects, ex, ey) === que[counter]) {
                 turnEvent(ex, ey);      //do animation
                 colours += 1;
                 colourNumberData.score = colours;
-                console.log(colours);
                 reverseQue.shift();     //pops the first object in array.
                 counter += 1; 
                 currentremain -= 1;     //update number of remaining boxes for user.
-                ctx.drawImage(cacheCanvas, 0, 0, 200*Xf, 30*Yf, 90*Xf, 380*Yf, 200*Xf, 30*Yf);
-                ctx.fillStyle = 'white';
+                ctx.drawImage(cacheCanvas, 0, 60 * Yf, 200 * Xf, 30 * Yf, 90*Xf, 380*Yf, 200*Xf, 30*Yf);
+                ctx.fillStyle = "black";
                 ctx.font = pixels + "px monospace";
-                ctx.fillText(""+currentremain, 230 * Xf, 400 * Yf);
+                ctx.textAlign = "center";
+                ctx.fillText("" + round, 235 * Xf, 400 * Yf);
+                ctx.fillText("" + colours, 275 * Xf, 400 * Yf);
             }
             else {
                 a_canvas.removeEventListener('click', clickEvent, false);
@@ -477,14 +502,13 @@ function startPlaying() {
                 if (lives !== 0) {  //if not game over.
                     setTimeout(function () {
                         userTurn = false;   //blackCan should be false too.
-                        remainUpdate();
                         computerRe();
                     }, 1000);
                 }
             }
         }
     }
-        if (!reverseQue.length) { // if it's still user's turn.
+        if (!reverseQue.length && userTurn) { // if it's still user's turn.
             roundDone.play();
             rounded_rect(70, 430, 230, 50, 10, 'black', 'green');
             round += 1;
