@@ -10,7 +10,6 @@
 document.addEventListener("deviceready", authUser, false);
 var failureCallback = "Error!";
 var successCallback = function (user) {
-    alert(user.alias);
     var onSuccess = true;
     // user.alias, user.playerID, user.displayName
 };
@@ -138,9 +137,7 @@ function collides(rect, x, y) {
 }
 
 function rounded_rect(x, y, w, h, r, fillstyle, strokestyle){
-    //ctx.lineCap = "round";
     ctx.beginPath();
-    //ctx.lineCap = "round";
     ctx.fillStyle = fillstyle;
     ctx.moveTo((x + r) * Xf, y * Yf);
     ctx.lineTo((x + w - r) * Xf, y * Yf);
@@ -451,7 +448,7 @@ function startPlaying() {
     g = { 'x': 0, 'y': 0 };
     if (collides(startRects, ex, ey)) { // if start button...
         rounded_rect(70, 430, 230, 50, 10, 'black', 'silver');
-        ctx.drawImage(cacheCanvas, 0, 30*Yf, 200 * Xf, 30 * Yf, 90*Xf, 440*Yf, 200*Xf, 30*Yf);
+        ctx.drawImage(cacheCanvas, 0, 30 * Yf, 200 * Xf, 30 * Yf, 90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);
         ctx.fillStyle = "White";
         ctx.font = pixels + "px monospace";
         ctx.textAlign = "center";
@@ -462,13 +459,12 @@ function startPlaying() {
     if (blackCan && !userTurn) {
         var computerBox = collides(rects, g.x, g.y);
         if (computerBox) {
-            ctx.drawImage(cacheCanvas, 0, 60 * Yf, 200 * Xf, 30 * Yf, 90*Xf, 380*Yf, 200*Xf, 30*Yf); //Remaining;
+            ctx.drawImage(cacheCanvas, 0, 60 * Yf, 200 * Xf, 30 * Yf, 90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf); //Remaining;
             ctx.fillStyle = "black";
             ctx.font = pixels + "px monospace";
             ctx.textAlign = "center";
             ctx.fillText("" + round, 235 * Xf, 400 * Yf);
             ctx.fillText("" + colours, 275 * Xf, 400 * Yf);
-            //remainUpdate();
             que.push(computerBox);
             reverseQue = que.slice(0);
             blackCan = false;
@@ -492,7 +488,7 @@ function startPlaying() {
                 reverseQue.shift();     //pops the first object in array.
                 counter += 1; 
                 currentremain -= 1;     //update number of remaining boxes for user.
-                ctx.drawImage(cacheCanvas, 0, 60 * Yf, 200 * Xf, 30 * Yf, 90*Xf, 380*Yf, 200*Xf, 30*Yf);
+                ctx.drawImage(cacheCanvas, 0, 60 * Yf, 200 * Xf, 30 * Yf, 90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);
                 ctx.fillStyle = "black";
                 ctx.font = pixels + "px monospace";
                 ctx.textAlign = "center";
@@ -534,7 +530,7 @@ function startPlaying() {
             counter = 0;
             blackCan = false;
             userTurn = false;
-            ctx.drawImage(cacheCanvas, 90*Xf, 440*Yf, 200*Xf, 30*Yf,90*Xf, 440*Yf, 200*Xf, 30*Yf);
+            ctx.drawImage(cacheCanvas, 90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf,90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);
             return;
         }
         if (!lives) {
