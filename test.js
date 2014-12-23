@@ -10,10 +10,13 @@
 document.addEventListener("deviceready", authUser, false);
 var failureCallback = "Error!";
 var successCallback = function (user) {
-    alert(user.alias);
     var onSuccess = true;
     // user.alias, user.playerID, user.displayName
 };
+window.onerror = function(msg, url, linenumber) {
+    alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
+    return true;
+}
 
 function authUser(){
     gamecenter.auth(successCallback, failureCallback);
@@ -27,33 +30,39 @@ var a_canvas = document.getElementById("a");
 var ctx = a_canvas.getContext("2d");
 //------------------------------------------------>
 //--------------------GLOBAL---------------------->
-var x = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-var y = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+var x = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)/**devicePixelRatio*/;
+var y = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)/**devicePixelRatio*/;
 var userTurn = false;
 var blackCan = false;
 var second = false;
 var round = 1;
+var colours = 0;
 var que = [];
 var reverseQue = [];
 var remain = 1;
-var currentremain = 1;
+var currentremain;
 var lives = 3;
 var ex = undefined;
 var ey = undefined;
 var counter = 0;
 var myMedia = new Audio("Click.mp3");
 var endAudio = new Audio("GameOver.mp3");
+var roundDone = new Audio("CorrectSound.mp3");
 //------------------------------------------------>
 var scoreData = { 
         score: round = round, 
         leaderboardId: "board1"
     };
+var colourNumberData = { 
+        score: colours = colours, 
+        leaderboardId: "board2"
+    };
+
 var x_canvas = a_canvas.width;//310
 var y_canvas = a_canvas.height;//490
-var Xf = (x / x_canvas).toFixed(5); // X fraction
-console.log(Xf);
-var Yf = (y / y_canvas).toFixed(5); // Y fraction
-console.log(Yf);
+var Xf = (x / x_canvas); // X fraction
+var Yf = (y / y_canvas); // Y fraction
+
 function resize_canvas() {
     if (a_canvas.width < x) {
         a_canvas.width = x;
@@ -63,6 +72,45 @@ function resize_canvas() {
     }
 }
 resize_canvas();
+
+function enhanceContext(canvas, context) {
+    var ratio = window.devicePixelRatio || 1,
+        width = canvas.width,
+        height = canvas.height;
+
+    if (ratio > 1) {
+        canvas.width = width * ratio;
+        canvas.height = height * ratio;
+        canvas.style.width = width + "px";
+        canvas.style.height = height + "px";
+        context.scale(ratio, ratio);
+    }
+}
+enhanceContext(a_canvas, ctx);
+(function() {
+    var lastTime = 0;
+    var vendors = ['webkit', 'moz'];
+    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+        window.cancelAnimationFrame =
+          window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+    }
+
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function(callback, element) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+              timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+}());
 
 var pixels = (20 * Yf).toFixed(0);
 var xc = 90 * Xf, yc = 110 * Yf;
@@ -120,20 +168,20 @@ function rounded_rect(x, y, w, h, r, fillstyle, strokestyle){
     ctx.lineTo(x * Xf, (y + r) * Yf);
     ctx.quadraticCurveTo(x * Xf, y * Yf, (x + r) * Xf, y * Yf);
     ctx.fill();
-    ctx.lineWidth = 4*Xf;
+    ctx.lineWidth = 3*Xf;
     ctx.strokeStyle = strokestyle;
     ctx.stroke();
     ctx.closePath();
 }
 //--------------------DRAWINGS TO CACHE--------------->
-function complexDraw(canvas){
+function blackBox2(canvas) {
     canvas.fillStyle = "Black";
-    canvas.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
+    canvas.fillRect(0, 30*Yf, 200 * Xf, 30 * Yf);//k10
     canvas.fillStyle = "White";
     canvas.font = pixels + "px monospace";
     canvas.textAlign = "center";
-    canvas.fillText("Left: ", 185 * Xf, 400 * Yf);
-}
+    canvas.fillText("Round: ", 100 * Xf, 50 * Yf);
+};
 
 function proCeed(canvas) {
     canvas.fillStyle = "Black";
@@ -144,8 +192,38 @@ function proCeed(canvas) {
     canvas.fillText("Next round", 185 * Xf, 460 * Yf);
 };
 
+function remainUpdate(canvas) {
+    canvas.fillStyle = "White";
+    canvas.font = pixels + "px monospace";
+    canvas.textAlign = "center";
+    canvas.fillText("Progress", 60*Xf, 80 * Yf);
+    canvas.beginPath();
+    canvas.moveTo(180*Xf, 60*Yf);
+    canvas.lineTo(190*Xf, 60*Yf);
+    canvas.quadraticCurveTo(200*Xf, 60*Yf, 200*Xf, 70*Yf);
+    canvas.lineTo(200*Xf, 80*Yf);
+    canvas.quadraticCurveTo(200*Xf, 90*Yf, 190*Xf, 90*Yf);
+    canvas.lineTo(180*Xf, 90*Yf);
+    canvas.quadraticCurveTo(170*Xf,90*Yf, 170*Xf, 80*Yf);
+    canvas.lineTo(170*Xf, 70*Yf);
+    canvas.quadraticCurveTo(170*Xf, 60*Yf, 180*Xf, 60*Yf);
+    canvas.fill();
+    canvas.closePath();
+    canvas.beginPath();
+    canvas.moveTo(140*Xf, 60*Yf);
+    canvas.lineTo(150*Xf, 60*Yf);
+    canvas.quadraticCurveTo(160*Xf, 60*Yf, 160*Xf, 70*Yf);
+    canvas.lineTo(160*Xf, 80*Yf);
+    canvas.quadraticCurveTo(160*Xf, 90*Yf, 150*Xf, 90*Yf);
+    canvas.lineTo(140*Xf, 90*Yf);
+    canvas.quadraticCurveTo(130*Xf,90*Yf, 130*Xf, 80*Yf);
+    canvas.lineTo(130*Xf, 70*Yf);
+    canvas.quadraticCurveTo(130*Xf, 60*Yf, 140*Xf, 60*Yf);
+    canvas.fill();
+    canvas.closePath();
+};
+
 function drawK13(ctx) {
-    //rounded_rect(10, 430, 50, 50, 10, 'black', 'silver');
     ctx.fillStyle = "Black";
     ctx.beginPath();
     ctx.moveTo(20 * Xf, 430 * Yf);
@@ -158,7 +236,7 @@ function drawK13(ctx) {
     ctx.lineTo(10 * Xf, 440 * Yf);
     ctx.quadraticCurveTo(10 * Xf, 430 * Yf, 20 * Xf, 430 * Yf);
     ctx.fill();
-    ctx.lineWidth = 4*Xf;
+    ctx.lineWidth = 3*Xf;
     ctx.strokeStyle = 'silver';
     ctx.stroke();
     ctx.closePath();
@@ -170,11 +248,12 @@ function drawK13(ctx) {
     ctx.lineTo(32*Xf, 455*Yf);
     ctx.lineTo(42*Xf, 447*Yf);
     ctx.fill()
+    ctx.closePath();
     ctx.beginPath();
     ctx.arc(37*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
     ctx.arc(47*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
     ctx.fill();
-    ctx.clip();
+    ctx.closePath();
 };
 //-------------------------------------------------------->
 //----------CACHED CANVAS------------->
@@ -199,8 +278,9 @@ var cacheCanvas = cloneCanvas(a_canvas); // newCanvas
 var cacheCtx = cacheCanvas.getContext('2d'); // context
 //----------------------------------------------------->
 //--------------CACHE DRAWINGS----------->
-complexDraw(cacheCtx);
+blackBox2(cacheCtx);
 proCeed(cacheCtx);
+remainUpdate(cacheCtx);
 drawK13(cacheCtx);
 //--------------------------------------->
 
@@ -243,24 +323,7 @@ var game_interface = function drawGame() {
     ctx.lineTo(20 * Xf, 395 * Yf);
     ctx.fill();
     ctx.fillText("Start", 185 * Xf, 460 * Yf);
-};
 
-var black_canvas2 = function blackBox2() {
-        ctx.fillStyle = "Black";
-        ctx.fillRect(90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);//k11
-        ctx.fillStyle = "White";
-        ctx.font = pixels + "px monospace";
-        ctx.textAlign = "center";
-        ctx.fillText("Score: " + round, 185 * Xf, 460 * Yf);
-};
-
- var remainUpdate = function remainUpdate() {
-    ctx.fillStyle = "Black";
-    ctx.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
-    ctx.fillStyle = "White";
-    ctx.font = pixels + "px monospace";
-    ctx.textAlign = "center";
-    ctx.fillText("Remaining: " + remain, 185 * Xf, 400 * Yf);//k10
 };
 
 function gameover(e) {
@@ -277,6 +340,8 @@ var gameover_interface = function game_over() {
     //------------SUBMIT HIGHSCORE-------------------->
     function authUser(){
         gamecenter.submitScore(successCallback, failureCallback, scoreData);
+        gamecenter.submitScore(successCallback, failureCallback, colourNumberData);
+
     }
     document.addEventListener("deviceready", authUser, false);
     //------------------------------------------------>
@@ -341,21 +406,13 @@ function turnEvent(AnX, AnY) {
             eventDone = true;
         }
     }
-    window.requestAnimFrame = (function(){
-        return  window.requestAnimationFrame       ||
-                window.webkitRequestAnimationFrame ||
-                window.mozRequestAnimationFrame    ||
-                function( callback ){
-                window.setTimeout(callback, 1000 / 60);
-                };
-    })();
     (function animloop(){
         if (eventDone) {//condition to stop requestAnimationFrame();
             eventDone = false;
             rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'black');
             return;
         };
-        requestAnimFrame(animloop);
+        requestAnimationFrame(animloop);
         render();
     })();
 }
@@ -397,7 +454,6 @@ function randomXY() {
     X = randomInt(minXY, maxX),
     Y = randomInt(minXY, maxY);
     while (!collides(rects, X, Y)) {
-        console.log("renew");
         // new coordinates if the other ones do not match.
         X = randomInt(minXY, maxX);
         Y = randomInt(minXY, maxY);
@@ -408,81 +464,100 @@ function randomXY() {
 function startPlaying() {
     var lengd = rects.length,
     g = { 'x': 0, 'y': 0 };
-    for (var i = 0; i < lengd; i += 1) {
-        // Identify the rectangle in use.
-        if (collides([rects[i]], ex, ey)) {
-            var rightBox = rects[i];
-            var rectangle = rects2[i];
-        }
-    }
     if (collides(startRects, ex, ey)) { // if start button...
-        black_canvas2();
+        rounded_rect(70, 430, 230, 50, 10, 'black', 'silver');
+        ctx.drawImage(cacheCanvas, 0, 30 * Yf, 200 * Xf, 30 * Yf, 90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);
+        ctx.fillStyle = "White";
+        ctx.font = pixels + "px monospace";
+        ctx.textAlign = "center";
+        ctx.fillText(round + "", 235 * Xf, 460 * Yf);
         blackCan = true;
         g = randomXY(); // generate coordinates for computer.
     }
     if (blackCan && !userTurn) {
         var computerBox = collides(rects, g.x, g.y);
         if (computerBox) {
-            remainUpdate();
+            ctx.drawImage(cacheCanvas, 0, 60 * Yf, 200 * Xf, 30 * Yf, 90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf); //Remaining;
+            ctx.fillStyle = "black";
+            ctx.font = pixels + "px monospace";
+            ctx.textAlign = "center";
+            ctx.fillText("" + round, 235 * Xf, 400 * Yf);
+            ctx.fillText("" + colours, 275 * Xf, 400 * Yf);
             que.push(computerBox);
             reverseQue = que.slice(0);
             blackCan = false;
             computer();
         }
-    } else if (userTurn) {
-        //if clicked n box is the same as n box from computer.
-        if (rightBox === que[counter]) {
-            turnEvent(ex, ey);      //do animation
-            reverseQue.shift();     //pops the first object in array.
-            counter += 1; 
-            currentremain -= 1;     //update number of remaining boxes for user.
-            ctx.drawImage(cacheCanvas, 90*Xf, 380*Yf, 200*Xf, 30*Yf, 90*Xf, 380*Yf, 200*Xf, 30*Yf);
-            ctx.fillStyle = 'white';
-            ctx.font = pixels + "px monospace";
-            ctx.fillText(""+currentremain, 230 * Xf, 400 * Yf);
-        } else {
-            a_canvas.removeEventListener('click', clickEvent, false);
-            //---------------DRAW A RED BORDER------------------->
-            rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'red');
-            //--------------------------------------------------->
-            //display normal banner after 300ms.
-            setTimeout(function () {
-                rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'black');
-            }, 300);
-            counter = 0;    //reset counter.
-            lives -= 1;
-            reverseQue = que.slice(0);  //reset the reverseQue.
-            k13Box();
-            ctx.fillStyle = "White";
-            ctx.font = pixels + "px monospace";
-            ctx.textAlign = "center";
-            ctx.fillText(lives + "", 25 * Xf, 460 * Yf);
-            if (lives !== 0) {  //if not game over.
-                setTimeout(function () {
-                    userTurn = false;   //blackCan should be false too.
-                    remainUpdate();
-                    computerRe();
-                }, 1000);
+    } 
+    if (collides(rects, ex, ey)) {
+        for (var i = 0; i < lengd; i += 1) {
+            // Identify the rectangle in use.
+            if (collides([rects[i]], ex, ey)) {
+                var rightBox = rects[i];
+                var rectangle = rects2[i];
             }
         }
-        if (!reverseQue.length) { // if it's still user's turn.
+        if (userTurn) {
+            //if clicked n box is the same as n box from computer.
+            if (collides(rects, ex, ey) === que[counter]) {
+                turnEvent(ex, ey);      //do animation
+                colours += 1;
+                colourNumberData.score = colours;
+                reverseQue.shift();     //pops the first object in array.
+                counter += 1; 
+                currentremain -= 1;     //update number of remaining boxes for user.
+                ctx.drawImage(cacheCanvas, 0, 60 * Yf, 200 * Xf, 30 * Yf, 90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);
+                ctx.fillStyle = "black";
+                ctx.font = pixels + "px monospace";
+                ctx.textAlign = "center";
+                ctx.fillText("" + round, 235 * Xf, 400 * Yf);
+                ctx.fillText("" + colours, 275 * Xf, 400 * Yf);
+            }
+            else {
+                a_canvas.removeEventListener('click', clickEvent, false);
+                //---------------DRAW A RED BORDER------------------->
+                rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'red');
+                //--------------------------------------------------->
+                //display normal banner after 300ms.
+                setTimeout(function () {
+                    rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'black');
+                }, 300);
+                counter = 0;    //reset counter.
+                lives -= 1;
+                reverseQue = que.slice(0);  //reset the reverseQue.
+                k13Box();
+                ctx.fillStyle = "White";
+                ctx.font = pixels + "px monospace";
+                ctx.textAlign = "center";
+                ctx.fillText(lives + "", 25 * Xf, 460 * Yf);
+                if (lives !== 0) {  //if not game over.
+                    setTimeout(function () {
+                        userTurn = false;   //blackCan should be false too.
+                        computerRe();
+                    }, 1000);
+                }
+            }
+        }
+    }
+        if (!reverseQue.length && userTurn) { // if it's still user's turn.
+            roundDone.play();
+            rounded_rect(70, 430, 230, 50, 10, 'black', 'green');
             round += 1;
             scoreData.score = round; // increase score by one.
             remain += 1;
             counter = 0;
             blackCan = false;
             userTurn = false;
-            ctx.drawImage(cacheCanvas, 90*Xf, 440*Yf, 200*Xf, 30*Yf,90*Xf, 440*Yf, 200*Xf, 30*Yf);
+            ctx.drawImage(cacheCanvas, 90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf,90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);
             return;
         }
         if (!lives) {
             setTimeout(function () {
                 endAudio.play();
-            }, 800);
+            }, 750);
             gameover_interface();
             return;
         }
-    }
 }
 var clickEvent = function clickEvent(e) {
     new FastClick.attach(document.body);
@@ -495,8 +570,9 @@ var clickEvent = function clickEvent(e) {
         }, 50);
     }
 }
-
+resize_canvas();
 game_interface();
+//ctx.drawImage(cacheCanvas, 0, 0, x, y, 0, 0, x, y);
 if (a_canvas && a_canvas.getContext) {
     a_canvas.addEventListener('click', clickEvent, false);
     FastClick.attach(document.body);
