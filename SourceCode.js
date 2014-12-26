@@ -299,10 +299,6 @@ var cacheCtx = cacheCanvas.getContext('2d');// context
 
 //--------------CACHE DRAWINGS----------->
 drawBoxes(cacheCtx);
-/*blackBox2(cacheCtx);
-proCeed(cacheCtx);
-remainUpdate(cacheCtx);
-drawK13(cacheCtx);*/
 //--------------------------------------->
 
 
@@ -324,7 +320,6 @@ var game_interface = function drawGame() {
     //----------------K12-------------------
     rounded_rect(10, 370, 50, 50, 10, null, 'silver');
     //--------------------------------------
-    //ctx.drawImage(cacheCanvas, 6 * Xf, 426 * Yf, 60*Xf, 56*Yf, 6* Xf, 426*Yf, 60*Xf, 56*Yf);
     ctx.fillStyle = "Black";
     ctx.beginPath();
     ctx.moveTo(20 * Xf, 430 * Yf);
@@ -393,8 +388,6 @@ var gameover_interface = function game_over() {
     }
     document.addEventListener("deviceready", authUser, false);
     //------------------------------------------------>
-    //ctx.drawImage(cacheCanvas, 6 * Xf, 426 * Yf, 60*Xf, 56*Yf, 6* Xf, 426*Yf, 60*Xf, 56*Yf);
-    console.log("hi");
     ctx.fillStyle = "Black";
     ctx.beginPath();
     ctx.moveTo(20 * Xf, 430 * Yf);
@@ -548,7 +541,6 @@ function startPlaying() {
     if (collides(startRects, ex, ey)) { // if start button...
         rounded_rect(70, 430, 230, 50, 10, 'black', 'silver');
         blackBox2(ctx) 
-        //ctx.drawImage(cacheCanvas, 0, 29 * Yf, 200 * Xf, 29 * Yf, 90 * Xf, 440 * Yf, 200 * Xf, 29 * Yf);
         ctx.fillStyle = "White";
         ctx.font = pixels + "px monospace";
         ctx.textAlign = "center";
@@ -559,7 +551,6 @@ function startPlaying() {
     if (blackCan && !userTurn) {
         var computerBox = collides(rects, g.x, g.y);
         if (computerBox) {
-            //ctx.drawImage(cacheCanvas, 0, 60 * Yf, 200 * Xf, 30 * Yf, 90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf); //Remaining;
             remainUpdate(ctx);
             ctx.fillStyle = "black";
             ctx.font = pixels + "px monospace";
@@ -589,7 +580,6 @@ function startPlaying() {
                 reverseQue.shift();     //pops the first object in array.
                 counter += 1; 
                 currentremain -= 1;     //update number of remaining boxes for user.
-                //ctx.drawImage(cacheCanvas, 0, 60 * Yf, 200 * Xf, 30 * Yf, 90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);
                 remainUpdate(ctx);
                 ctx.fillStyle = "black";
                 ctx.font = pixels + "px monospace";
@@ -609,7 +599,6 @@ function startPlaying() {
                 counter = 0;    //reset counter.
                 lives -= 1;
                 reverseQue = que.slice(0);  //reset the reverseQue.
-                //ctx.drawImage(cacheCanvas, 6 * Xf, 426 * Yf, 60*Xf, 56*Yf, 6* Xf, 426*Yf, 60*Xf, 56*Yf);
                 console.log("hi");
                 ctx.fillStyle = "Black";
                 ctx.beginPath();
@@ -665,7 +654,6 @@ function startPlaying() {
             blackCan = false;
             userTurn = false;
             proCeed(ctx);
-            //ctx.drawImage(cacheCanvas, 90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf,90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);
         }
         if (!lives) {
             setTimeout(function () {
