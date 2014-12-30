@@ -6,6 +6,10 @@
 // computer and ANOTHER box in to que.
 // computer uses turnEvent on BOTH boxex in que, in the right order.
 // user follows...
+/*window.onerror = function(msg, url, linenumber) {
+    alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
+    return true;
+}*/
 //--------------AUTHENTICATE GAME CENTER LOGIN-------------->
 document.addEventListener("deviceready", authUser, false);
 var failureCallback = "Error!";
@@ -62,7 +66,6 @@ var Yf = (y / y_canvas); // Y fraction
 function resize_canvas() {
     if (a_canvas.width < x) {
         a_canvas.width = x;
-        console.log(x);
     }
     if (a_canvas.height < y) {
         a_canvas.height = y;
@@ -180,7 +183,7 @@ function rounded_rect(x, y, w, h, r, fillstyle, strokestyle){
     ctx.lineTo(x * Xf, (y + r) * Yf);
     ctx.quadraticCurveTo(x * Xf, y * Yf, (x + r) * Xf, y * Yf);
     ctx.fill();
-    ctx.lineWidth = 3 * Xf;
+    ctx.lineWidth = 3*Xf;
     ctx.strokeStyle = strokestyle;
     ctx.stroke();
     ctx.closePath();
@@ -212,32 +215,33 @@ function remainUpdate(canvas) {
     canvas.textAlign = "center";
     canvas.fillText("Progress", 155*Xf, 400 * Yf);
     canvas.beginPath();
-    canvas.moveTo(270 * Xf, 380 * Yf);
-    canvas.lineTo(280 * Xf, 380 * Yf);
-    canvas.quadraticCurveTo(290 * Xf, 380 * Yf, 290 * Xf, 390 * Yf);
-    canvas.lineTo(290 * Xf, 400 * Yf);
-    canvas.quadraticCurveTo(290 * Xf, 410 * Yf, 280 * Xf, 410 * Yf);
-    canvas.lineTo(270 * Xf, 410 * Yf);
-    canvas.quadraticCurveTo(260 * Xf,410 * Yf, 260 * Xf, 400 * Yf);
-    canvas.lineTo(260 * Xf, 390 * Yf);
-    canvas.quadraticCurveTo(260 * Xf, 380 * Yf, 270 * Xf, 380 * Yf);
+    canvas.moveTo(270*Xf, 380*Yf);
+    canvas.lineTo(280*Xf, 380*Yf);
+    canvas.quadraticCurveTo(290*Xf, 380*Yf, 290*Xf, 390*Yf);
+    canvas.lineTo(290*Xf, 400*Yf);
+    canvas.quadraticCurveTo(290*Xf, 410*Yf, 280*Xf, 410*Yf);
+    canvas.lineTo(270*Xf, 410*Yf);
+    canvas.quadraticCurveTo(260*Xf,410*Yf, 260*Xf, 400*Yf);
+    canvas.lineTo(260*Xf, 390*Yf);
+    canvas.quadraticCurveTo(260*Xf, 380*Yf, 270*Xf, 380*Yf);
     canvas.fill();
     canvas.closePath();
     canvas.beginPath();
-    canvas.moveTo(230 * Xf, 380 * Yf);
-    canvas.lineTo(240 * Xf, 380 * Yf);
-    canvas.quadraticCurveTo(250 * Xf, 380 * Yf, 250 * Xf, 390 * Yf);
-    canvas.lineTo(250 * Xf, 400 * Yf);
-    canvas.quadraticCurveTo(250 * Xf, 410 * Yf, 240 * Xf, 410 * Yf);
-    canvas.lineTo(230 * Xf,410 * Yf);
-    canvas.quadraticCurveTo(220 * Xf, 410 * Yf, 220 * Xf, 400 * Yf);
-    canvas.lineTo(220 * Xf, 390 * Yf);
-    canvas.quadraticCurveTo(220 * Xf, 380 * Yf, 230 * Xf, 380 * Yf);
+    canvas.moveTo(230*Xf, 380*Yf);
+    canvas.lineTo(240*Xf, 380*Yf);
+    canvas.quadraticCurveTo(250*Xf, 380*Yf, 250*Xf, 390*Yf);
+    canvas.lineTo(250*Xf, 400*Yf);
+    canvas.quadraticCurveTo(250*Xf, 410*Yf, 240*Xf, 410*Yf);
+    canvas.lineTo(230*Xf,410*Yf);
+    canvas.quadraticCurveTo(220*Xf,410*Yf, 220*Xf, 400*Yf);
+    canvas.lineTo(220*Xf, 390*Yf);
+    canvas.quadraticCurveTo(220*Xf, 380*Yf, 230*Xf, 380*Yf);
     canvas.fill();
     canvas.closePath();
 };
 
 function drawK13(ctx) {
+    console.log("hi");
     ctx.fillStyle = "Black";
     ctx.beginPath();
     ctx.moveTo(20 * Xf, 430 * Yf);
@@ -250,22 +254,22 @@ function drawK13(ctx) {
     ctx.lineTo(10 * Xf, 440 * Yf);
     ctx.quadraticCurveTo(10 * Xf, 430 * Yf, 20 * Xf, 430 * Yf);
     ctx.fill();
-    ctx.lineWidth = 3 * Xf;
+    ctx.lineWidth = 3*Xf;
     ctx.strokeStyle = 'silver';
     ctx.stroke();
     ctx.closePath();
 
     ctx.fillStyle = 'red';
     ctx.beginPath();
-    ctx.moveTo(52 * Xf, 455 * Yf);
-    ctx.lineTo(42 * Xf, 465 * Yf);
-    ctx.lineTo(32 * Xf, 455 * Yf);
-    ctx.lineTo(42 * Xf, 447 * Yf);
+    ctx.moveTo(52*Xf, 455*Yf);
+    ctx.lineTo(42*Xf, 465*Yf);
+    ctx.lineTo(32*Xf, 455*Yf);
+    ctx.lineTo(42*Xf, 447*Yf);
     ctx.fill()
     ctx.closePath();
     ctx.beginPath();
-    ctx.arc(37 * Xf, 451 * Yf, 6 * Xf, 2 * Math.PI, 0, true);
-    ctx.arc(47 * Xf, 451 * Yf, 6 * Xf, 2 * Math.PI, 0, true);
+    ctx.arc(37*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
+    ctx.arc(47*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
     ctx.fill();
     ctx.closePath();
 };
@@ -289,6 +293,7 @@ function drawBoxes(ctx) {
         ctx.strokeStyle = 'black';
         ctx.stroke();
         ctx.closePath();
+        //rounded_rect(rects2[i].x, rects2[i].y, 90, 110, 10, rects[i].color, 'black');
     }
 }
 //-------------------------------------------------------->
@@ -318,7 +323,36 @@ var game_interface = function drawGame() {
     //----------------K12-------------------
     rounded_rect(10, 370, 50, 50, 10, null, 'silver');
     //--------------------------------------
-    drawK13(ctx);
+    ctx.fillStyle = "Black";
+    ctx.beginPath();
+    ctx.moveTo(20 * Xf, 430 * Yf);
+    ctx.lineTo(50 * Xf, 430 * Yf);
+    ctx.quadraticCurveTo(60 * Xf, 430 * Yf, 60 * Xf, 440 * Yf);
+    ctx.lineTo(60 * Xf, 470 * Yf);
+    ctx.quadraticCurveTo(60 * Xf, 480 * Yf, 50 * Xf, 480 * Yf);
+    ctx.lineTo(20 * Xf, 480 * Yf);
+    ctx.quadraticCurveTo(10 * Xf, 480 * Yf, 10 * Xf, 470 * Yf);
+    ctx.lineTo(10 * Xf, 440 * Yf);
+    ctx.quadraticCurveTo(10 * Xf, 430 * Yf, 20 * Xf, 430 * Yf);
+    ctx.fill();
+    ctx.lineWidth = 3*Xf;
+    ctx.strokeStyle = 'silver';
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.fillStyle = 'red';
+    ctx.beginPath();
+    ctx.moveTo(52*Xf, 455*Yf);
+    ctx.lineTo(42*Xf, 465*Yf);
+    ctx.lineTo(32*Xf, 455*Yf);
+    ctx.lineTo(42*Xf, 447*Yf);
+    ctx.fill()
+    ctx.closePath();
+    ctx.beginPath();
+    ctx.arc(37*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
+    ctx.arc(47*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
+    ctx.fill();
+    ctx.closePath();
     ctx.fillStyle = "White";
     ctx.font = pixels + "px monospace";
     ctx.textAlign = "center";
@@ -357,15 +391,47 @@ var gameover_interface = function game_over() {
     }
     document.addEventListener("deviceready", authUser, false);
     //------------------------------------------------>
-    drawK13(ctx);
+    ctx.fillStyle = "Black";
+    ctx.beginPath();
+    ctx.moveTo(20 * Xf, 430 * Yf);
+    ctx.lineTo(50 * Xf, 430 * Yf);
+    ctx.quadraticCurveTo(60 * Xf, 430 * Yf, 60 * Xf, 440 * Yf);
+    ctx.lineTo(60 * Xf, 470 * Yf);
+    ctx.quadraticCurveTo(60 * Xf, 480 * Yf, 50 * Xf, 480 * Yf);
+    ctx.lineTo(20 * Xf, 480 * Yf);
+    ctx.quadraticCurveTo(10 * Xf, 480 * Yf, 10 * Xf, 470 * Yf);
+    ctx.lineTo(10 * Xf, 440 * Yf);
+    ctx.quadraticCurveTo(10 * Xf, 430 * Yf, 20 * Xf, 430 * Yf);
+    ctx.fill();
+    ctx.lineWidth = 3*Xf;
+    ctx.strokeStyle = 'silver';
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.fillStyle = 'red';
+    ctx.beginPath();
+    ctx.moveTo(52*Xf, 455*Yf);
+    ctx.lineTo(42*Xf, 465*Yf);
+    ctx.lineTo(32*Xf, 455*Yf);
+    ctx.lineTo(42*Xf, 447*Yf);
+    ctx.fill()
+    ctx.closePath();
+    ctx.beginPath();
+    ctx.arc(37*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
+    ctx.arc(47*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
+    ctx.fill();
+    ctx.closePath();
+
     ctx.fillStyle = "Black";
     ctx.fillRect(90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);//k10
+    ctx.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
     ctx.fillStyle = "White";
     ctx.font = pixels + "px monospace";
     ctx.textAlign = "center";
     ctx.fillText("0", 25 * Xf, 460 * Yf);//lives = 0
-    ctx.fillText("Game over", 185 * Xf, 460 * Yf);
+    ctx.fillText("Game over: " + round, 185 * Xf, 460 * Yf);
     a_canvas.addEventListener('click', gameover, false);
+    ctx.fillText("<-- Try again?", 185 * Xf, 400 * Yf);
 };
 
 function randomInt(min, max) {
@@ -391,24 +457,27 @@ function turnEvent(AnX, AnY) {
     function render() {
         ctx.beginPath();
         ctx.fillStyle = rightBox.color;
-        ctx.moveTo((rectangle.x + 43 - one40) * Xf, (rectangle.y + 33 - one30) * Yf);
-        ctx.lineTo((rectangle.x + 47 + one40) * Xf, (rectangle.y + 33 - one30) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + 57 + one30) * Xf, (rectangle.y + 33 - one30) * Yf, (rectangle.x + 57 + one30) * Xf, (rectangle.y + 43 - one40) * Yf);
-        ctx.lineTo((rectangle.x + 57 + one30) * Xf, (rectangle.y + 67 + one40) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + 57 + one30) * Xf, (rectangle.y + 77 + one30) * Yf, (rectangle.x + 47 + one40) * Xf, (rectangle.y + 77 + one30) * Yf);
-        ctx.lineTo((rectangle.x + 43 - one40) * Xf, (rectangle.y + 77 + one30) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + 33 - one30) * Xf, (rectangle.y + 77 + one30) * Yf, (rectangle.x + 33 - one30) * Xf, (rectangle.y + 67 + one40) * Yf);
-        ctx.lineTo((rectangle.x + 33 - one30) * Xf, (rectangle.y + 43 - one40) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + 33 - one30) * Xf, (rectangle.y + 33 - one30) * Yf, (rectangle.x + 43 - one40) * Xf, (rectangle.y + 33 - one30) * Yf);
+        ctx.moveTo((rectangle.x + 42 - one40) * Xf, (rectangle.y + 32 - one30) * Yf);
+        ctx.lineTo((rectangle.x + 48 + one40) * Xf, (rectangle.y + 32 - one30) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 58 + one30) * Xf, (rectangle.y + 32 - one30) * Yf, (rectangle.x + 58 + one30) * Xf, (rectangle.y + 42 - one40) * Yf);
+        ctx.lineTo((rectangle.x + 58 + one30) * Xf, (rectangle.y + 68 + one40) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 58 + one30) * Xf, (rectangle.y + 78 + one30) * Yf, (rectangle.x + 48 + one40) * Xf, (rectangle.y + 78 + one30) * Yf);
+        ctx.lineTo((rectangle.x + 42 - one40) * Xf, (rectangle.y + 78 + one30) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 32 - one30) * Xf, (rectangle.y + 78 + one30) * Yf, (rectangle.x + 32 - one30) * Xf, (rectangle.y + 68 + one40) * Yf);
+        ctx.lineTo((rectangle.x + 32 - one30) * Xf, (rectangle.y + 42 - one40) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 32 - one30) * Xf, (rectangle.y + 32 - one30) * Yf, (rectangle.x + 42 - one40) * Xf, (rectangle.y + 32 - one30) * Yf);
         ctx.fill();
         ctx.closePath();
         if (one30 === 30) {
+            one30 += 0;
             one301 = true;
+            console.log("one30 true");
         } else {
             one30 += 4;
         }
-        if (one40 === 40) {
+        if (one40 === 30) {
             one401 = true;
+            console.log("one40 true");
         } else {
             one40 += 2;
         }
@@ -536,7 +605,38 @@ function startPlaying() {
                 counter = 0;    //reset counter.
                 lives -= 1;
                 reverseQue = que.slice(0);  //reset the reverseQue.
-                drawK13(ctx);
+                console.log("hi");
+                ctx.fillStyle = "Black";
+                ctx.beginPath();
+                ctx.moveTo(20 * Xf, 430 * Yf);
+                ctx.lineTo(50 * Xf, 430 * Yf);
+                ctx.quadraticCurveTo(60 * Xf, 430 * Yf, 60 * Xf, 440 * Yf);
+                ctx.lineTo(60 * Xf, 470 * Yf);
+                ctx.quadraticCurveTo(60 * Xf, 480 * Yf, 50 * Xf, 480 * Yf);
+                ctx.lineTo(20 * Xf, 480 * Yf);
+                ctx.quadraticCurveTo(10 * Xf, 480 * Yf, 10 * Xf, 470 * Yf);
+                ctx.lineTo(10 * Xf, 440 * Yf);
+                ctx.quadraticCurveTo(10 * Xf, 430 * Yf, 20 * Xf, 430 * Yf);
+                ctx.fill();
+                ctx.lineWidth = 3*Xf;
+                ctx.strokeStyle = 'silver';
+                ctx.stroke();
+                ctx.closePath();
+
+                ctx.fillStyle = 'red';
+                ctx.beginPath();
+                ctx.moveTo(52*Xf, 455*Yf);
+                ctx.lineTo(42*Xf, 465*Yf);
+                ctx.lineTo(32*Xf, 455*Yf);
+                ctx.lineTo(42*Xf, 447*Yf);
+                ctx.fill()
+                ctx.closePath();
+                ctx.beginPath();
+                ctx.arc(37*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
+                ctx.arc(47*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
+                ctx.fill();
+                ctx.closePath();
+
                 ctx.fillStyle = "White";
                 ctx.font = pixels + "px monospace";
                 ctx.textAlign = "center";
@@ -582,8 +682,13 @@ var clickEvent = function clickEvent(e) {
 }
 enhanceContext(a_canvas, ctx);
 game_interface();
-var imgData=ctx.getImageData(0,0,2*x,2*365*Yf);
 //ctx.drawImage(cacheCanvas, 0, 0, x, y, 0, 0, x, y);
+
+if (x === 414 && y === 736) {
+    imgData = ctx.getImageData(0,0,3*x,3*365*Yf);
+} else {
+    imgData = ctx.getImageData(0,0,2*x,2*365*Yf);
+}
 if (a_canvas && a_canvas.getContext) {
     a_canvas.addEventListener('click', clickEvent, false);
     FastClick.attach(document.body);
