@@ -7,31 +7,40 @@
 // computer uses turnEvent on BOTH boxex in que, in the right order.
 // user follows...
 //--------------AUTHENTICATE GAME CENTER LOGIN-------------->
+var model;
 document.addEventListener("deviceready", authUser, false);
 var failureCallback = "Error!";
 var successCallback = function (user) {
     var onSuccess = true;
     // user.alias, user.playerID, user.displayName
 };
-window.onerror = function(msg, url, linenumber) {
-    alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
-    return true;
-}
 
 function authUser(){
     gamecenter.auth(successCallback, failureCallback);
     var data = {
     leaderboardId: "board1"
     };
+    var model = device.model;
 }
+/*document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() []
+    /*if (model === iPhone7,1) {
+        imgData = ctx.getImageData(0,0,3*x,3*365*Yf);
+    } else {
+        imgData = ctx.getImageData(0,0,2*x,2*365*Yf);
+    }
+}*/
+
 //--------------------------------------------------------->
 //--------------------CANVAS---------------------->
 var a_canvas = document.getElementById("a");
 var ctx = a_canvas.getContext("2d");
+var b_canvas = document.getElementById("b");
+var context = b_canvas.getContext("2d");
 //------------------------------------------------>
 //--------------------GLOBAL---------------------->
-var x = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)/**devicePixelRatio*/;
-var y = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)/**devicePixelRatio*/;
+var x = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+var y = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 var userTurn = false;
 var blackCan = false;
 var second = false;
@@ -66,12 +75,30 @@ var Yf = (y / y_canvas); // Y fraction
 function resize_canvas() {
     if (a_canvas.width < x) {
         a_canvas.width = x;
+        b_canvas.width = x;
     }
     if (a_canvas.height < y) {
         a_canvas.height = y;
+        b_canvas.height = y;
     }
 }
 resize_canvas();
+function cloneCanvas(oldCanvas) {
+
+    //create a new canvas
+    var newCanvas = document.createElement('canvas');
+    var context = newCanvas.getContext('2d');
+
+    //set dimensions
+    newCanvas.width = oldCanvas.width;
+    newCanvas.height = oldCanvas.height;
+
+    //apply the old canvas to the new one
+    //context.drawImage(oldCanvas, 0, 0);
+
+    //return the new canvas
+    return newCanvas;
+}
 
 function enhanceContext(canvas, context) {
     var ratio = window.devicePixelRatio || 1,
@@ -86,7 +113,6 @@ function enhanceContext(canvas, context) {
         context.scale(ratio, ratio);
     }
 }
-enhanceContext(a_canvas, ctx);
 (function() {
     var lastTime = 0;
     var vendors = ['webkit', 'moz'];
@@ -137,7 +163,8 @@ var rects2 = [{x: 10, y: 10},   //Green
 
 var consoleRects = [{x: 10 * Xf, y: 370 * Yf, w: 50 * Xf, h: 50 * Yf}];//k12
 var startRects = [{x: 70 * Xf, y: 430 * Yf, w: 230 * Xf, h: 50 * Yf}];//k11
-var secondCanvas = [{x: 0, y: 0, w: x, h: y}];
+var secondStartRect = [{x: 70 * Xf, y: 370 * Yf, w: 230 * Xf, h: 50 * Yf}];//k10
+//var secondCanvas = [{x: 0, y: 0, w: x, h: y}];
 //---------------------------------------------------------------->
 
 function collides(rect, x, y) {
@@ -168,7 +195,7 @@ function rounded_rect(x, y, w, h, r, fillstyle, strokestyle){
     ctx.lineTo(x * Xf, (y + r) * Yf);
     ctx.quadraticCurveTo(x * Xf, y * Yf, (x + r) * Xf, y * Yf);
     ctx.fill();
-    ctx.lineWidth = 3*Xf;
+    ctx.lineWidth = 3 * Xf;
     ctx.strokeStyle = strokestyle;
     ctx.stroke();
     ctx.closePath();
@@ -176,11 +203,11 @@ function rounded_rect(x, y, w, h, r, fillstyle, strokestyle){
 //--------------------DRAWINGS TO CACHE--------------->
 function blackBox2(canvas) {
     canvas.fillStyle = "Black";
-    canvas.fillRect(0, 30*Yf, 200 * Xf, 30 * Yf);//k10
+    canvas.fillRect(90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);//k10
     canvas.fillStyle = "White";
     canvas.font = pixels + "px monospace";
     canvas.textAlign = "center";
-    canvas.fillText("Round: ", 100 * Xf, 50 * Yf);
+    canvas.fillText("Round: ", 185 * Xf, 460 * Yf);
 };
 
 function proCeed(canvas) {
@@ -193,32 +220,34 @@ function proCeed(canvas) {
 };
 
 function remainUpdate(canvas) {
+    canvas.fillStyle = 'black'
+    ctx.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
     canvas.fillStyle = "White";
     canvas.font = pixels + "px monospace";
     canvas.textAlign = "center";
-    canvas.fillText("Progress", 60*Xf, 80 * Yf);
+    canvas.fillText("Progress", 155 * Xf, 400 * Yf);
     canvas.beginPath();
-    canvas.moveTo(180*Xf, 60*Yf);
-    canvas.lineTo(190*Xf, 60*Yf);
-    canvas.quadraticCurveTo(200*Xf, 60*Yf, 200*Xf, 70*Yf);
-    canvas.lineTo(200*Xf, 80*Yf);
-    canvas.quadraticCurveTo(200*Xf, 90*Yf, 190*Xf, 90*Yf);
-    canvas.lineTo(180*Xf, 90*Yf);
-    canvas.quadraticCurveTo(170*Xf,90*Yf, 170*Xf, 80*Yf);
-    canvas.lineTo(170*Xf, 70*Yf);
-    canvas.quadraticCurveTo(170*Xf, 60*Yf, 180*Xf, 60*Yf);
+    canvas.moveTo(270 * Xf, 380 * Yf);
+    canvas.lineTo(280 * Xf, 380 * Yf);
+    canvas.quadraticCurveTo(290 * Xf, 380 * Yf, 290 * Xf, 390 * Yf);
+    canvas.lineTo(290 * Xf, 400 * Yf);
+    canvas.quadraticCurveTo(290 * Xf, 410 * Yf, 280 * Xf, 410 * Yf);
+    canvas.lineTo(270 * Xf, 410 * Yf);
+    canvas.quadraticCurveTo(260 * Xf,410 * Yf, 260 * Xf, 400 * Yf);
+    canvas.lineTo(260 * Xf, 390 * Yf);
+    canvas.quadraticCurveTo(260 * Xf, 380 * Yf, 270 * Xf, 380 * Yf);
     canvas.fill();
     canvas.closePath();
     canvas.beginPath();
-    canvas.moveTo(140*Xf, 60*Yf);
-    canvas.lineTo(150*Xf, 60*Yf);
-    canvas.quadraticCurveTo(160*Xf, 60*Yf, 160*Xf, 70*Yf);
-    canvas.lineTo(160*Xf, 80*Yf);
-    canvas.quadraticCurveTo(160*Xf, 90*Yf, 150*Xf, 90*Yf);
-    canvas.lineTo(140*Xf, 90*Yf);
-    canvas.quadraticCurveTo(130*Xf,90*Yf, 130*Xf, 80*Yf);
-    canvas.lineTo(130*Xf, 70*Yf);
-    canvas.quadraticCurveTo(130*Xf, 60*Yf, 140*Xf, 60*Yf);
+    canvas.moveTo(230 * Xf, 380 * Yf);
+    canvas.lineTo(240 * Xf, 380 * Yf);
+    canvas.quadraticCurveTo(250 * Xf, 380 * Yf, 250 * Xf, 390 * Yf);
+    canvas.lineTo(250 * Xf, 400 * Yf);
+    canvas.quadraticCurveTo(250 * Xf, 410 * Yf, 240 * Xf, 410 * Yf);
+    canvas.lineTo(230 * Xf,410 * Yf);
+    canvas.quadraticCurveTo(220 * Xf, 410 * Yf, 220 * Xf, 400 * Yf);
+    canvas.lineTo(220 * Xf, 390 * Yf);
+    canvas.quadraticCurveTo(220 * Xf, 380 * Yf, 230 * Xf, 380 * Yf);
     canvas.fill();
     canvas.closePath();
 };
@@ -236,57 +265,40 @@ function drawK13(ctx) {
     ctx.lineTo(10 * Xf, 440 * Yf);
     ctx.quadraticCurveTo(10 * Xf, 430 * Yf, 20 * Xf, 430 * Yf);
     ctx.fill();
-    ctx.lineWidth = 3*Xf;
+    ctx.lineWidth = 3 * Xf;
     ctx.strokeStyle = 'silver';
     ctx.stroke();
     ctx.closePath();
-    //the heart
+
     ctx.fillStyle = 'red';
     ctx.beginPath();
-    ctx.moveTo(52*Xf, 455*Yf);
-    ctx.lineTo(42*Xf, 465*Yf);
-    ctx.lineTo(32*Xf, 455*Yf);
-    ctx.lineTo(42*Xf, 447*Yf);
+    ctx.moveTo(52 * Xf, 455 * Yf);
+    ctx.lineTo(42 * Xf, 465 * Yf);
+    ctx.lineTo(32 * Xf, 455 * Yf);
+    ctx.lineTo(42 * Xf, 447 * Yf);
     ctx.fill()
     ctx.closePath();
     ctx.beginPath();
-    ctx.arc(37*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
-    ctx.arc(47*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
+    ctx.arc(37 * Xf, 451 * Yf, 6 * Xf, 2 * Math.PI, 0, true);
+    ctx.arc(47 * Xf, 451 * Yf, 6 * Xf, 2 * Math.PI, 0, true);
     ctx.fill();
     ctx.closePath();
 };
-//-------------------------------------------------------->
-//----------CACHED CANVAS------------->
-function cloneCanvas(oldCanvas) {
 
-    //create a new canvas
-    var newCanvas = document.createElement('canvas');
-    var context = newCanvas.getContext('2d');
-
-    //set dimensions
-    newCanvas.width = oldCanvas.width;
-    newCanvas.height = oldCanvas.height;
-
-    //apply the old canvas to the new one
-    context.drawImage(oldCanvas, 0, 0);
-
-    //return the new canvas
-    return newCanvas;
+function drawBoxes(ctx) { 
+    var lengd = rects.length, i;
+    for (i = 0; i < lengd; i += 1) {
+        rounded_rect(rects2[i].x, rects2[i].y, 90, 110, 10, rects[i].color, 'black');
+    }
 }
-
+//-------------------------------------------------------->
 var cacheCanvas = cloneCanvas(a_canvas); // newCanvas
-var cacheCtx = cacheCanvas.getContext('2d'); // context
-//----------------------------------------------------->
+var cacheCtx = cacheCanvas.getContext('2d');// context
+
 //--------------CACHE DRAWINGS----------->
-blackBox2(cacheCtx);
-proCeed(cacheCtx);
-remainUpdate(cacheCtx);
-drawK13(cacheCtx);
+drawBoxes(cacheCtx);
 //--------------------------------------->
 
-function k13Box(){
-    ctx.drawImage(cacheCanvas, 6 * Xf, 426 * Yf, 60*Xf, 56*Yf, 6* Xf, 426*Yf, 60*Xf, 56*Yf);
-}
 
 var game_interface = function drawGame() {
     var lengd = rects.length, i;
@@ -306,24 +318,31 @@ var game_interface = function drawGame() {
     //----------------K12-------------------
     rounded_rect(10, 370, 50, 50, 10, null, 'silver');
     //--------------------------------------
-    k13Box();
+    drawK13(ctx);
     ctx.fillStyle = "White";
     ctx.font = pixels + "px monospace";
     ctx.textAlign = "center";
     ctx.fillText("3", 25 * Xf, 460 * Yf);// Number of lives to start with.
     ctx.beginPath();
-    ctx.arc(35 * Xf, 395 * Yf, 20 * Xf, (5 * Math.PI) / 4, (Math.PI), false);
+    ctx.arc(35 * Xf, 395 * Yf, 15 * Xf, (5 * Math.PI) / 4, (Math.PI), false);
     ctx.lineWidth = 3 * Xf;
     ctx.strokeStyle = "White";
     ctx.stroke();
 
     ctx.beginPath();
-    ctx.moveTo(15 * Xf, 385 * Yf);
-    ctx.lineTo(11 * Xf, 395 * Yf);
-    ctx.lineTo(20 * Xf, 395 * Yf);
+    ctx.moveTo(20 * Xf, 385 * Yf);
+    ctx.lineTo(15 * Xf, 395 * Yf);
+    ctx.lineTo(25 * Xf, 395 * Yf);
     ctx.fill();
     ctx.fillText("Start", 185 * Xf, 460 * Yf);
-
+    ctx.fillText("Tap to Share", 185 * Xf, 400 * Yf);
+    model = device.model;
+    alert(model);
+    /*if (model === iPhone7,1) {
+        var imgData=ctx.getImageData(0,0,3*x,3*365*Yf);
+    } else {
+        var imgData=ctx.getImageData(0,0,2*x,2*365*Yf);
+    }*/
 };
 
 function gameover(e) {
@@ -334,9 +353,15 @@ function gameover(e) {
             location.reload();
         }, 100);
     }
+    if (collides(startRects, ex, ey)) {
+        window.plugins.socialsharing.share('Colour Trio! A free brain training app for iOS!', null, null, 'https://itunes.apple.com/us/app/colour-trio/id944735899?mt=8');
+    };
 }
 
 var gameover_interface = function game_over() {
+    //window.plugins.socialsharing.share('Message only');
+    //window.plugins.socialsharing.share('Message and subject', 'The subject');
+    //window.plugins.socialsharing.share('Colour Trio! A free brain training app for iOS!', null, null, 'https://itunes.apple.com/us/app/colour-trio/id944735899?mt=8');
     //------------SUBMIT HIGHSCORE-------------------->
     function authUser(){
         gamecenter.submitScore(successCallback, failureCallback, scoreData);
@@ -345,17 +370,15 @@ var gameover_interface = function game_over() {
     }
     document.addEventListener("deviceready", authUser, false);
     //------------------------------------------------>
-    k13Box();
+    drawK13(ctx);
     ctx.fillStyle = "Black";
     ctx.fillRect(90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);//k10
-    ctx.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
     ctx.fillStyle = "White";
     ctx.font = pixels + "px monospace";
     ctx.textAlign = "center";
     ctx.fillText("0", 25 * Xf, 460 * Yf);//lives = 0
-    ctx.fillText("Game over: " + round, 185 * Xf, 460 * Yf);
+    ctx.fillText("Share game", 185 * Xf, 460 * Yf);
     a_canvas.addEventListener('click', gameover, false);
-    ctx.fillText("<-- Try again?", 185 * Xf, 400 * Yf);
 };
 
 function randomInt(min, max) {
@@ -364,10 +387,11 @@ function randomInt(min, max) {
 }
 
 function turnEvent(AnX, AnY) {
+    //alert(model);
     var lengd = rects.length;
     eventDone = false,
-    one30 = 9,
-    one40 = 8,  
+    one30 = 10,
+    one40 = 10,  
     one301 = false, 
     one401 = false;
     for (var i = 0; i < lengd; i += 1) {
@@ -382,12 +406,12 @@ function turnEvent(AnX, AnY) {
         ctx.beginPath();
         ctx.fillStyle = rightBox.color;
         ctx.moveTo((rectangle.x + 43 - one40) * Xf, (rectangle.y + 33 - one30) * Yf);
-        ctx.lineTo((rectangle.x + 50 + one40) * Xf, (rectangle.y + 33 - one30) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + 58 + one30) * Xf, (rectangle.y + 33 - one30) * Yf, (rectangle.x + 58 + one30) * Xf, (rectangle.y + 43 - one40) * Yf);
-        ctx.lineTo((rectangle.x + 58 + one30) * Xf, (rectangle.y + 70 + one40) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + 58 + one30) * Xf, (rectangle.y + 78 + one30) * Yf, (rectangle.x + 50 + one40) * Xf, (rectangle.y + 78 + one30) * Yf);
-        ctx.lineTo((rectangle.x + 43 - one40) * Xf, (rectangle.y + 78 + one30) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + 33 - one30) * Xf, (rectangle.y + 78 + one30) * Yf, (rectangle.x + 33 - one30) * Xf, (rectangle.y + 70 + one40) * Yf);
+        ctx.lineTo((rectangle.x + 47 + one40) * Xf, (rectangle.y + 33 - one30) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 57 + one30) * Xf, (rectangle.y + 33 - one30) * Yf, (rectangle.x + 57 + one30) * Xf, (rectangle.y + 43 - one40) * Yf);
+        ctx.lineTo((rectangle.x + 57 + one30) * Xf, (rectangle.y + 67 + one40) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 57 + one30) * Xf, (rectangle.y + 77 + one30) * Yf, (rectangle.x + 47 + one40) * Xf, (rectangle.y + 77 + one30) * Yf);
+        ctx.lineTo((rectangle.x + 43 - one40) * Xf, (rectangle.y + 77 + one30) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 33 - one30) * Xf, (rectangle.y + 77 + one30) * Yf, (rectangle.x + 33 - one30) * Xf, (rectangle.y + 67 + one40) * Yf);
         ctx.lineTo((rectangle.x + 33 - one30) * Xf, (rectangle.y + 43 - one40) * Yf);
         ctx.quadraticCurveTo((rectangle.x + 33 - one30) * Xf, (rectangle.y + 33 - one30) * Yf, (rectangle.x + 43 - one40) * Xf, (rectangle.y + 33 - one30) * Yf);
         ctx.fill();
@@ -395,7 +419,7 @@ function turnEvent(AnX, AnY) {
         if (one30 === 30) {
             one301 = true;
         } else {
-            one30 += 3;
+            one30 += 4;
         }
         if (one40 === 40) {
             one401 = true;
@@ -409,7 +433,8 @@ function turnEvent(AnX, AnY) {
     (function animloop(){
         if (eventDone) {//condition to stop requestAnimationFrame();
             eventDone = false;
-            rounded_rect(rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'black');
+            ctx.clearRect(0,0, 310*Xf, 365*Yf);
+            ctx.putImageData(imgData,0,0);
             return;
         };
         requestAnimationFrame(animloop);
@@ -466,7 +491,7 @@ function startPlaying() {
     g = { 'x': 0, 'y': 0 };
     if (collides(startRects, ex, ey)) { // if start button...
         rounded_rect(70, 430, 230, 50, 10, 'black', 'silver');
-        ctx.drawImage(cacheCanvas, 0, 30 * Yf, 200 * Xf, 30 * Yf, 90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);
+        blackBox2(ctx) 
         ctx.fillStyle = "White";
         ctx.font = pixels + "px monospace";
         ctx.textAlign = "center";
@@ -477,7 +502,7 @@ function startPlaying() {
     if (blackCan && !userTurn) {
         var computerBox = collides(rects, g.x, g.y);
         if (computerBox) {
-            ctx.drawImage(cacheCanvas, 0, 60 * Yf, 200 * Xf, 30 * Yf, 90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf); //Remaining;
+            remainUpdate(ctx);
             ctx.fillStyle = "black";
             ctx.font = pixels + "px monospace";
             ctx.textAlign = "center";
@@ -506,7 +531,7 @@ function startPlaying() {
                 reverseQue.shift();     //pops the first object in array.
                 counter += 1; 
                 currentremain -= 1;     //update number of remaining boxes for user.
-                ctx.drawImage(cacheCanvas, 0, 60 * Yf, 200 * Xf, 30 * Yf, 90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);
+                remainUpdate(ctx);
                 ctx.fillStyle = "black";
                 ctx.font = pixels + "px monospace";
                 ctx.textAlign = "center";
@@ -525,7 +550,7 @@ function startPlaying() {
                 counter = 0;    //reset counter.
                 lives -= 1;
                 reverseQue = que.slice(0);  //reset the reverseQue.
-                k13Box();
+                drawK13(ctx);
                 ctx.fillStyle = "White";
                 ctx.font = pixels + "px monospace";
                 ctx.textAlign = "center";
@@ -548,8 +573,7 @@ function startPlaying() {
             counter = 0;
             blackCan = false;
             userTurn = false;
-            ctx.drawImage(cacheCanvas, 90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf,90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);
-            return;
+            proCeed(ctx);
         }
         if (!lives) {
             setTimeout(function () {
@@ -569,10 +593,24 @@ var clickEvent = function clickEvent(e) {
             location.reload();
         }, 50);
     }
+    if (collides(secondStartRect, ex, ey)) {
+        window.plugins.socialsharing.share('Colour Trio! A free brain training app for iOS!', null, null, 'https://itunes.apple.com/us/app/colour-trio/id944735899?mt=8');
+    };
 }
-resize_canvas();
+enhanceContext(a_canvas, ctx);
 game_interface();
+//var model = device.model;
 //ctx.drawImage(cacheCanvas, 0, 0, x, y, 0, 0, x, y);
+/*if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+ // some code..
+    alert(model);
+    if (model === iPhone7,1) {
+        var imgData=ctx.getImageData(0,0,3*x,3*365*Yf);
+    } else {
+        var imgData=ctx.getImageData(0,0,2*x,2*365*Yf);
+    }
+}*/
+
 if (a_canvas && a_canvas.getContext) {
     a_canvas.addEventListener('click', clickEvent, false);
     FastClick.attach(document.body);
