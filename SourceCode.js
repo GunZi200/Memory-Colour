@@ -24,6 +24,7 @@ function authUser(){
     leaderboardId: "board1"
     };
 }
+document.addEventListener('touchmove', function(e) { e.preventDefault(); }, false);
 //--------------------------------------------------------->
 //--------------------CANVAS---------------------->
 var a_canvas = document.getElementById("a");
@@ -683,9 +684,14 @@ var clickEvent = function clickEvent(e) {
 enhanceContext(a_canvas, ctx);
 game_interface();
 //ctx.drawImage(cacheCanvas, 0, 0, x, y, 0, 0, x, y);
-
 if (x === 414 && y === 736) {
     imgData = ctx.getImageData(0,0,3*x,3*365*Yf);
+} else if (x === 768 && y === 1024) {
+    if (a_canvas.width === 2 * x) {
+        imgData = ctx.getImageData(0,0,2*x,2*365*Yf);
+    } else {
+        imgData = ctx.getImageData(0,0,x,365*Yf);
+    }
 } else {
     imgData = ctx.getImageData(0,0,2*x,2*365*Yf);
 }
