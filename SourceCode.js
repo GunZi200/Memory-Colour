@@ -1,4 +1,4 @@
-// computer picks x and y coordinates and stores that box in que.
+  // computer picks x and y coordinates and stores that box in que.
 // computer uses turnEvent animation on all boxex in que array
 // user's turn, user hits all the boxes in the right order in que
 // If not, its game over.
@@ -75,18 +75,14 @@ function resize_canvas() {
 }
 resize_canvas();
 /*function cloneCanvas(oldCanvas) {
-
     //create a new canvas
     var newCanvas = document.createElement('canvas');
     var context = newCanvas.getContext('2d');
-
     //set dimensions
     newCanvas.width = oldCanvas.width;
     newCanvas.height = oldCanvas.height;
-
     //apply the old canvas to the new one
     //context.drawImage(oldCanvas, 0, 0);
-
     //return the new canvas
     return newCanvas;
 }*/
@@ -104,56 +100,32 @@ function enhanceContext(canvas, context) {
         context.scale(ratio, ratio);
     }
 }
-(function() {
-    var lastTime = 0;
-    var vendors = ['webkit', 'moz'];
-    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame =
-          window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
-    }
 
-    if (!window.requestAnimationFrame)
-        window.requestAnimationFrame = function(callback, element) {
-            var currTime = new Date().getTime();
-            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
-              timeToCall);
-            lastTime = currTime + timeToCall;
-            return id;
-        };
-
-    if (!window.cancelAnimationFrame)
-        window.cancelAnimationFrame = function(id) {
-            clearTimeout(id);
-        };
-}());
-
-var pixels = (20 * Yf).toFixed(0);
-var xc = 90 * Xf, yc = 110 * Yf;
+var pixels = (10 * Yf).toFixed(0);
+var xc = 45 * Xf, yc = 55 * Yf;
 //-------------------RECTANGLES THAT USE CLICKEVENY-------------->
-var rects = [{x: 10 * Xf, y: 10 * Yf, w: xc, h: yc, color: '#26A65B'},        //Green
-        {x: 110 * Xf, y: 10 * Yf, w: xc, h: yc, color: '#F22613'},          //Red
-        {x: 10 * Xf, y: 130 * Yf, w: xc, h: yc, color: '#1E90FF'},          //Blue
-        {x: 10 * Xf, y: 250 * Yf, w: xc, h: yc, color: '#F7CA18'},             //Gold
-        {x: 110 * Xf, y: 250 * Yf, w: xc, h: yc, color: '#8E44AD'},         //Purple
-        {x: 210 * Xf, y: 10 * Yf, w: xc, h: yc, color: '#DDA0DD'},          //Pink
-        {x: 210 * Xf, y: 130 * Yf, w: xc, h: yc, color: '#FF8C00'},         //Orange k6
-        {x: 210 * Xf, y: 250 * Yf, w: xc, h: yc, color: '#36D7B7'},   //Lightseagreen
-        {x: 110 * Xf, y: 130 * Yf, w: xc, h: yc, color: 'Brown'}];          //Brown
+var rects = [{x: 5 * Xf, y: 5 * Yf, w: xc, h: yc, color: '#26A65B'},        //Green
+        {x: 55 * Xf, y: 5 * Yf, w: xc, h: yc, color: '#F22613'},          //Red
+        {x: 5 * Xf, y: 65 * Yf, w: xc, h: yc, color: '#1E90FF'},          //Blue
+        {x: 5 * Xf, y: 125 * Yf, w: xc, h: yc, color: '#F7CA18'},             //Gold
+        {x: 55 * Xf, y: 125 * Yf, w: xc, h: yc, color: '#8E44AD'},         //Purple
+        {x: 105 * Xf, y: 5 * Yf, w: xc, h: yc, color: '#DDA0DD'},          //Pink
+        {x: 105 * Xf, y: 65 * Yf, w: xc, h: yc, color: '#FF8C00'},         //Orange k6
+        {x: 105 * Xf, y: 125 * Yf, w: xc, h: yc, color: '#36D7B7'},   //Lightseagreen
+        {x: 55 * Xf, y: 65 * Yf, w: xc, h: yc, color: 'Brown'}];          //Brown
 
-var rects2 = [{x: 10, y: 10},   //Green
-        {x: 110, y: 10},        //Red
-        {x: 10, y: 130},        //Blue
-        {x: 10, y: 250},        //Gold
-        {x: 110, y: 250},       //Purple
-        {x: 210, y: 10},        //Pink
-        {x: 210, y: 130},       //Orange k6
-        {x: 210, y: 250},       //Lightseagreen
-        {x: 110, y: 130}];      //Brown
+var rects2 = [{x: 5, y: 5},   //Green
+        {x: 55, y: 5},        //Red
+        {x: 5, y: 65},        //Blue
+        {x: 5, y: 125},        //Gold
+        {x: 55, y: 125},       //Purple
+        {x: 105, y: 5},        //Pink
+        {x: 105, y: 65},       //Orange k6
+        {x: 105, y: 125},       //Lightseagreen
+        {x: 55, y: 65}];      //Brown
 
-var consoleRects = [{x: 10 * Xf, y: 370 * Yf, w: 50 * Xf, h: 50 * Yf}];//k12
-var startRects = [{x: 70 * Xf, y: 430 * Yf, w: 230 * Xf, h: 50 * Yf}];//k11
+var consoleRects = [{x: 5 * Xf, y: 185 * Yf, w: 25 * Xf, h: 25 * Yf}];//k12
+var startRects = [{x: 35 * Xf, y: 215 * Yf, w: 115 * Xf, h: 25 * Yf}];//k11
 var secondCanvas = [{x: 0, y: 0, w: x, h: y}];
 //---------------------------------------------------------------->
 
@@ -185,7 +157,7 @@ function rounded_rect(ctx,x, y, w, h, r, fillstyle, strokestyle){
     ctx.lineTo(x * Xf, (y + r) * Yf);
     ctx.quadraticCurveTo(x * Xf, y * Yf, (x + r) * Xf, y * Yf);
     ctx.fill();
-    ctx.lineWidth = 3*Xf;
+    ctx.lineWidth = 1.5*Xf;
     ctx.strokeStyle = strokestyle;
     ctx.stroke();
     ctx.closePath();
@@ -194,52 +166,52 @@ function rounded_rect(ctx,x, y, w, h, r, fillstyle, strokestyle){
 function blackBox2(canvas) {
     sharing = true;
     canvas.fillStyle = "Black";
-    canvas.fillRect(90*Xf, 440*Yf, 200 * Xf, 30 * Yf);//k10
+    canvas.fillRect(45*Xf, 220*Yf, 100 * Xf, 15 * Yf);//k10
     canvas.fillStyle = "White";
     canvas.font = pixels + "px monospace";
     canvas.textAlign = "center";
-    canvas.fillText("Tap to Share", 185 * Xf, 460 * Yf);
+    canvas.fillText("Tap to Share", 92.5 * Xf, 230 * Yf);
 };
 
 function proCeed(canvas) {
     sharing = false;
     canvas.fillStyle = "Black";
-    canvas.fillRect(90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);
+    canvas.fillRect(45 * Xf, 220 * Yf, 100 * Xf, 15 * Yf);
     canvas.fillStyle = "White";
     canvas.font = pixels + "px monospace";
     canvas.textAlign = "center";
-    canvas.fillText("Next round", 185 * Xf, 460 * Yf);
+    canvas.fillText("Next round", 92.5 * Xf, 230 * Yf);
 };
 
 function remainUpdate(canvas) {
     canvas.fillStyle = 'black'
-    ctx.fillRect(90 * Xf, 380 * Yf, 200 * Xf, 30 * Yf);//k10
+    ctx.fillRect(45 * Xf, 190 * Yf, 100 * Xf, 15 * Yf);//k10
     canvas.fillStyle = "White";
     canvas.font = pixels + "px monospace";
     canvas.textAlign = "center";
-    canvas.fillText("Progress", 135*Xf, 400 * Yf);
+    canvas.fillText("Progress", 67.5*Xf, 200 * Yf);
     canvas.beginPath();
-    canvas.moveTo(260*Xf, 380*Yf);
-    canvas.lineTo(280*Xf, 380*Yf);
-    canvas.quadraticCurveTo(290*Xf, 380*Yf, 290*Xf, 390*Yf);
-    canvas.lineTo(290*Xf, 400*Yf);
-    canvas.quadraticCurveTo(290*Xf, 410*Yf, 280*Xf, 410*Yf);
-    canvas.lineTo(260*Xf, 410*Yf);
-    canvas.quadraticCurveTo(250*Xf,410*Yf, 250*Xf, 400*Yf);
-    canvas.lineTo(250*Xf, 390*Yf);
-    canvas.quadraticCurveTo(250*Xf, 380*Yf, 260*Xf, 380*Yf);
+    canvas.moveTo(130*Xf, 190*Yf);
+    canvas.lineTo(140*Xf, 190*Yf);
+    canvas.quadraticCurveTo(145*Xf, 190*Yf, 145*Xf, 195*Yf);
+    canvas.lineTo(145*Xf, 200*Yf);
+    canvas.quadraticCurveTo(145*Xf, 205*Yf, 140*Xf, 205*Yf);
+    canvas.lineTo(130*Xf, 205*Yf);
+    canvas.quadraticCurveTo(125*Xf,205*Yf, 125*Xf, 200*Yf);
+    canvas.lineTo(125*Xf, 195*Yf);
+    canvas.quadraticCurveTo(125*Xf, 190*Yf, 130*Xf, 190*Yf);
     canvas.fill();
     canvas.closePath();
     canvas.beginPath();
-    canvas.moveTo(210*Xf, 380*Yf);
-    canvas.lineTo(230*Xf, 380*Yf);
-    canvas.quadraticCurveTo(240*Xf, 380*Yf, 240*Xf, 390*Yf);
-    canvas.lineTo(240*Xf, 400*Yf);
-    canvas.quadraticCurveTo(240*Xf, 410*Yf, 230*Xf, 410*Yf);
-    canvas.lineTo(210*Xf,410*Yf);
-    canvas.quadraticCurveTo(200*Xf,410*Yf, 200*Xf, 400*Yf);
-    canvas.lineTo(200*Xf, 390*Yf);
-    canvas.quadraticCurveTo(200*Xf, 380*Yf, 210*Xf, 380*Yf);
+    canvas.moveTo(105*Xf, 190*Yf);
+    canvas.lineTo(115*Xf, 190*Yf);
+    canvas.quadraticCurveTo(120*Xf, 190*Yf, 120*Xf, 195*Yf);
+    canvas.lineTo(120*Xf, 200*Yf);
+    canvas.quadraticCurveTo(120*Xf, 205*Yf, 115*Xf, 205*Yf);
+    canvas.lineTo(105*Xf,205*Yf);
+    canvas.quadraticCurveTo(100*Xf,205*Yf, 100*Xf, 200*Yf);
+    canvas.lineTo(100*Xf, 195*Yf);
+    canvas.quadraticCurveTo(100*Xf, 190*Yf, 105*Xf, 190*Yf);
     canvas.fill();
     canvas.closePath();
 };
@@ -247,32 +219,32 @@ function remainUpdate(canvas) {
 function drawK13(ctx) {
     ctx.fillStyle = "Black";
     ctx.beginPath();
-    ctx.moveTo(20 * Xf, 430 * Yf);
-    ctx.lineTo(50 * Xf, 430 * Yf);
-    ctx.quadraticCurveTo(60 * Xf, 430 * Yf, 60 * Xf, 440 * Yf);
-    ctx.lineTo(60 * Xf, 470 * Yf);
-    ctx.quadraticCurveTo(60 * Xf, 480 * Yf, 50 * Xf, 480 * Yf);
-    ctx.lineTo(20 * Xf, 480 * Yf);
-    ctx.quadraticCurveTo(10 * Xf, 480 * Yf, 10 * Xf, 470 * Yf);
-    ctx.lineTo(10 * Xf, 440 * Yf);
-    ctx.quadraticCurveTo(10 * Xf, 430 * Yf, 20 * Xf, 430 * Yf);
+    ctx.moveTo(10 * Xf, 215 * Yf);
+    ctx.lineTo(25 * Xf, 215 * Yf);
+    ctx.quadraticCurveTo(30 * Xf, 215 * Yf, 30 * Xf, 220 * Yf);
+    ctx.lineTo(30 * Xf, 235 * Yf);
+    ctx.quadraticCurveTo(30 * Xf, 240 * Yf, 25 * Xf, 240 * Yf);
+    ctx.lineTo(10 * Xf, 240 * Yf);
+    ctx.quadraticCurveTo(5 * Xf, 240 * Yf, 5 * Xf, 235 * Yf);
+    ctx.lineTo(5 * Xf, 220 * Yf);
+    ctx.quadraticCurveTo(5 * Xf, 215 * Yf, 10 * Xf, 215 * Yf);
     ctx.fill();
-    ctx.lineWidth = 3*Xf;
+    ctx.lineWidth = 1.5*Xf;
     ctx.strokeStyle = 'silver';
     ctx.stroke();
     ctx.closePath();
 
     ctx.fillStyle = 'red';
     ctx.beginPath();
-    ctx.moveTo(52*Xf, 455*Yf);
-    ctx.lineTo(42*Xf, 465*Yf);
-    ctx.lineTo(32*Xf, 455*Yf);
-    ctx.lineTo(42*Xf, 447*Yf);
+    ctx.moveTo(26*Xf, 227.5*Yf);
+    ctx.lineTo(21*Xf, 232.5*Yf);
+    ctx.lineTo(16*Xf, 227.5*Yf);
+    ctx.lineTo(21*Xf, 223.5*Yf);
     ctx.fill()
     ctx.closePath();
     ctx.beginPath();
-    ctx.arc(37*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
-    ctx.arc(47*Xf, 451*Yf, 6*Xf, 2*Math.PI, 0, true);
+    ctx.arc(18.5*Xf, 225.5*Yf, 3*Xf, 2*Math.PI, 0, true);
+    ctx.arc(23.5*Xf, 225.5*Yf, 3*Xf, 2*Math.PI, 0, true);
     ctx.fill();
     ctx.closePath();
 };
@@ -282,17 +254,17 @@ function drawBoxes(ctx) {
     for (i = 0; i < lengd; i += 1) {
         ctx.beginPath();
         ctx.fillStyle = rects[i].color;
-        ctx.moveTo((rects2[i].x + 10) * Xf, rects2[i].y * Yf);
-        ctx.lineTo((rects2[i].x + 90 - 10) * Xf, rects2[i].y * Yf);
-        ctx.quadraticCurveTo((rects2[i].x + 90) * Xf, rects2[i].y * Yf, (rects2[i].x + 90) * Xf, (rects2[i].y + 10) * Yf);
-        ctx.lineTo((rects2[i].x + 90) * Xf, (rects2[i].y + 110 - 10) * Yf);
-        ctx.quadraticCurveTo((rects2[i].x + 90) * Xf, (rects2[i].y + 110) * Yf, (rects2[i].x + 90 - 10) * Xf, (rects2[i].y + 110) * Yf);
-        ctx.lineTo((rects2[i].x + 10) * Xf, (rects2[i].y + 110) * Yf);
-        ctx.quadraticCurveTo(rects2[i].x * Xf, (rects2[i].y + 110) * Yf, rects2[i].x * Xf, (rects2[i].y + 110 - 10) * Yf);
-        ctx.lineTo(rects2[i].x * Xf, (rects2[i].y + 10) * Yf);
-        ctx.quadraticCurveTo(rects2[i].x * Xf, rects2[i].y * Yf, (rects2[i].x + 10) * Xf, rects2[i].y * Yf);
+        ctx.moveTo((rects2[i].x + 5) * Xf, rects2[i].y * Yf);
+        ctx.lineTo((rects2[i].x + 45 - 5) * Xf, rects2[i].y * Yf);
+        ctx.quadraticCurveTo((rects2[i].x + 45) * Xf, rects2[i].y * Yf, (rects2[i].x + 45) * Xf, (rects2[i].y + 5) * Yf);
+        ctx.lineTo((rects2[i].x + 45) * Xf, (rects2[i].y + 55 - 5) * Yf);
+        ctx.quadraticCurveTo((rects2[i].x + 45) * Xf, (rects2[i].y + 55) * Yf, (rects2[i].x + 45 - 5) * Xf, (rects2[i].y + 55) * Yf);
+        ctx.lineTo((rects2[i].x + 5) * Xf, (rects2[i].y + 55) * Yf);
+        ctx.quadraticCurveTo(rects2[i].x * Xf, (rects2[i].y + 55) * Yf, rects2[i].x * Xf, (rects2[i].y + 55 - 5) * Yf);
+        ctx.lineTo(rects2[i].x * Xf, (rects2[i].y + 5) * Yf);
+        ctx.quadraticCurveTo(rects2[i].x * Xf, rects2[i].y * Yf, (rects2[i].x + 5) * Xf, rects2[i].y * Yf);
         ctx.fill();
-        ctx.lineWidth = 3*Xf;
+        ctx.lineWidth = 1.5*Xf;
         ctx.strokeStyle = 'black';
         ctx.stroke();
         ctx.closePath();
@@ -301,7 +273,6 @@ function drawBoxes(ctx) {
 //-------------------------------------------------------->
 /*var cacheCanvas = cloneCanvas(a_canvas); // newCanvas
 var cacheCtx = cacheCanvas.getContext('2d');// context
-
 //--------------CACHE DRAWINGS----------->
 drawBoxes(cacheCtx);*/
 //--------------------------------------->
@@ -312,36 +283,36 @@ var game_interface = function drawGame(ctx) {
     //--------------DRAW ALL MAIN COLOURED RECTANGLES---------------------->
 
     for (i = 0; i < lengd; i += 1) {
-        rounded_rect(ctx,rects2[i].x, rects2[i].y, 90, 110, 10, rects[i].color, 'black');
+        rounded_rect(ctx,rects2[i].x, rects2[i].y, 45, 55, 5, rects[i].color, 'black');
     }
     //--------------------------------------------------------------------->
     ctx.fillStyle = 'black';
     //------------------K10-----------------
-    rounded_rect(ctx,70, 370, 230, 50, 10, null, 'silver');
+    rounded_rect(ctx,35, 185, 115, 25, 5, null, 'silver');
     //--------------------------------------
     //------------------K11-----------------
-    rounded_rect(ctx,70, 430, 230, 50, 10, null, 'silver');
+    rounded_rect(ctx,35, 215, 115, 25, 5, null, 'silver');
     //--------------------------------------
     //----------------K12-------------------
-    rounded_rect(ctx,10, 370, 50, 50, 10, null, 'silver');
+    rounded_rect(ctx,5, 185, 25, 25, 5, null, 'silver');
     //--------------------------------------
     drawK13(ctx);
     ctx.fillStyle = "White";
     ctx.font = pixels + "px monospace";
     ctx.textAlign = "center";
-    ctx.fillText("3", 25 * Xf, 460 * Yf);// Number of lives to start with.
+    ctx.fillText("3", 12.5 * Xf, 230 * Yf);// Number of lives to start with.
     ctx.beginPath();
-    ctx.arc(35 * Xf, 395 * Yf, 15 * Xf, (5 * Math.PI) / 4, (Math.PI), false);
-    ctx.lineWidth = 3 * Xf;
+    ctx.arc(17.5 * Xf, 197.5 * Yf, 7.5 * Xf, (5 * Math.PI) / 4, (Math.PI), false);
+    ctx.lineWidth = 1.5 * Xf;
     ctx.strokeStyle = "White";
     ctx.stroke();
 
     ctx.beginPath();
-    ctx.moveTo(20 * Xf, 385 * Yf);
-    ctx.lineTo(15 * Xf, 395 * Yf);
-    ctx.lineTo(25 * Xf, 395 * Yf);
+    ctx.moveTo(10 * Xf, 192.5 * Yf);
+    ctx.lineTo(7.5 * Xf, 197.5 * Yf);
+    ctx.lineTo(12.5 * Xf, 197.5 * Yf);
     ctx.fill();
-    ctx.fillText("Start", 185 * Xf, 460 * Yf);
+    ctx.fillText("Start", 92.5 * Xf, 230 * Yf);
 
 };
 
@@ -369,12 +340,12 @@ var gameover_interface = function game_over() {
     //------------------------------------------------>
     drawK13(ctx);
     ctx.fillStyle = "Black";
-    ctx.fillRect(90 * Xf, 440 * Yf, 200 * Xf, 30 * Yf);//k10
+    ctx.fillRect(45 * Xf, 220 * Yf, 100 * Xf, 15 * Yf);//k10
     ctx.fillStyle = "White";
     ctx.font = pixels + "px monospace";
     ctx.textAlign = "center";
-    ctx.fillText("0", 25 * Xf, 460 * Yf);//lives = 0
-    ctx.fillText("Share game", 185 * Xf, 460 * Yf);
+    ctx.fillText("0", 12.5 * Xf, 230 * Yf);//lives = 0
+    ctx.fillText("Share game", 92.5 * Xf, 230 * Yf);
     a_canvas.addEventListener('click', gameover, false);
 };
 
@@ -386,8 +357,8 @@ function randomInt(min, max) {
 function turnEvent(AnX, AnY) {
     var lengd = rects.length;
     eventDone = false,
-    one30 = 18,
-    one40 = 18,  
+    one30 = 9,
+    one40 = 9,  
     one301 = false, 
     one401 = false;
     for (var i = 0; i < lengd; i += 1) {
@@ -397,45 +368,49 @@ function turnEvent(AnX, AnY) {
             var rectangle = rects2[i];
         }
     }
-    rounded_rect(ctx,rectangle.x, rectangle.y, 90, 110, 10, 'black', 'black');
+    rounded_rect(ctx,rectangle.x, rectangle.y, 45, 55, 5, 'black', 'black');
     function render() {
         ctx.beginPath();
         ctx.fillStyle = rightBox.color;
-        ctx.moveTo((rectangle.x + 42 - one40) * Xf, (rectangle.y + 32 - one30) * Yf);
-        ctx.lineTo((rectangle.x + 48 + one40) * Xf, (rectangle.y + 32 - one30) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + 58 + one30) * Xf, (rectangle.y + 32 - one30) * Yf, (rectangle.x + 58 + one30) * Xf, (rectangle.y + 42 - one40) * Yf);
-        ctx.lineTo((rectangle.x + 58 + one30) * Xf, (rectangle.y + 68 + one40) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + 58 + one30) * Xf, (rectangle.y + 78 + one30) * Yf, (rectangle.x + 48 + one40) * Xf, (rectangle.y + 78 + one30) * Yf);
-        ctx.lineTo((rectangle.x + 42 - one40) * Xf, (rectangle.y + 78 + one30) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + 32 - one30) * Xf, (rectangle.y + 78 + one30) * Yf, (rectangle.x + 32 - one30) * Xf, (rectangle.y + 68 + one40) * Yf);
-        ctx.lineTo((rectangle.x + 32 - one30) * Xf, (rectangle.y + 42 - one40) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + 32 - one30) * Xf, (rectangle.y + 32 - one30) * Yf, (rectangle.x + 42 - one40) * Xf, (rectangle.y + 32 - one30) * Yf);
+        ctx.moveTo((rectangle.x + 21 - one40) * Xf, (rectangle.y + 16 - one30) * Yf);
+        ctx.lineTo((rectangle.x + 24 + one40) * Xf, (rectangle.y + 16 - one30) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 29 + one30) * Xf, (rectangle.y + 16 - one30) * Yf, (rectangle.x + 29 + one30) * Xf, (rectangle.y + 21 - one40) * Yf);
+        ctx.lineTo((rectangle.x + 29 + one30) * Xf, (rectangle.y + 34 + one40) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 29 + one30) * Xf, (rectangle.y + 39 + one30) * Yf, (rectangle.x + 24 + one40) * Xf, (rectangle.y + 39 + one30) * Yf);
+        ctx.lineTo((rectangle.x + 21 - one40) * Xf, (rectangle.y + 39 + one30) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 16 - one30) * Xf, (rectangle.y + 39 + one30) * Yf, (rectangle.x + 16 - one30) * Xf, (rectangle.y + 34 + one40) * Yf);
+        ctx.lineTo((rectangle.x + 16 - one30) * Xf, (rectangle.y + 21 - one40) * Yf);
+        ctx.quadraticCurveTo((rectangle.x + 16 - one30) * Xf, (rectangle.y + 16 - one30) * Yf, (rectangle.x + 21 - one40) * Xf, (rectangle.y + 16 - one30) * Yf);
         ctx.fill();
         ctx.closePath();
-        if (one30 === 30) {
+    }
+    (function animloop(){
+        if (one30 === 15) {
             one30 += 0;
             one301 = true;
         } else {
-            one30 += 2;
+            one30 += 1;
         }
-        if (one40 === 30) {
+        if (one40 === 15) {
             one401 = true;
         } else {
             one40 += 1;
         }
         if (one401 && one301) {
-            eventDone = true;
-        }
-    }
-    (function animloop(){
-        if (eventDone) {//condition to stop requestAnimationFrame();
-            ctx.clearRect((rectangle.x-5)*Xf,(rectangle.y-5)*Yf, 95*Xf, 115*Yf);
-            eventDone = false;
-            rounded_rect(ctx,rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'black');
+            //eventDone = false;
+            rounded_rect(ctx,rectangle.x, rectangle.y, 45, 55, 5, rightBox.color, 'black');
             return;
-        };
-        requestAnimationFrame(animloop);
+        }
+        /*if (eventDone) {//condition to stop requestAnimationFrame();
+            //ctx.clearRect((rectangle.x-2.5)*Xf,(rectangle.y-2.5)*Yf, 47.5*Xf, 57.5*Yf);
+            eventDone = false;
+            rounded_rect(ctx,rectangle.x, rectangle.y, 45, 55, 5, rightBox.color, 'black');
+            return;
+        };*/
         render();
+        requestAnimationFrame(animloop);
+        //setTimeout(animloop, 1000/60);
+        //render();
     })();
 }
 
@@ -443,10 +418,13 @@ function computer() {
     a_canvas.removeEventListener('click', clickEvent, false);
     currentremain = remain; // reset values...
     var j = 0, i = setInterval(function () {
-        turnEvent(que[j].x, que[j].y);  // do animation for the first object in Object, and then the next, and the next.
-        myMedia.play(); //play click sound
+        turnEvent(reverseQue[0].x, reverseQue[0].y);  // do animation for the first object in Object, and then the next, and the next.
+        reverseQue.shift();
+        myMedia.play();
+        //new Audio('Click.mp3').play() //play click sound
         j += 1; // stops when counter equals the length of que.
         if (j === que.length) {
+            reverseQue = que.slice(0);  //reset the reverseQue.
             clearInterval(i);
             userTurn = true;
             a_canvas.addEventListener('click', clickEvent, false);
@@ -458,10 +436,12 @@ function computerRe() {
     //same as computer function, but is timed faster.
     currentremain = remain;
     var j = 0, i = setInterval(function () {
-        turnEvent(que[j].x, que[j].y);  // do animation for the first object in Object, and then the next, and the next.
-        myMedia.play(); // play click sound
+        turnEvent(reverseQue[0].x, reverseQue[0].y);  // do animation for the first object in Object, and then the next, and the next.
+        reverseQue.shift();
+        myMedia.play() // play click sound
         j += 1;
         if (j === que.length) {
+            reverseQue = que.slice(0);  //reset the reverseQue.
             clearInterval(i);
             userTurn = true;
             a_canvas.addEventListener('click', clickEvent, false);
@@ -470,9 +450,9 @@ function computerRe() {
 }
 function randomXY() {
     //chooses random coordinates for the computer.
-    var minXY = 10 * Xf,// minimum coordinates in which X and Y meet first.
-    maxX = 300 * Xf,    // maximum length computer reaches on the X plane.
-    maxY = 360 * Yf,    // maximum length computer reaches on the Y plane.
+    var minXY = 5 * Xf,// minimum coordinates in which X and Y meet first.
+    maxX = 150 * Xf,    // maximum length computer reaches on the X plane.
+    maxY = 230 * Yf,    // maximum length computer reaches on the Y plane.
     X = randomInt(minXY, maxX),
     Y = randomInt(minXY, maxY);
     while (!collides(rects, X, Y)) {
@@ -487,7 +467,7 @@ function startPlaying() {
     var lengd = rects.length,
     g = { 'x': 0, 'y': 0 };
     if (collides(startRects, ex, ey)) { // if start button...
-        rounded_rect(ctx,70, 430, 230, 50, 10, 'black', 'silver');
+        rounded_rect(ctx,35, 215, 115, 25, 5, 'black', 'silver');
         blackBox2(ctx) 
         blackCan = true;
         g = randomXY(); // generate coordinates for computer.
@@ -499,8 +479,8 @@ function startPlaying() {
             ctx.fillStyle = "black";
             ctx.font = pixels + "px monospace";
             ctx.textAlign = "center";
-            ctx.fillText("" + round, 220 * Xf, 400 * Yf);
-            ctx.fillText("" + colours, 270 * Xf, 400 * Yf);
+            ctx.fillText("" + round, 110 * Xf, 200 * Yf);
+            ctx.fillText("" + colours, 135 * Xf, 200 * Yf);
             que.push(computerBox);
             reverseQue = que.slice(0);
             blackCan = false;
@@ -528,17 +508,17 @@ function startPlaying() {
                 ctx.fillStyle = "black";
                 ctx.font = pixels + "px monospace";
                 ctx.textAlign = "center";
-                ctx.fillText("" + round, 220 * Xf, 400 * Yf);
-                ctx.fillText("" + colours, 270 * Xf, 400 * Yf);
+                ctx.fillText("" + round, 110 * Xf, 200 * Yf);
+                ctx.fillText("" + colours, 135 * Xf, 200 * Yf);
             }
             else {
                 a_canvas.removeEventListener('click', clickEvent, false);
                 //---------------DRAW A RED BORDER------------------->
-                rounded_rect(ctx,rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'red');
+                rounded_rect(ctx,rectangle.x, rectangle.y, 45, 55, 5, rightBox.color, 'red');
                 //--------------------------------------------------->
                 //display normal banner after 300ms.
                 setTimeout(function () {
-                    rounded_rect(ctx,rectangle.x, rectangle.y, 90, 110, 10, rightBox.color, 'black');
+                    rounded_rect(ctx,rectangle.x, rectangle.y, 45, 55, 5, rightBox.color, 'black');
                 }, 300);
                 counter = 0;    //reset counter.
                 lives -= 1;
@@ -547,7 +527,7 @@ function startPlaying() {
                 ctx.fillStyle = "White";
                 ctx.font = pixels + "px monospace";
                 ctx.textAlign = "center";
-                ctx.fillText(lives + "", 25 * Xf, 460 * Yf);
+                ctx.fillText(lives + "", 12.5 * Xf, 230 * Yf);
                 if (lives !== 0) {  //if not game over.
                     setTimeout(function () {
                         userTurn = false;   //blackCan should be false too.
@@ -559,7 +539,7 @@ function startPlaying() {
     }
         if (!reverseQue.length && userTurn) { // if it's still user's turn.
             roundDone.play();
-            rounded_rect(ctx,70, 430, 230, 50, 10, 'black', 'green');
+            rounded_rect(ctx,35, 215, 115, 25, 5, 'black', 'green');
             round += 1;
             scoreData.score = round; // increase score by one.
             remain += 1;
@@ -596,4 +576,3 @@ if (a_canvas && a_canvas.getContext) {
     a_canvas.addEventListener('click', clickEvent, false);
     FastClick.attach(document.body);
 }
-console.log( document.getElementsByTagName('*').length );
