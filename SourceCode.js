@@ -27,9 +27,49 @@ function authUser(){
 document.addEventListener('touchmove', function(e) { e.preventDefault(); }, false);
 //--------------------------------------------------------->
 //--------------------CANVAS---------------------->
+audio = document.getElementById("audio");
+audio.addEventListener("playing", drawGradient, false);
+audio.addEventListener("pause", stop, false);
+audio.addEventListener("ended", stop, false);
 var a_canvas = document.getElementById("a");
 var ctx = a_canvas.getContext("2d");
 //------------------------------------------------>
+var timer, angle = 0;
+function stop() {
+    clearTimeout(timer);
+}
+
+function drawGradient() {
+    // increment angle slowly from 0 to 2 PI
+    angle += 0.1;
+    if (angle >= 6.2)
+        angle = 0;
+        // create gradient that goes from bottom to top of canvas
+    var grad = ctx.createLinearGradient(0,can.height, 0,0);
+
+    // start gradient at black
+    grad.addColorStop(0, 'black');
+
+    // create changing rgb color values that go from 0 to 255
+    var gAngle = angle + Math.PI / 2;
+    var bAngle = gAngle + Math.PI;
+    var r = parseInt(255 * Math.abs(Math.sin(angle)));
+    var g = parseInt(255 * Math.abs(Math.sin(gAngle)));
+    var b = parseInt(255 * Math.abs(Math.sin(bAngle)));
+    var rgbCol = "rgb(" + r + "," + g + "," + b + ")";
+
+    // add color stop with new rgb colors
+    grad.addColorStop(1, rgbCol);
+
+    // fill canvas with gradient
+    ctx.save();
+    ctx.fillStyle = grad;
+    ctx.fillRect(0,0, can.width, can.height);
+    ctx.restore();
+        // repeat while audio is not paused
+    if (!document.querySelector("audio").paused)
+        timer = setTimeout(drawGradient, 100);
+}
 //--------------------GLOBAL---------------------->
 var x = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)/**devicePixelRatio*/;
 var y = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)/**devicePixelRatio*/;
@@ -47,9 +87,9 @@ var lives = 3;
 var ex = undefined;
 var ey = undefined;
 var counter = 0;
-var myMedia = new Audio("Click.mp3");
-var endAudio = new Audio("GameOver.mp3");
-var roundDone = new Audio("CorrectSound.mp3");
+//var myMedia = new Audio("Click.mp3");
+//var endAudio = new Audio("GameOver.mp3");
+//var roundDone = new Audio("CorrectSound.mp3");
 //------------------------------------------------>
 var scoreData = { 
         score: round = round, 
@@ -74,18 +114,6 @@ function resize_canvas() {
     }
 }
 resize_canvas();
-/*function cloneCanvas(oldCanvas) {
-    //create a new canvas
-    var newCanvas = document.createElement('canvas');
-    var context = newCanvas.getContext('2d');
-    //set dimensions
-    newCanvas.width = oldCanvas.width;
-    newCanvas.height = oldCanvas.height;
-    //apply the old canvas to the new one
-    //context.drawImage(oldCanvas, 0, 0);
-    //return the new canvas
-    return newCanvas;
-}*/
 
 function enhanceContext(canvas, context) {
     var ratio = window.devicePixelRatio || 1,
@@ -146,20 +174,54 @@ function collides(rect, x, y) {
 
 function rounded_rect(ctx,x, y, w, h, r, fillstyle, strokestyle){
     ctx.beginPath();
+    var X = x * Xf;
+    var XplusR = (x + r) * Xf;
+    var XplusWminusR = (x + w - r) * Xf;
+    var XplusW = (x + w) * Xf;
+
+    var Y = y * Yf;
+    var YplusR = (y + r) * Yf;
+    var YplusH = (y + h) * Yf
+    var YplusHminusR = (y + h - r) * Yf;
+
     ctx.fillStyle = fillstyle;
-    ctx.moveTo((x + r) * Xf, y * Yf);
-    ctx.lineTo((x + w - r) * Xf, y * Yf);
-    ctx.quadraticCurveTo((x + w) * Xf, y * Yf, (x + w) * Xf, (y + r) * Yf);
-    ctx.lineTo((x + w) * Xf, (y + h - r) * Yf);
-    ctx.quadraticCurveTo((x + w) * Xf, (y + h) * Yf, (x + w - r) * Xf, (y + h) * Yf);
-    ctx.lineTo((x + r) * Xf, (y + h) * Yf);
-    ctx.quadraticCurveTo(x * Xf, (y + h) * Yf, x * Xf, (y + h - r) * Yf);
-    ctx.lineTo(x * Xf, (y + r) * Yf);
-    ctx.quadraticCurveTo(x * Xf, y * Yf, (x + r) * Xf, y * Yf);
+    ctx.moveTo(XplusR, Y);
+    ctx.lineTo(XplusWminusR, Y);
+    ctx.quadraticCurveTo(XplusW, Y, XplusW, YplusR);
+    ctx.lineTo(XplusW, YplusHminusR);
+    ctx.quadraticCurveTo(XplusW, YplusH, XplusWminusR, YplusH);
+    ctx.lineTo(XplusR, YplusH);
+    ctx.quadraticCurveTo(X, YplusH, X, YplusHminusR);
+    ctx.lineTo(X, YplusR);
+    ctx.quadraticCurveTo(X, Y, XplusR, Y);
     ctx.fill();
     ctx.lineWidth = 1.5*Xf;
     ctx.strokeStyle = strokestyle;
     ctx.stroke();
+    ctx.closePath();
+}
+
+function rounded_rectNOSTROKE(ctx,x, y, w, h, r){
+    ctx.beginPath();
+    var X = x * Xf;
+    var XplusR = (x + r) * Xf;
+    var XplusWminusR = (x + w - r) * Xf;
+    var XplusW = (x + w) * Xf;
+
+    var Y = y * Yf;
+    var YplusR = (y + r) * Yf;
+    var YplusH = (y + h) * Yf
+    var YplusHminusR = (y + h - r) * Yf;
+    ctx.moveTo(XplusR, Y);
+    ctx.lineTo(XplusWminusR, Y);
+    ctx.quadraticCurveTo(XplusW, Y, XplusW, YplusR);
+    ctx.lineTo(XplusW, YplusHminusR);
+    ctx.quadraticCurveTo(XplusW, YplusH, XplusWminusR, YplusH);
+    ctx.lineTo(XplusR, YplusH);
+    ctx.quadraticCurveTo(X, YplusH, X, YplusHminusR);
+    ctx.lineTo(X, YplusR);
+    ctx.quadraticCurveTo(X, Y, XplusR, Y);
+    ctx.fill();
     ctx.closePath();
 }
 //--------------------DRAWINGS TO CACHE--------------->
@@ -184,36 +246,15 @@ function proCeed(canvas) {
 };
 
 function remainUpdate(canvas) {
+    var Y190 = 190 * Xf;
     canvas.fillStyle = 'black'
     ctx.fillRect(45 * Xf, 190 * Yf, 100 * Xf, 15 * Yf);//k10
     canvas.fillStyle = "White";
     canvas.font = pixels + "px monospace";
     canvas.textAlign = "center";
     canvas.fillText("Progress", 67.5*Xf, 200 * Yf);
-    canvas.beginPath();
-    canvas.moveTo(130*Xf, 190*Yf);
-    canvas.lineTo(140*Xf, 190*Yf);
-    canvas.quadraticCurveTo(145*Xf, 190*Yf, 145*Xf, 195*Yf);
-    canvas.lineTo(145*Xf, 200*Yf);
-    canvas.quadraticCurveTo(145*Xf, 205*Yf, 140*Xf, 205*Yf);
-    canvas.lineTo(130*Xf, 205*Yf);
-    canvas.quadraticCurveTo(125*Xf,205*Yf, 125*Xf, 200*Yf);
-    canvas.lineTo(125*Xf, 195*Yf);
-    canvas.quadraticCurveTo(125*Xf, 190*Yf, 130*Xf, 190*Yf);
-    canvas.fill();
-    canvas.closePath();
-    canvas.beginPath();
-    canvas.moveTo(105*Xf, 190*Yf);
-    canvas.lineTo(115*Xf, 190*Yf);
-    canvas.quadraticCurveTo(120*Xf, 190*Yf, 120*Xf, 195*Yf);
-    canvas.lineTo(120*Xf, 200*Yf);
-    canvas.quadraticCurveTo(120*Xf, 205*Yf, 115*Xf, 205*Yf);
-    canvas.lineTo(105*Xf,205*Yf);
-    canvas.quadraticCurveTo(100*Xf,205*Yf, 100*Xf, 200*Yf);
-    canvas.lineTo(100*Xf, 195*Yf);
-    canvas.quadraticCurveTo(100*Xf, 190*Yf, 105*Xf, 190*Yf);
-    canvas.fill();
-    canvas.closePath();
+    rounded_rectNOSTROKE(canvas, 125, 190, 20, 15, 5);
+    rounded_rectNOSTROKE(canvas, 100, 190, 20, 15, 5);
 };
 
 function drawK13(ctx) {
@@ -270,13 +311,6 @@ function drawBoxes(ctx) {
         ctx.closePath();
     }
 }
-//-------------------------------------------------------->
-/*var cacheCanvas = cloneCanvas(a_canvas); // newCanvas
-var cacheCtx = cacheCanvas.getContext('2d');// context
-//--------------CACHE DRAWINGS----------->
-drawBoxes(cacheCtx);*/
-//--------------------------------------->
-
 
 var game_interface = function drawGame(ctx) {
     var lengd = rects.length, i;
@@ -362,25 +396,36 @@ function turnEvent(AnX, AnY) {
     one301 = false, 
     one401 = false;
     for (var i = 0; i < lengd; i += 1) {
-        // Indentifying rectangle in use, so we can access the color, and position.
         if (collides([rects[i]], AnX, AnY)) {
             var rightBox = rects[i];
             var rectangle = rects2[i];
+            break;
         }
     }
+
+    var X16 = (rectangle.x + 16 - one30) * Xf;
+    var X21 = (rectangle.x + 21 - one40) * Xf;
+    var X24 = (rectangle.x + 24 + one40) * Xf;
+    var X29 = (rectangle.x + 29 + one30) * Xf;
+
+    var Y16 = (rectangle.y + 16 - one30) * Yf;
+    var Y21 = (rectangle.y + 21 - one40) * Yf;
+    var Y24 = (rectangle.y + 24 + one40) * Yf;
+    var Y34 = (rectangle.y + 34 + one40) * Yf;
+    var Y39 = (rectangle.y + 39 + one30) * Yf;
     rounded_rect(ctx,rectangle.x, rectangle.y, 45, 55, 5, 'black', 'black');
     function render() {
         ctx.beginPath();
         ctx.fillStyle = rightBox.color;
-        ctx.moveTo((rectangle.x + 21 - one40) * Xf, (rectangle.y + 16 - one30) * Yf);
-        ctx.lineTo((rectangle.x + 24 + one40) * Xf, (rectangle.y + 16 - one30) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + 29 + one30) * Xf, (rectangle.y + 16 - one30) * Yf, (rectangle.x + 29 + one30) * Xf, (rectangle.y + 21 - one40) * Yf);
-        ctx.lineTo((rectangle.x + 29 + one30) * Xf, (rectangle.y + 34 + one40) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + 29 + one30) * Xf, (rectangle.y + 39 + one30) * Yf, (rectangle.x + 24 + one40) * Xf, (rectangle.y + 39 + one30) * Yf);
-        ctx.lineTo((rectangle.x + 21 - one40) * Xf, (rectangle.y + 39 + one30) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + 16 - one30) * Xf, (rectangle.y + 39 + one30) * Yf, (rectangle.x + 16 - one30) * Xf, (rectangle.y + 34 + one40) * Yf);
-        ctx.lineTo((rectangle.x + 16 - one30) * Xf, (rectangle.y + 21 - one40) * Yf);
-        ctx.quadraticCurveTo((rectangle.x + 16 - one30) * Xf, (rectangle.y + 16 - one30) * Yf, (rectangle.x + 21 - one40) * Xf, (rectangle.y + 16 - one30) * Yf);
+        ctx.moveTo(X21, Y16);
+        ctx.lineTo(X24, Y16);
+        ctx.quadraticCurveTo(X29, Y16, X29, Y21);
+        ctx.lineTo(X29, Y34);
+        ctx.quadraticCurveTo(X29, Y39, X24, Y39);
+        ctx.lineTo(X21, Y39);
+        ctx.quadraticCurveTo(X16, Y39, X16, Y34);
+        ctx.lineTo(X16, Y21);
+        ctx.quadraticCurveTo(X16, Y16, X21, Y16);
         ctx.fill();
         ctx.closePath();
     }
@@ -397,34 +442,35 @@ function turnEvent(AnX, AnY) {
             one40 += 1;
         }
         if (one401 && one301) {
-            //eventDone = false;
             rounded_rect(ctx,rectangle.x, rectangle.y, 45, 55, 5, rightBox.color, 'black');
             return;
         }
-        /*if (eventDone) {//condition to stop requestAnimationFrame();
-            //ctx.clearRect((rectangle.x-2.5)*Xf,(rectangle.y-2.5)*Yf, 47.5*Xf, 57.5*Yf);
-            eventDone = false;
-            rounded_rect(ctx,rectangle.x, rectangle.y, 45, 55, 5, rightBox.color, 'black');
-            return;
-        };*/
+
+        X16 = (rectangle.x + 16 - one30) * Xf;
+        X21 = (rectangle.x + 21 - one40) * Xf;
+        X24 = (rectangle.x + 24 + one40) * Xf;
+        X29 = (rectangle.x + 29 + one30) * Xf;
+
+        Y16 = (rectangle.y + 16 - one30) * Yf;
+        Y21 = (rectangle.y + 21 - one40) * Yf;
+        Y24 = (rectangle.y + 24 + one40) * Yf;
+        Y34 = (rectangle.y + 34 + one40) * Yf;
+        Y39 = (rectangle.y + 39 + one30) * Yf;
         render();
         requestAnimationFrame(animloop);
-        //setTimeout(animloop, 1000/60);
-        //render();
     })();
 }
 
 function computer() {
     a_canvas.removeEventListener('click', clickEvent, false);
-    currentremain = remain; // reset values...
+    currentremain = remain;
     var j = 0, i = setInterval(function () {
-        turnEvent(reverseQue[0].x, reverseQue[0].y);  // do animation for the first object in Object, and then the next, and the next.
+        turnEvent(reverseQue[0].x, reverseQue[0].y);
         reverseQue.shift();
-        myMedia.play();
-        //new Audio('Click.mp3').play() //play click sound
-        j += 1; // stops when counter equals the length of que.
+        //myMedia.play();
+        j += 1;
         if (j === que.length) {
-            reverseQue = que.slice(0);  //reset the reverseQue.
+            reverseQue = que.slice(0);
             clearInterval(i);
             userTurn = true;
             a_canvas.addEventListener('click', clickEvent, false);
@@ -433,12 +479,11 @@ function computer() {
 }
 
 function computerRe() {
-    //same as computer function, but is timed faster.
     currentremain = remain;
     var j = 0, i = setInterval(function () {
-        turnEvent(reverseQue[0].x, reverseQue[0].y);  // do animation for the first object in Object, and then the next, and the next.
+        turnEvent(reverseQue[0].x, reverseQue[0].y);
         reverseQue.shift();
-        myMedia.play() // play click sound
+        //myMedia.play() // play click sound
         j += 1;
         if (j === que.length) {
             reverseQue = que.slice(0);  //reset the reverseQue.
@@ -470,7 +515,7 @@ function startPlaying() {
         rounded_rect(ctx,35, 215, 115, 25, 5, 'black', 'silver');
         blackBox2(ctx) 
         blackCan = true;
-        g = randomXY(); // generate coordinates for computer.
+        g = randomXY();
     }
     if (blackCan && !userTurn) {
         var computerBox = collides(rects, g.x, g.y);
@@ -489,27 +534,25 @@ function startPlaying() {
     } 
     if (collides(rects, ex, ey)) {
         for (var i = 0; i < lengd; i += 1) {
-            // Identify the rectangle in use.
             if (collides([rects[i]], ex, ey)) {
                 var rightBox = rects[i];
                 var rectangle = rects2[i];
             }
         }
         if (userTurn) {
-            //if clicked n box is the same as n box from computer.
             if (collides(rects, ex, ey) === que[counter]) {
                 turnEvent(ex, ey);      //do animation
                 colours += 1;
-                colourNumberData.score = colours;
-                reverseQue.shift();     //pops the first object in array.
-                counter += 1; 
+                counter += 1;
                 currentremain -= 1;     //update number of remaining boxes for user.
+                colourNumberData.score = colours;
                 remainUpdate(ctx);
                 ctx.fillStyle = "black";
                 ctx.font = pixels + "px monospace";
                 ctx.textAlign = "center";
                 ctx.fillText("" + round, 110 * Xf, 200 * Yf);
                 ctx.fillText("" + colours, 135 * Xf, 200 * Yf);
+                reverseQue.shift();     //pops the first object in array.
             }
             else {
                 a_canvas.removeEventListener('click', clickEvent, false);
@@ -538,7 +581,7 @@ function startPlaying() {
         }
     }
         if (!reverseQue.length && userTurn) { // if it's still user's turn.
-            roundDone.play();
+            //roundDone.play();
             rounded_rect(ctx,35, 215, 115, 25, 5, 'black', 'green');
             round += 1;
             scoreData.score = round; // increase score by one.
@@ -550,7 +593,7 @@ function startPlaying() {
         }
         if (!lives) {
             setTimeout(function () {
-                endAudio.play();
+                //endAudio.play();
             }, 750);
             gameover_interface();
             return;
